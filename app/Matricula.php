@@ -24,7 +24,7 @@ class Matricula extends Model
     }
     public function periodo_academico()
     {
-        return $this->belongsTo('App\PeriodoAcademico');
+        return $this->belongsTo('App\PeriodoAcademico')->orderBy('nombre');
     }
 
     public function malla()

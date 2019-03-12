@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Asignatura;
 use App\DetalleMatricula;
+use App\Estudiante;
 use App\Malla;
 use App\Carrera;
 use App\Matricula;
@@ -25,58 +26,30 @@ class MatriculasController extends Controller
         //
     }
 
-    public function getCupos2(Request $request)
-    {
-        $carrera = Carrera::where('id', $request->carrera_id)->first();
-        $malla = Malla::where('carrera_id', $carrera->id)->first();
-        if ($request->periodo_academico_id) {
-            $sql = "SELECT 
-                        matriculas.id,matriculas.jornada,matriculas.estado
-                        ,estudiantes.nombre1,estudiantes.nombre2,estudiantes.apellido1,estudiantes.apellido2
-                        ,estudiantes.identificacion
-                        ,periodo_academicos.nombre   
-                    FROM matriculas inner join detalle_matriculas on matriculas.id = detalle_matriculas.matricula_id
-                    inner join estudiantes on matriculas.estudiante_id = estudiantes.id
-                    inner join periodo_academicos on matriculas.periodo_academico_id = periodo_academicos.id   
-                    WHERE matriculas.estado <> 'INACTIVO' AND malla_id =" . $malla->id
-                . " AND matriculas.periodo_academico_id=" . $request->periodo_academico_id . " AND  periodo_lectivo_id="
-                . $request->periodo_lectivo_id . " AND matriculas.estado = 'EN_PROCESO'";
-        } else {
-            $sql = "SELECT 
-                        matriculas.id,matriculas.jornada,matriculas.estado
-                        ,estudiantes.nombre1,estudiantes.nombre2,estudiantes.apellido1,estudiantes.apellido2
-                        ,estudiantes.identificacion
-                        ,periodo_academicos.nombre  
-                    FROM matriculas inner join detalle_matriculas on matriculas.id = detalle_matriculas.matricula_id
-                    inner join estudiantes on matriculas.estudiante_id = estudiantes.id   
-                    inner join periodo_academicos on matriculas.periodo_academico_id = periodo_academicos.id
-                    WHERE matriculas.estado <> 'INACTIVO' AND malla_id =" . $malla->id
-                . " AND  periodo_lectivo_id=" . $request->periodo_lectivo_id . " AND matriculas.estado = 'EN_PROCESO'";
-        }
-        $cupos = DB::select($sql);
-        return response()->json(['cupos' => $cupos], 200);
-    }
-
     public function getCupos(Request $request)
     {
         $carrera = Carrera::where('id', $request->carrera_id)->first();
         $malla = Malla::where('carrera_id', $carrera->id)->first();
         if ($request->periodo_academico_id) {
-            $cupos = Matricula::
-            where('malla_id', $malla->id)
+            $cupos = Matricula::select('estudiantes.apellido1', 'matriculas.*')
+                ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+                ->where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
-                ->where('estado', 'EN_PROCESO')
+                ->where('matriculas.estado', 'EN_PROCESO')
                 ->with('estudiante')
                 ->with('periodo_academico')
+                ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
-            $cupos = Matricula::
-            where('malla_id', $malla->id)
+            $cupos = Matricula::select('estudiantes.apellido1', 'matriculas.*')
+                ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+                ->where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
-                ->where('estado', 'EN_PROCESO')
+                ->where('matriculas.estado', 'EN_PROCESO')
                 ->with('estudiante')
                 ->with('periodo_academico')
+                ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
 
@@ -87,7 +60,7 @@ class MatriculasController extends Controller
             'last_page' => $cupos->lastPage(),
             'from' => $cupos->firstItem(),
             'to' => $cupos->lastItem()
-        ],'cupos' => $cupos], 200);
+        ], 'cupos' => $cupos], 200);
     }
 
     public function getAsignaturasMalla(Request $request)
@@ -144,27 +117,22 @@ class MatriculasController extends Controller
         return response()->json(['matriculas' => $matriculas], 200);
     }
 
-    public function getOne(Request $request)
+    public function getCupo(Request $request)
     {
-        //$data = $request->json()->all();
-
-        $sql = 'SELECT estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $estudiante = DB::select($sql);
-
-        $sql = 'SELECT informacion_estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $informacionEstudiante = DB::select($sql);
-        return response()->json([
-            'estudiante' => $estudiante[0],
-            'informacion_estudiante' => $informacionEstudiante[0]
-        ]);
+        $matricula = Matricula::select('matriculas.*')
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('periodo_lectivos', 'periodo_lectivos.id', '=', 'matriculas.periodo_lectivo_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->orWhere('identificacion', $request['identificacion'])
+            ->orWhere('apellido1', 'like', '%' . $request['apellido1'] . '%')
+            ->orWhere('apellido2', 'like', '%' . $request['apellido2'] . '%')
+            ->orWhere('nombre1', 'like', '%' . $request['nombre1'] . '%')
+            ->orWhere('nombre2', 'like', '%' . $request['nombre2'] . '%')
+            ->where('matriculas.estado', 'EN_PROCESO')
+            ->where('periodo_lectivos.estado', 'ACTUAL')
+            ->get();
+        return response()->json(['cupo' => $matricula], 200);
     }
 
     public function update(Request $request)
@@ -206,5 +174,11 @@ class MatriculasController extends Controller
             'estudiante' => $estudiante,
             'informacion_estudiante' => $informacionEstudiante
         ]);
+    }
+
+    public function deleteCupo(Request $request)
+    {
+        $matricula = Matricula::findOrFail($request->id)->delete();
+        return response()->json(['detalle_matricula' => $matricula], 201);
     }
 }

@@ -20,7 +20,7 @@ class PeriodoLectivosController extends Controller
 
     public function get()
     {
-        $periodoLectivos = PeriodoLectivo::where('estado', 'ACTIVO')->get();
+        $periodoLectivos = PeriodoLectivo::where('estado','<>', 'INACTIVO')->get();
         return response()->json(['periodo_lectivos' => $periodoLectivos], 200);
     }
 
