@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-
+use Carbon\Carbon;
 use App\Asignatura;
 use App\DetalleMatricula;
 use App\Estudiante;
 use App\Exports\UsersExport;
-use App\Imports\UsersImport;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use App\Matricula;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
 use App\Malla;
 use App\TipoMatricula;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-
 
 class ExcelController extends Controller
 {
@@ -40,14 +39,16 @@ class ExcelController extends Controller
             Excel::load($path, function ($reader) {
                 // $carrera = Carrera::where('codigo', $request->carrera_id)->first();
                 foreach ($reader->get() as $row) {
+                    DB::beginTransaction();
                     $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
                     if ($estudiante) {
                         $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
                         $existeMatricula = Matricula::where('estudiante_id', $estudiante->id)
                             ->where('periodo_lectivo_id', $periodoLectivo->id)->first();
                         if (!$existeMatricula) {
+                            $now = Carbon::now();
                             $matricula = new Matricula([
-                                'fecha' => '2019-03-12',
+                                'fecha' => $now,
                                 'jornada' => $row->jornada_principal,
                                 'paralelo_principal' => $row->paralelo_principal,
                                 'estado' => 'EN_PROCESO'
@@ -82,6 +83,7 @@ class ExcelController extends Controller
                         }
 
                     }
+                    DB::commit();
                 }
             });
             $cupos = Matricula::get();

@@ -25,7 +25,7 @@ class CreateMatriculasTable extends Migration
             $table->integer('periodo_academico_id');
             $table->foreign('periodo_academico_id')->references('id')->on('periodo_academicos');
             $table->string('codigo', 50)->nullable();
-            $table->date('fecha')->nullable();
+            $table->dateTime('fecha')->nullable();
             $table->string('folio', 50)->nullable();
             $table->string('jornada', 50)->nullable();
             $table->string('paralelo_principal', 50)->nullable();
