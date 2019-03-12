@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b53bc611-7523-40fd-90e7-b2f46fd9ff92" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PeriodoLectivosController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PeriodoLectivosController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Matricula.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Matricula.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_detalle_matriculas_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_detalle_matriculas_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,31 +26,47 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExcelController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="621">
+              <caret line="69" column="32" lean-forward="true" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+              <folding>
+                <element signature="e#427#526#0#PHP" />
+                <element signature="e#4833#4877#0#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="204">
               <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
               <folding>
                 <element signature="e#304#383#0#PHP" />
                 <element signature="e#388#440#0#PHP" />
+                <element signature="e#2588#4347#0#PHP" />
+                <element signature="e#2785#3985#0#PHP" />
                 <element signature="e#2844#2991#0#PHP" />
                 <element signature="e#2844#3039#0#PHP" />
                 <element signature="e#2844#3115#0#PHP" />
+                <element signature="e#732#1083#0#PHP" />
                 <element signature="e#2844#3254#0#PHP" />
                 <element signature="e#2844#3291#0#PHP" />
                 <element signature="e#2844#3335#0#PHP" />
                 <element signature="e#2844#3374#0#PHP" />
                 <element signature="e#2844#3429#0#PHP" />
+                <element signature="e#1249#1793#0#PHP" />
+                <element signature="e#1277#1424#0#PHP" />
+                <element signature="e#1277#1472#0#PHP" />
+                <element signature="e#1277#1548#0#PHP" />
+                <element signature="e#1277#1607#0#PHP" />
+                <element signature="e#1277#1644#0#PHP" />
+                <element signature="e#1277#1688#0#PHP" />
+                <element signature="e#1277#1727#0#PHP" />
+                <element signature="e#1277#1782#0#PHP" />
                 <element signature="e#4002#4340#0#PHP" />
                 <element signature="e#4019#4334#0#PHP" />
                 <element signature="e#4036#4314#1#PHP" />
@@ -88,16 +99,8 @@
                 <element signature="e#0#345#2" />
                 <element signature="e#9686#9819#0#PHP" />
                 <element signature="e#9703#9818#1#PHP" />
+                <element signature="e#7587#7819#0#PHP" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Matricula.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -107,6 +110,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
               <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="338">
+              <caret line="29" column="54" lean-forward="true" selection-start-line="29" selection-start-column="54" selection-end-line="29" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -193,7 +205,6 @@
         <option value="$PROJECT_DIR$/app/Carrera.php" />
         <option value="$PROJECT_DIR$/app/Malla.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_asignaturas_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TipoMatriculasController.php" />
         <option value="$PROJECT_DIR$/app/Asignatura.php" />
         <option value="$PROJECT_DIR$/app/PeriodoAcademico.php" />
@@ -202,10 +213,11 @@
         <option value="$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php" />
         <option value="$PROJECT_DIR$/app/Matricula.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PeriodoLectivosController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_detalle_matriculas_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" />
       </list>
     </option>
   </component>
@@ -298,7 +310,7 @@
       <path value="$PROJECT_DIR$/vendor/asm89/stack-cors" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="width" value="980" />
     <option name="height" value="525" />
@@ -348,7 +360,28 @@
             <path>
               <item name="excel" type="b2602c69:ProjectViewProjectNode" />
               <item name="excel" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="excel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="excel" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="excel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="excel" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="excel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="excel" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="archivos" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -421,18 +454,18 @@
       <workItem from="1552226196993" duration="4559000" />
       <workItem from="1552267330484" duration="2074000" />
       <workItem from="1552311151766" duration="11459000" />
-      <workItem from="1552402207391" duration="7865000" />
+      <workItem from="1552402207391" duration="9769000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75186000" />
+    <option name="totallyTimeSpent" value="77090000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27046978" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27046978" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -700,20 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExcelController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Matricula.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -759,13 +778,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
@@ -773,21 +785,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Matricula.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
+        <state relative-caret-position="204">
           <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
           <folding>
             <element signature="e#304#383#0#PHP" />
             <element signature="e#388#440#0#PHP" />
+            <element signature="e#2588#4347#0#PHP" />
+            <element signature="e#2785#3985#0#PHP" />
             <element signature="e#2844#2991#0#PHP" />
             <element signature="e#2844#3039#0#PHP" />
             <element signature="e#2844#3115#0#PHP" />
+            <element signature="e#732#1083#0#PHP" />
             <element signature="e#2844#3254#0#PHP" />
             <element signature="e#2844#3291#0#PHP" />
             <element signature="e#2844#3335#0#PHP" />
             <element signature="e#2844#3374#0#PHP" />
             <element signature="e#2844#3429#0#PHP" />
+            <element signature="e#1249#1793#0#PHP" />
+            <element signature="e#1277#1424#0#PHP" />
+            <element signature="e#1277#1472#0#PHP" />
+            <element signature="e#1277#1548#0#PHP" />
+            <element signature="e#1277#1607#0#PHP" />
+            <element signature="e#1277#1644#0#PHP" />
+            <element signature="e#1277#1688#0#PHP" />
+            <element signature="e#1277#1727#0#PHP" />
+            <element signature="e#1277#1782#0#PHP" />
             <element signature="e#4002#4340#0#PHP" />
             <element signature="e#4019#4334#0#PHP" />
             <element signature="e#4036#4314#1#PHP" />
@@ -820,6 +851,25 @@
             <element signature="e#0#345#2" />
             <element signature="e#9686#9819#0#PHP" />
             <element signature="e#9703#9818#1#PHP" />
+            <element signature="e#7587#7819#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="29" column="54" lean-forward="true" selection-start-line="29" selection-start-column="54" selection-end-line="29" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExcelController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="69" column="32" lean-forward="true" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+          <folding>
+            <element signature="e#427#526#0#PHP" />
+            <element signature="e#4833#4877#0#PHP" />
           </folding>
         </state>
       </provider>

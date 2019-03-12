@@ -14,6 +14,7 @@ use App\PeriodoLectivo;
 use App\Malla;
 use App\TipoMatricula;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -39,52 +40,40 @@ class ExcelController extends Controller
             Excel::load($path, function ($reader) {
                 // $carrera = Carrera::where('codigo', $request->carrera_id)->first();
                 foreach ($reader->get() as $row) {
-                    $estudiante = Estudiante::where('identificacion', $row->identificacion)->first();
-                    if (!$estudiante) {
-                        $error = 'no hay estudiante';
-                    } else {
-                        $periodoLectivo = PeriodoLectivo::where('id', $row->periodo_lectivo_id)->first();
+                    $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
+                    if ($estudiante) {
+                        $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
                         $existeMatricula = Matricula::where('estudiante_id', $estudiante->id)
                             ->where('periodo_lectivo_id', $periodoLectivo->id)->first();
                         if (!$existeMatricula) {
                             $matricula = new Matricula([
-                                'codigo' => $row->codigo,
-                                'codigo_sniese_paralelo' => $row->codigo_sniese_paralelo,
-                                'folio' => $row->folio,
-                                'fecha' => $row->fecha,
-                                'jornada' => $row->jornada,
+                                'fecha' => '2019-03-12',
+                                'jornada' => $row->jornada_principal,
                                 'paralelo_principal' => $row->paralelo_principal,
                                 'estado' => 'EN_PROCESO'
                             ]);
-
-                            $estudiante = Estudiante::where('id', $estudiante->id)->first();
                             $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
                             $malla = Malla::where('id', $row->malla_id)->first();
-                            // $carrera = Carrera::where('codigo', $carrera)->first();
                             $matricula->estudiante()->associate($estudiante);
                             $matricula->periodo_lectivo()->associate($periodoLectivo);
-                            $matricula->periodo_academico()->associate($periodoAcademico);
                             $matricula->periodo_academico()->associate($periodoAcademico);
                             $matricula->malla()->associate($malla);
                             $matricula->save();
                         } else {
                             $matricula = $existeMatricula;
                         }
-                        $asignatura = Asignatura::where('codigo', $row->asignatura_codigo)->first();
-                        if (!$asignatura) {
-                            $error = 'no hay asignatura';
-                        } else {
+                        $asignatura = Asignatura::where('codigo', $row->codigo_asignatura)->first();
+                        if ($asignatura) {
                             $existeAsignatura = DetalleMatricula::where('asignatura_id', $asignatura->id)
                                 ->where('matricula_id', $matricula->id)->first();
                             if (!$existeAsignatura) {
                                 $detalleMatriculas = new DetalleMatricula([
-                                    'paralelo' => $row->paralelo,
+                                    'paralelo' => $row->paralelo_asignatura,
                                     'numero_matricula' => $row->numero_matricula,
                                     'jornada' => $row->jornada_asignatura,
                                     'estado' => 'EN_PROCESO'
                                 ]);
                                 $tipoMatricula = TipoMatricula::where('nombre', $row->tipo_matricula)->first();
-
                                 $detalleMatriculas->matricula()->associate($matricula);
                                 $detalleMatriculas->asignatura()->associate($asignatura);
                                 $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
@@ -96,7 +85,7 @@ class ExcelController extends Controller
                 }
             });
             $cupos = Matricula::get();
-            Storage::delete($pathFile);
+            //Storage::delete($pathFile);
             return response()->json(['cupos' => $cupos], 200);
         } else {
             return "false";
