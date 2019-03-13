@@ -14,6 +14,9 @@ class Matricula extends Model
         return $this->hasMany('App\DetalleMatricula');
     }
 
+    public function informacionEstudiantes(){
+        return $this->hasMany('App\InformacionEstudiante');
+    }
     public function estudiante()
     {
         return $this->belongsTo('App\Estudiante');

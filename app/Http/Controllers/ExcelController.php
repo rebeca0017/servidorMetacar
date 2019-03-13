@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\InformacionEstudiante;
 use Carbon\Carbon;
 use App\Asignatura;
 use App\DetalleMatricula;
@@ -45,7 +46,9 @@ class ExcelController extends Controller
 
             //$path = Storage::disk('public')->put('archivos', $request->file('archivo'));
             // $post->fill(['file' => asset($path)])->save();
+
             Excel::load($path, function ($reader) {
+                $now = Carbon::now();
                 // $carrera = Carrera::where('codigo', $request->carrera_id)->first();
                 foreach ($reader->get() as $row) {
                     DB::beginTransaction();
@@ -55,12 +58,11 @@ class ExcelController extends Controller
                         $existeMatricula = Matricula::where('estudiante_id', $estudiante->id)
                             ->where('periodo_lectivo_id', $periodoLectivo->id)->first();
                         if (!$existeMatricula) {
-                            $now = Carbon::now();
                             $matricula = new Matricula([
                                 'fecha' => $now,
                                 'jornada' => $row->jornada_principal,
                                 'paralelo_principal' => $row->paralelo_principal,
-                                'estado' => 'MATRICULADO'
+                                'estado' => 'EN_PROCESO'
                             ]);
                             $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
                             $malla = Malla::where('id', $row->malla_id)->first();
@@ -69,8 +71,17 @@ class ExcelController extends Controller
                             $matricula->periodo_academico()->associate($periodoAcademico);
                             $matricula->malla()->associate($malla);
                             $matricula->save();
+
+                            $matricula->informacionEstudiantes()->create();
+                            // InformacionEstudiante::create(['estado','ACTIVO']);
                         } else {
                             $matricula = $existeMatricula;
+                            $matricula->update([
+                                'fecha' => $now,
+                                'jornada' => $row->jornada_principal,
+                                'paralelo_principal' => $row->paralelo_principal,
+                                'estado' => 'EN_PROCESO'
+                            ]);
                         }
                         $asignatura = Asignatura::where('codigo', $row->codigo_asignatura)->first();
                         if ($asignatura) {
@@ -131,7 +142,7 @@ class ExcelController extends Controller
                                 'fecha' => $row->fecha,
                                 'jornada' => $row->jornada_principal,
                                 'paralelo_principal' => $row->paralelo_principal,
-                                'estado' => 'EN_PROCESO'
+                                'estado' => 'MATRICULADO'
                             ]);
                             $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
                             $malla = Malla::where('id', $row->malla_id)->first();
@@ -181,37 +192,5 @@ class ExcelController extends Controller
         }
 
     }
-
-    public function importAsignaturas(Request $request)
-    {
-        if ($request->file('archivo')) {
-            $pathFile = $request->file('archivo')->store('public/archivos');
-            $path = storage_path() . '\\app\\' . $pathFile;
-            Excel::load($path, function ($reader) {
-                foreach ($reader->get() as $row) {
-                    DB::beginTransaction();
-                    $malla = Malla::where('id', $row->malla_id)->first();
-                    $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
-                    $asignatura = new Matricula([
-                        'codigo' => $row->codigo,
-                        'nombre' => $row->nombre,
-                        'horas_practica' => $row->horas_practica,
-                        'horas_docente' => $row->horas_docente,
-                        'horas_autonoma' => $row->horas_autonoma,
-                        'tipo' => $row->tipo,
-                        'estado' => 'ACTIVO'
-                    ]);
-                    $asignatura->periodo_academico()->associate($periodoAcademico);
-                    $asignatura->malla()->associate($malla);
-                    $asignatura->save();
-                    DB::commit();
-                }
-            });
-            $cupos = Matricula::get();
-            Storage::delete($pathFile);
-            return response()->json(['cupos' => $cupos], 200);
-        }
-    }
-
 
 }
