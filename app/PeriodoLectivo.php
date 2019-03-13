@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PeriodoLectivo extends Model
 {
     protected $fillable = [
-        'nombre', 'estado',
+        'codigo', 'nombre', 'estado',
     ];
 
-    public function matriculas(){
+    public function matriculas()
+    {
         return $this->hasMany('App\Matricula');
     }
 }

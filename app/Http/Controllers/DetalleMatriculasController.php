@@ -31,6 +31,24 @@ class DetalleMatriculasController extends Controller
         return response()->json(['detalle_matricula' => $detalleMatricula], 200);
     }
 
+    public function getForMalla(Request $request)
+    {
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        if ($request->periodo_academico_id) {
+            $detalleMatricula = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('periodo_academico_id', $request->periodo_academico_id)
+                ->get();
+        } else {
+            $detalleMatricula = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->get();
+        }
+        return response()->json(['detalle_matriculas' => $detalleMatricula], 200);
+    }
+
     public function getOne(Request $request)
     {
         //$data = $request->json()->all();

@@ -26,17 +26,17 @@ class CreateEstudiantesTable extends Migration
             $table->foreign('canton_residencia_id')->references('id')->on('ubicaciones')->nullable();
             $table->string('identificacion', 50);
             $table->string('nombre1', 50);
-            $table->string('nombre2', 50);
+            $table->string('nombre2', 50)->nullable();;
             $table->string('apellido1', 50);
-            $table->string('apellido2', 50);
-            $table->date('fecha_nacimiento');
-            $table->string('correo_personal', 100);
-            $table->string('correo_institucional', 100);
+            $table->string('apellido2', 50)->nullable();;
+            $table->date('fecha_nacimiento')->nullable();;
+            $table->string('correo_personal', 100)->nullable();;
+            $table->string('correo_institucional', 100)->nullable();;
             $table->string('sexo', 50);
             $table->string('etnia', 50);
             $table->string('tipo_sangre', 50);
             $table->string('tipo_identificacion', 50);
-            $table->string('tipo_colegio', 50);
+            $table->string('tipo_colegio', 50)->nullable();
             $table->string('estado', 20)->default('ACTIVO');
         });
     }

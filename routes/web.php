@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::post('/detalle_matriculas', 'DetalleMatriculasController@create');
 Route::get('/detalle_matriculas', 'DetalleMatriculasController@get');
+Route::get('/detalle_matriculas/malla', 'DetalleMatriculasController@getForMalla');
 
 Route::get('/asignaturas', 'AsignaturasController@get');
 Route::get('/asignaturas/{id}', 'AsignaturasController@getOne');
@@ -47,4 +48,5 @@ Route::get('/catalogos/carreras', 'CatalogosController@getCarreras');
 Route::get('/catalogos/periodo_academicos', 'CatalogosController@getPeriodoAcademicos');
 Route::get('/export', 'ExcelController@export');
 //Route::get('/import', 'ExcelController@import');
-Route::post('/import', 'ExcelController@import');
+Route::post('/import_cupos', 'ExcelController@importCupos');
+Route::post('/import_matriculas', 'ExcelController@importMatriculas');

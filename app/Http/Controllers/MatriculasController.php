@@ -121,7 +121,6 @@ class MatriculasController extends Controller
     {
         $matricula = Matricula::select('matriculas.*')
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
-            ->join('periodo_lectivos', 'periodo_lectivos.id', '=', 'matriculas.periodo_lectivo_id')
             ->with('estudiante')
             ->with('periodo_academico')
             ->orWhere('identificacion', $request['identificacion'])
@@ -129,8 +128,8 @@ class MatriculasController extends Controller
             ->orWhere('apellido2', 'like', '%' . $request['apellido2'] . '%')
             ->orWhere('nombre1', 'like', '%' . $request['nombre1'] . '%')
             ->orWhere('nombre2', 'like', '%' . $request['nombre2'] . '%')
+            ->where('matriculas.periodo_lectivo_id', '4')
             ->where('matriculas.estado', 'EN_PROCESO')
-            ->where('periodo_lectivos.estado', 'ACTUAL')
             ->get();
         return response()->json(['cupo' => $matricula], 200);
     }

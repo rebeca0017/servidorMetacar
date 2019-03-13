@@ -18,16 +18,16 @@ class CreateCarrerasTable extends Migration
             $table->timestamps();
             $table->integer('instituto_id');
             $table->foreign('instituto_id')->references('id')->on('institutos');
-            $table->string('codigo',50);
-            $table->string('codigo_sniese',50);
-            $table->string('nombre',50);
-            $table->string('descripcion',50);
-            $table->string('modalidad',50);
-            $table->string('numero_resolucion',50);
-            $table->string('titulo_otorga',50);
-            $table->string('siglas',50);
-            $table->string('tipo_carrera',50);
-            $table->string('estado',20)->default('ACTIVO');;
+            $table->string('codigo', 50)->nullable();;
+            $table->string('codigo_sniese', 50)->nullable();
+            $table->string('nombre', 200);
+            $table->string('descripcion', 200);
+            $table->string('modalidad', 50);
+            $table->string('numero_resolucion', 50)->nullable();
+            $table->string('titulo_otorga', 200);
+            $table->string('siglas', 50);
+            $table->string('tipo_carrera', 50);
+            $table->string('estado', 20)->default('ACTIVO');;
         });
     }
 

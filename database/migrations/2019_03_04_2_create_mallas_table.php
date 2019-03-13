@@ -18,10 +18,10 @@ class CreateMallasTable extends Migration
             $table->timestamps();
             $table->integer('carrera_id');
             $table->foreign('carrera_id')->references('id')->on('carreras');
-            $table->string('nombre',50);
+            $table->string('nombre',50)->nullable();
             $table->date('fecha_aprobacion');
-            $table->date('fecha_finalizacion');
-            $table->string('numero_resolucion',50);
+            $table->date('fecha_finalizacion')->nullable();
+            $table->string('numero_resolucion',50)->nullable();
             $table->string('estado',20)->default('ACTIVO');
         });
     }

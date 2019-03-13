@@ -16,10 +16,10 @@ class CreatePeriodoLectivosTable extends Migration
         Schema::create('periodo_lectivos', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->string('codigo', 50);
             $table->string('nombre', 100);
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
-            $table->integer('numero_semanas');
             $table->string('estado', 20)->default('ACTIVO');;
         });
     }

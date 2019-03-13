@@ -5,6 +5,8 @@ namespace App\Exports;
 use App\Malla;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
+
 
 class UsersExport implements FromQuery
 {
@@ -14,8 +16,8 @@ class UsersExport implements FromQuery
 
     use Exportable;
 
-    public function query()
+    public function collection()
     {
-        return Malla::query();
+        return Malla::all();
     }
 }
