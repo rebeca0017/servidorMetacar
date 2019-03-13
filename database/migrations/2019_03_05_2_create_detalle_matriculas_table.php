@@ -17,7 +17,7 @@ class CreateDetalleMatriculasTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->integer('matricula_id');
-            $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');;
+            $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');
             $table->integer('asignatura_id');
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->integer('tipo_matricula_id');

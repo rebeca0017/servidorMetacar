@@ -16,8 +16,8 @@ class CreateInformacionEstudiantesTable extends Migration
         Schema::create('informacion_estudiantes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->integer('matricula_id')->nullable();
-            $table->foreign('matricula_id')->references('id')->on('matriculas')->nullable();
+            $table->integer('matricula_id');
+            $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');;
             $table->string('ha_repetido_asignatura', 10)->nullable();
             $table->string('ha_perdido_gratuidad', 10)->nullable();
             $table->date('fecha_inicio_carrera')->nullable();
