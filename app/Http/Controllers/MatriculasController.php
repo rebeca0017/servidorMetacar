@@ -36,7 +36,6 @@ class MatriculasController extends Controller
                 ->where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
-                ->where('matriculas.estado', 'EN_PROCESO')
                 ->with('estudiante')
                 ->with('periodo_academico')
                 ->orderby('apellido1')
@@ -44,11 +43,10 @@ class MatriculasController extends Controller
         } else {
             $cupos = Matricula::select('estudiantes.apellido1', 'matriculas.*')
                 ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
-                ->where('malla_id', $malla->id)
-                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
-                ->where('matriculas.estado', 'EN_PROCESO')
                 ->with('estudiante')
                 ->with('periodo_academico')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -119,17 +117,21 @@ class MatriculasController extends Controller
 
     public function getCupo(Request $request)
     {
+        $parametersOrWhere = [
+            'apellido1' => $request['apellido1'],
+            'apellido2' => $request['apellido2'],
+            'nombre1' => $request['nombre1'],
+            'nombre2' => $request['nombre2']
+        ];
+
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
         $matricula = Matricula::select('matriculas.*')
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->with('estudiante')
             ->with('periodo_academico')
-            ->orWhere('identificacion', $request['identificacion'])
-            ->orWhere('apellido1', 'like', '%' . $request['apellido1'] . '%')
-            ->orWhere('apellido2', 'like', '%' . $request['apellido2'] . '%')
-            ->orWhere('nombre1', 'like', '%' . $request['nombre1'] . '%')
-            ->orWhere('nombre2', 'like', '%' . $request['nombre2'] . '%')
-            ->where('matriculas.periodo_lectivo_id', '4')
-            ->where('matriculas.estado', 'EN_PROCESO')
+            ->orWhere($parametersOrWhere)
+            ->where('matriculas.estado', '<>', 'MATRICULADO')
+            ->where('matriculas.malla_id', $malla->id)
             ->get();
         return response()->json(['cupo' => $matricula], 200);
     }
@@ -179,5 +181,41 @@ class MatriculasController extends Controller
     {
         $matricula = Matricula::findOrFail($request->id)->delete();
         return response()->json(['detalle_matricula' => $matricula], 201);
+    }
+
+    public function validateCupo(Request $request)
+    {
+        $matricula = Matricula::findOrFail($request->matricula_id);
+        if ($matricula && $matricula->estado != 'MATRICULADO') {
+            $matricula->update(['estado' => 'APROBADO']);
+            $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+        }
+        return response()->json(['matricula' => $matricula], 201);
+    }
+
+    public function validateCuposCarrera(Request $request)
+    {
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $malla->matriculas()->update(['estado' => 'APROBADO']);
+        $matriculas = $malla->matriculas()->get();
+        foreach ($matriculas as $matricula) {
+
+            $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+
+        }
+        return response()->json(['matricula' => $matriculas], 201);
+    }
+
+    public function validateCuposPeriodoAcademico(Request $request)
+    {
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $malla->matriculas()->where('periodo_academico_id', $request->periodo_academico_id)->update(['estado' => 'APROBADO']);
+        $matriculas = $malla->matriculas()->where('periodo_academico_id', $request->periodo_academico_id)->get();
+        foreach ($matriculas as $matricula) {
+
+            $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+
+        }
+        return response()->json(['matricula' => $matriculas], 201);
     }
 }

@@ -32,6 +32,9 @@ Route::get('/tipo_matriculas/{id}', 'TipoMatriculasController@getOne');
 Route::get('/estudiantes', 'EstudiantesController@getOne');
 
 Route::get('/matriculas/cupo', 'MatriculasController@getCupo');
+Route::get('/matriculas/validate_cupo', 'MatriculasController@validateCupo');
+Route::get('/matriculas/validate_cupos_carrera', 'MatriculasController@validateCuposCarrera');
+Route::get('/matriculas/validate_cupos_periodo_academico', 'MatriculasController@validateCuposPeriodoAcademico');
 Route::delete('/matriculas/cupo', 'MatriculasController@deleteCupo');
 Route::get('/matriculas/carreras', 'MatriculasController@getMatriculasCarreras');
 Route::get('/matriculas/periodo_academicos', 'MatriculasController@getMatriculasPeriodoAcademicos');
