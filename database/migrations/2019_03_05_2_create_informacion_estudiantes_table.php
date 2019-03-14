@@ -20,7 +20,6 @@ class CreateInformacionEstudiantesTable extends Migration
             $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');;
             $table->string('ha_repetido_asignatura', 10)->nullable();
             $table->string('ha_perdido_gratuidad', 10)->nullable();
-            $table->date('fecha_inicio_carrera')->nullable();
             $table->string('ha_realizado_practicas', 10)->nullable();
             $table->integer('horas_practicas')->nullable();
             $table->string('sector_economico_practica', 100)->nullable();

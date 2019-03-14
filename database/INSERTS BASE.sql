@@ -3,17 +3,28 @@ INSERT INTO institutos(id,nombre) VALUES(2,'INSTITUTO TECNOLÓGICO SUPERIOR 24 D
 INSERT INTO institutos(id,nombre) VALUES(3,'INSTITUTO TECNOLÓGICO SUPERIOR GRAN COLOMBIA');
 INSERT INTO institutos(id,nombre) VALUES(4,'INSTITUTO TECNOLÓGICO SUPERIOR DE TURISMO Y PATRIMONIO YAVIRAC');
 
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(1,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(2,'2','TECNOLOGÍA SUPERIOR EN MARKETING','TECNÓLOGO SUPERIOR EN MARKETING','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MK','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(3,'3','DISEÑO DE MODAS CON NIVEL EQUIVALENTE A TECNOLOGÍA SUPERIOR','DISEÑADOR DE MODAS CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','PRESENCIAL','DISEÑADOR DE MODAS CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','DM','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(4,'4','TÉCNICO SUPERIOR EN GUIANZA TURÍSTICA CON MENCIÓN EN PATRIMONIO CULTURAL O AVITURISMO','TÉCNICO SUPERIOR EN GUIANZA TURÍSTICA CON MENCIÓN EN PATRIMONIO CULTURAL O AVITURISMO','SEMIPRESENCIAL','TÉCNICO SUPERIOR EN GUIANZA TURÍSTICA CON MENCIÓN EN PATRIMONIO CULTURAL O AVITURISMO','GT','Tecnicatura');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(5,'4','TÉCNICO SUPERIOR EN ARTE CULINARIO ECUATORIANO','TECNÓLOGO SUPERIOR EN ARTE CULINARIO ECUATORIANO','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN ARTE CULINARIO ECUATORIANO','AC','Tecnicatura');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(6,'4','TECNOLOGÍA SUPERIOR EN MARKETING','TECNÓLOGO SUPERIOR EN MARKETING','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MKT','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(7,'4','TECNOLOGÍA SUPERIOR EN ANÁLISIS DE SISTEMAS','TECNÓLOGO SUPERIOR EN ANÁLISIS DE SISTEMAS','PRESENCIAL','TECNÓLOGO SUPERIOR EN ANÁLISIS DE SISTEMAS','AS','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(8,'4','TECNOLOGÍA SUPERIOR EN ELECTRICIDAD','TECNÓLOGO SUPERIOR EN ELECTRICIDAD','PRESENCIAL','TECNÓLOGO SUPERIOR EN ELECTRICIDAD','ELC','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(9,'4','TECNOLOGÍA SUPERIOR EN ELECTRÓNICA','TECNÓLOGO SUPERIOR EN ELECTRÓNICA','PRESENCIAL','TECNÓLOGO SUPERIOR EN ELECTRÓNICA','ELT','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(10,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
-INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera) VALUES(11,'4','GUÍA NACIONAL DE TURISMO CON NIVEL EQUIVALENTE A TECNOLOGÍA SUPERIOR','GUÍA NACIONAL DE TURISMO CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','SEMIPRESENCIAL','GUÍA NACIONAL DE TURISMO CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','GN','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(1,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','MALLA ACTUAL','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(2,'2','TECNOLOGÍA SUPERIOR EN MARKETING','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MK','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(3,'3','DISEÑO DE MODAS CON NIVEL EQUIVALENTE A TECNOLOGÍA SUPERIOR','MALLA ACTUAL','PRESENCIAL','DISEÑADOR DE MODAS CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','DM','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(4,'4','TÉCNICO SUPERIOR EN GUIANZA TURÍSTICA CON MENCIÓN EN PATRIMONIO CULTURAL O AVITURISMO','MALLA ACTUAL','SEMIPRESENCIAL','TÉCNICO SUPERIOR EN GUIANZA TURÍSTICA CON MENCIÓN EN PATRIMONIO CULTURAL O AVITURISMO','GT','Tecnicatura');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(5,'4','TÉCNICO SUPERIOR EN ARTE CULINARIO ECUATORIANO','MALLA ACTUAL','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN ARTE CULINARIO ECUATORIANO','AC','Tecnicatura');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(6,'4','TECNOLOGÍA SUPERIOR EN MARKETING','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MKT','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(7,'4','TECNOLOGÍA SUPERIOR EN ANÁLISIS DE SISTEMAS','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN ANÁLISIS DE SISTEMAS','AS','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(8,'4','TECNOLOGÍA SUPERIOR EN ELECTRICIDAD','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN ELECTRICIDAD','ELC','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(9,'4','TECNOLOGÍA SUPERIOR EN ELECTRÓNICA','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN ELECTRÓNICA','ELT','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(10,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','MALLA ANTIGUA','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
+INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
+VALUES(11,'4','GUÍA NACIONAL DE TURISMO CON NIVEL EQUIVALENTE A TECNOLOGÍA SUPERIOR','MALLA ACTUAL','SEMIPRESENCIAL','GUÍA NACIONAL DE TURISMO CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','GN','Tecnología');
 
 INSERT INTO mallas(id,carrera_id,fecha_aprobacion) VALUES(2,1,'2017-03-01');
 INSERT INTO mallas(id,carrera_id,fecha_aprobacion) VALUES(3,2,'2015-02-02');

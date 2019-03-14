@@ -10,11 +10,11 @@ class Matricula extends Model
         'codigo', 'codigo_sniese_paralelo', 'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
     ];
 
-    public function detalleMatriculas(){
+    public function detalle_matriculas(){
         return $this->hasMany('App\DetalleMatricula');
     }
 
-    public function informacionEstudiantes(){
+    public function informacion_estudiantes(){
         return $this->hasMany('App\InformacionEstudiante');
     }
     public function estudiante()

@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::get('/pruebas', 'PruebasController@get');
 
 Route::post('/detalle_matriculas', 'DetalleMatriculasController@create');
 Route::get('/detalle_matriculas', 'DetalleMatriculasController@get');

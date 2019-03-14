@@ -6,8 +6,48 @@ use Illuminate\Database\Eloquent\Model;
 
 class InformacionEstudiante extends Model
 {
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     protected $fillable = [
-        'identificacion', 'fecha_aprobacion', 'numero_resolucion','fecha_finalizacion', 'estado',
+        'ha_repetido_asignatura',
+        'ha_perdido_gratuidad',
+        'ha_realizado_practicas',
+        'horas_practicas',
+        'sector_economico_practica',
+        'tipo_institucion_practicas',
+        'ha_realizado_vinculacion',
+        'horas_vinculacion',
+        'alcance_vinculacion',
+        'ocupacion',
+        'nombre_empresa_labora',
+        'area_trabajo_empresa',
+        'destino_ingreso',
+        'recibe_bono_desarrollo',
+        'nivel_formacion_padre',
+        'nivel_formacion_madre',
+        'ingreso_familiar',
+        'numero_miembros_hogar',
+        'tiene_carnet_conadis',
+        'numero_carnet_conadis',
+        'tipo_discapcidad',
+        'porcentaje_discapacidad',
+        'telefono_fijo',
+        'telefono_celular',
+        'direccion',
+        'estado_civil',
+        'pension_diferenciada',
+        'tipo_beca',
+        'razon_beca',
+        'monto_beca',
+        'porciento_beca_cobertura_arancel',
+        'porciento_beca_cobertura_manutencion',
+        'tipo_financiamiento_beca',
+        'monto_ayuda_economica',
+        'monto_credito_educativo',
+        'estado',
     ];
 
     public function matricula()
