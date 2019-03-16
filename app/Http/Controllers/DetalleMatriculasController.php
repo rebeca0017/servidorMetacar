@@ -31,7 +31,7 @@ class DetalleMatriculasController extends Controller
         return response()->json(['detalle_matricula' => $detalleMatricula], 200);
     }
 
-    public function getForMalla(Request $request)
+    public function getDetalleCuposForMalla(Request $request)
     {
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
         if ($request->periodo_academico_id) {
@@ -74,24 +74,40 @@ class DetalleMatriculasController extends Controller
 
     public function create(Request $request)
     {
-        $data = $request->json()->all();
-        $dataDetalleMatricula = $data['detalle_matricula'];
+        try {
+            $data = $request->json()->all();
+            $dataDetalleMatricula = $data['detalle_matricula'];
 
-        $detalleMatricula = new DetalleMatricula([
-            'paralelo' => $dataDetalleMatricula['paralelo'],
-            'numero_matricula' => $dataDetalleMatricula['numero_matricula'],
-            'jornada' => $dataDetalleMatricula['jornada'],
-            'estado' => 'EN_PROCESO'
-        ]);
-        $matricula = Matricula::findOrFail($data['detalle_matricula']['matricula']['id']);
-        $tipoMatricula = TipoMatricula::findOrFail($dataDetalleMatricula['tipo_matricula']['id']);
-        $asignatura = Asignatura::findOrFail($dataDetalleMatricula['asignatura']['id']);
+            $detalleMatricula = new DetalleMatricula([
+                'paralelo' => $dataDetalleMatricula['paralelo'],
+                'numero_matricula' => $dataDetalleMatricula['numero_matricula'],
+                'jornada' => $dataDetalleMatricula['jornada'],
+                'estado' => 'EN_PROCESO'
+            ]);
+            $matricula = Matricula::findOrFail($data['detalle_matricula']['matricula']['id']);
+            $tipoMatricula = TipoMatricula::findOrFail($dataDetalleMatricula['tipo_matricula']['id']);
+            $asignatura = Asignatura::findOrFail($dataDetalleMatricula['asignatura']['id']);
 
-        $detalleMatricula->matricula()->associate($matricula);
-        $detalleMatricula->asignatura()->associate($asignatura);
-        $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
-        $detalleMatricula->save();
-        return response()->json(['detalle_matricula' => $detalleMatricula], 200);
+            $detalleMatricula->matricula()->associate($matricula);
+            $detalleMatricula->asignatura()->associate($asignatura);
+            $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
+            $detalleMatricula->save();
+            return response()->json(['detalle_matricula' => $detalleMatricula], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json($e, 405);
+        } catch (NotFoundHttpException  $e) {
+            return response()->json($e, 405);
+        } catch (\PDOException $e) {
+            return response()->json($e, 409);
+        } catch (QueryException $e) {
+            return response()->json('asdasd', 200);
+        } catch (Exception $e) {
+            return response()->json($e, 500);
+        } catch (Error $e) {
+            return response()->json($e, 500);
+        } catch (ErrorException $e) {
+            return response()->json($e, 500);
+        }
     }
 
     public function update(Request $request)

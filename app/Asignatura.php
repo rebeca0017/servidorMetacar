@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Asignatura extends Model
 {
     protected $fillable = [
-        'nombre', 'fecha_aprobacion', 'numero_resolucion','fecha_finalizacion', 'estado',
+        'codigo',
+        'nombre',
+        'horas_practica',
+        'horas_docente',
+        'horas_autonoma',
+        'tipo',
+        'estado',
     ];
 
     public function matriculas(){
