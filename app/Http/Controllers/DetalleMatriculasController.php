@@ -31,22 +31,65 @@ class DetalleMatriculasController extends Controller
         return response()->json(['detalle_matricula' => $detalleMatricula], 200);
     }
 
-    public function getDetalleCuposForMalla(Request $request)
+    public function getCountDetalleCuposCarrera(Request $request)
     {
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
         if ($request->periodo_academico_id) {
-            $detalleMatricula = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+            $enProcesoCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
                 ->where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
-                ->get();
-        } else {
-            $detalleMatricula = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('matriculas.estado', 'EN_PROCESO')
+                ->count();
+            $aprobadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
                 ->where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
-                ->get();
+                ->where('periodo_academico_id', $request->periodo_academico_id)
+                ->where('matriculas.estado', 'APROBADO')
+                ->count();
+
+            $matriculadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('periodo_academico_id', $request->periodo_academico_id)
+                ->where('matriculas.estado', 'MATRICULADO')
+                ->count();
+
+            $anuladosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('periodo_academico_id', $request->periodo_academico_id)
+                ->where('matriculas.estado', 'ANULADO')
+                ->count();
+        } else {
+            $enProcesoCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('matriculas.estado', 'EN_PROCESO')
+                ->count();
+            $aprobadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('matriculas.estado', 'APROBADO')
+                ->count();
+
+            $matriculadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('matriculas.estado', 'MATRICULADO')
+                ->count();
+
+            $anuladosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
+                ->where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
+                ->where('matriculas.estado', 'ANULADO')
+                ->count();
         }
-        return response()->json(['detalle_matriculas' => $detalleMatricula], 200);
+        return response()->json(['en_proceso_count' => $enProcesoCount,
+            'aprobados_count' => $aprobadosCount,
+            'matriculados_count' => $matriculadosCount,
+            'anulados_count' => $anuladosCount
+        ], 200);
     }
 
     public function getOne(Request $request)

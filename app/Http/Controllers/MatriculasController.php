@@ -47,7 +47,7 @@ class MatriculasController extends Controller
                         ->orWhere('matriculas.estado', 'MATRICULADO')
                         ->orWhere('matriculas.estado', 'ANULADO');
                 })
-                ->orderby('matriculas.estado', 'ASC')
+                //->orderby('matriculas.estado', 'ASC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
@@ -65,7 +65,7 @@ class MatriculasController extends Controller
                         ->orWhere('matriculas.estado', 'MATRICULADO')
                         ->orWhere('matriculas.estado', 'ANULADO');
                 })
-                ->orderby('matriculas.estado', 'ASC')
+                //->orderby('matriculas.estado', 'ASC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -121,11 +121,11 @@ class MatriculasController extends Controller
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                         ->where('periodo_academico_id', $request->periodo_academico_id);
                 })
-                ->orWhere(function ($cupos) use (&$request) {
+                ->where(function ($cupos) use (&$request) {
                     $cupos->orWhere('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                ->orderby('matriculas.estado', 'DESC')
+                //->orderby('matriculas.estado', 'DESC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
@@ -142,7 +142,7 @@ class MatriculasController extends Controller
                     $cupos->where('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                ->orderby('matriculas.estado', 'DESC')
+                //->orderby('matriculas.estado', 'DESC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -234,7 +234,8 @@ class MatriculasController extends Controller
 
     public function deleteDetalleMatricula(Request $request)
     {
-        $detalleMatricula = DetalleMatricula::findOrFail($request->id)->delete();
+        $detalleMatricula = DetalleMatricula::findOrFail($request->id);
+        $detalleMatricula->update(['estado' => 'ANULADO']);
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
 
