@@ -17,6 +17,6 @@ class Malla extends Model
 
     public function carrera()
     {
-        return $this->hasMany('App\Carrera');
+        return $this->belongsTo('App\Carrera');
     }
 }

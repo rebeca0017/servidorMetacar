@@ -20,6 +20,11 @@ class Estudiante extends Model
         'tipo_sangre',
         'tipo_identificacion',
         'tipo_colegio',
+        'tipo_bachillerato',
+        'pueblo_nacionalidad',
+        'anio_graduacion',
+        'fecha_inicio_carrera',
+        'corte',
         'estado',
     ];
 

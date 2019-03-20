@@ -28,14 +28,20 @@ class ExcelController extends Controller
         $carrera = Carrera::findOrFail($request->carrera_id);
         $cupos = Matricula::select(
             'carreras.nombre as carrera',
-            'estudiantes.identificacion',
+            'estudiantes.identificacion as cedula_estudiante',
             'estudiantes.apellido1',
             'estudiantes.apellido2',
             'estudiantes.nombre1',
             'estudiantes.nombre2',
-            'asignaturas.codigo',
+            'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
-            'matriculas.periodo_academico_id as periodo_academico',
+            'detalle_matriculas.jornada as jornada_asignatura',
+            'detalle_matriculas.paralelo as paralelo_asignatura',
+            'detalle_matriculas.numero_matricula as numero_matricula',
+            'tipo_matriculas.nombre as tipo_matricula',
+            'matriculas.paralelo_principal as paralelo_principal',
+            'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal',
             'matriculas.estado'
         )
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
@@ -43,6 +49,7 @@ class ExcelController extends Controller
             ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('tipo_matriculas', 'tipo_matriculas.id', '=', 'detalle_matriculas.tipo_matricula_id')
             ->where('matriculas.malla_id', $malla->id)
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->orderBy('matriculas.estado', 'DESC')
@@ -121,7 +128,7 @@ class ExcelController extends Controller
                                 $matriculaAnterior = Matricula::where('estudiante_id', $estudiante->id)
                                     ->where('estado', 'MATRICULADO')
                                     ->orderby('fecha', 'DESC')->first();
-                                $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
+                                $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
                                 $malla = Malla::where('id', $row->malla_id)->first();
                                 $matricula->estudiante()->associate($estudiante);
                                 $matricula->periodo_lectivo()->associate($periodoLectivo);
@@ -221,6 +228,7 @@ class ExcelController extends Controller
 
     public function importCupos(Request $request)
     {
+
 //        $archivo = file_get_contents($_FILES['archivo']['tmp_name']);
 
         if ($request->file('archivo')) {
@@ -240,7 +248,8 @@ class ExcelController extends Controller
                         if ($estudiante) {
                             $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
                             $existeMatricula = Matricula::where('estudiante_id', $estudiante->id)
-                                ->where('periodo_lectivo_id', $periodoLectivo->id)->first();
+                                ->where('periodo_lectivo_id', $periodoLectivo->id)
+                                ->first();
                             if (!$existeMatricula) {
                                 $matriculaAnterior = Matricula::where('estudiante_id', $estudiante->id)
                                     ->where('estado', 'MATRICULADO')
@@ -251,7 +260,7 @@ class ExcelController extends Controller
                                     'paralelo_principal' => $row->paralelo_principal,
                                     'estado' => 'EN_PROCESO'
                                 ]);
-                                $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_id)->first();
+                                $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
                                 $malla = Malla::where('carrera_id', $request->carrera_id)->first();
                                 $matricula->estudiante()->associate($estudiante);
                                 $matricula->periodo_lectivo()->associate($periodoLectivo);
@@ -321,6 +330,7 @@ class ExcelController extends Controller
                                         'jornada' => $row->jornada_asignatura,
                                         'estado' => 'EN_PROCESO'
                                     ]);
+
                                     $tipoMatricula = TipoMatricula::where('nombre', $row->tipo_matricula)->first();
                                     $detalleMatriculas->matricula()->associate($matricula);
                                     $detalleMatriculas->asignatura()->associate($asignatura);
@@ -337,11 +347,40 @@ class ExcelController extends Controller
                 }
             });
             $cupos = Matricula::get();
-            Storage::delete($pathFile);
+            //Storage::delete($pathFile);
             return response()->json($response->parsed, 200);
         } else {
-            return "false";
+            return "No valido";
         }
 
+    }
+
+    public function prueba()
+    {
+        $now = Carbon::now();
+        $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        if ($now->format('Y-m-d') >= $periodoLectivo->fecha_inicio_cupo
+            && $now->format('Y-m-d') <= $periodoLectivo->fecha_fin_cupo) {
+            return 1;
+            $tipoMatricula = TipoMatricula::where('nombre', 'CUPO')->first();
+        } else if ($now->format('Y-m-d') >= $periodoLectivo->fecha_inicio_ordinaria
+            && $now->format('Y-m-d') <= $periodoLectivo->fecha_fin_ordinaria) {
+            return 2;
+            $tipoMatricula = TipoMatricula::where('nombre', 'ORDINARIA')->first();
+        } else if ($now->format('Y-m-d') >= $periodoLectivo->fecha_inicio_extraordinaria
+            && $now->format('Y-m-d') <= $periodoLectivo->fecha_fin_extraordinaria) {
+            return 3;
+            $tipoMatricula = TipoMatricula::where('nombre', 'EXTRAORDINARIA')->first();
+        } else if ($now->format('Y-m-d') >= $periodoLectivo->fecha_inicio_extraordinaria
+            && $now->format('Y-m-d') <= $periodoLectivo->fecha_fin_extraordinaria) {
+            return 4;
+            $tipoMatricula = TipoMatricula::where('nombre', 'ESPECIAL')->first();
+        } else {
+            return 5;
+            $tipoMatricula = TipoMatricula::where('nombre', 'NA')->first();
+        }
+
+
+        return $tipoMatricula;
     }
 }

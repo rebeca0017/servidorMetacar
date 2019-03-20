@@ -11,6 +11,7 @@ use App\Matricula;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
 use App\TipoMatricula;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,6 +26,119 @@ class MatriculasController extends Controller
     public function __construct()
     {
         //
+    }
+
+    public function getCountMatriculas(Request $request)
+    {
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+
+        $parameters = [$periodoLectivoActual->id, 'MATRICULADO', 'APROBADO'];
+        $matriculadosCount = DB::select
+        ('select carreras.id,carreras.nombre,matriculas.estado 
+                from matriculas inner join mallas on matriculas.malla_id = mallas.id 
+                inner join carreras on carreras.id = mallas.carrera_id
+                where periodo_lectivo_id=? and (matriculas.estado=? or matriculas.estado=?)
+                order by carreras.id'
+            , $parameters);
+
+        $carreras = DB::select
+        ('select carreras.id,carreras.nombre,carreras.descripcion 
+                from matriculas inner join mallas on matriculas.malla_id = mallas.id 
+                inner join carreras on carreras.id = mallas.carrera_id
+                where periodo_lectivo_id=? and (matriculas.estado=? or matriculas.estado=?)
+                group by carreras.id'
+            , $parameters);
+
+
+        return response()->json(['matriculados_count' => $matriculadosCount,
+            'carreras' => $carreras], 200);
+    }
+
+    public function getSolicitudMatricula(Request $request)
+    {
+        $certificadoMatricula = Matricula::select(
+            'matriculas.*',
+            'institutos.nombre as instituto',
+            'carreras.nombre as carrera',
+            'asignaturas.nombre as asignatura',
+            'asignaturas.horas_docente as horas_docente',
+            'asignaturas.horas_practica as horas_practica',
+            'asignaturas.horas_autonoma as horas_autonoma',
+            'asignaturas.codigo as asignatura_codigo',
+            'asignaturas.periodo_academico_id as periodo'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
+            ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->with('periodo_lectivo')
+            ->where('matriculas.id', $request->matricula_id)
+            ->get();
+
+        return response()->json(['certificado' => $certificadoMatricula], 200);
+    }
+
+    public function getCertificadoMatricula(Request $request)
+    {
+        $certificadoMatricula = Matricula::select(
+            'matriculas.*',
+            'institutos.nombre as instituto',
+            'carreras.nombre as carrera',
+            'asignaturas.nombre as asignatura',
+            'asignaturas.horas_docente as horas_docente',
+            'asignaturas.horas_practica as horas_practica',
+            'asignaturas.horas_autonoma as horas_autonoma',
+            'asignaturas.codigo as asignatura_codigo',
+            'asignaturas.periodo_academico_id as periodo',
+            'detalle_matriculas.numero_matricula as numero_matricula'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
+            ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->with('periodo_lectivo')
+            ->where('matriculas.id', $request->matricula_id)
+            ->get();
+
+        return response()->json(['certificado' => $certificadoMatricula], 200);
+    }
+
+    public function getCertificadoMatriculaPublic(Request $request)
+    {
+        $certificadoMatricula = Matricula::select(
+            'matriculas.*',
+            'institutos.nombre as instituto',
+            'carreras.nombre as carrera',
+            'asignaturas.nombre as asignatura',
+            'asignaturas.horas_docente as horas_docente',
+            'asignaturas.horas_practica as horas_practica',
+            'asignaturas.horas_autonoma as horas_autonoma',
+            'asignaturas.codigo as asignatura_codigo',
+            'asignaturas.periodo_academico_id as periodo',
+            'detalle_matriculas.numero_matricula as numero_matricula'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
+            ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->with('periodo_lectivo')
+            ->where('matriculas.id', $request->matricula_id)
+            ->get();
+
+        return view('certificado-matricula', ['certificado' => $certificadoMatricula]);
+        return $certificadoMatricula;
     }
 
     public function getAprobados(Request $request)
@@ -45,9 +159,11 @@ class MatriculasController extends Controller
                 ->where(function ($cupos) {
                     $cupos->orWhere('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'MATRICULADO')
+                        ->orWhere('matriculas.estado', 'EN_PROCESO')
                         ->orWhere('matriculas.estado', 'ANULADO');
                 })
-                //->orderby('matriculas.estado', 'ASC')
+                ->orderby('matriculas.estado', 'ASC')
+                ->orderby('apellido1')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
@@ -63,9 +179,10 @@ class MatriculasController extends Controller
                 ->where(function ($cupos) {
                     $cupos->where('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'MATRICULADO')
+                        ->orWhere('matriculas.estado', 'EN_PROCESO')
                         ->orWhere('matriculas.estado', 'ANULADO');
                 })
-                //->orderby('matriculas.estado', 'ASC')
+                ->orderby('matriculas.estado', 'ASC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -208,7 +325,43 @@ class MatriculasController extends Controller
             $detalleMatricula->asignatura()->associate($asignatura);
             $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
             $detalleMatricula->save();
+            $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
+
             return response()->json(['detalle_matricula' => $detalleMatricula], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json($e, 405);
+        } catch (NotFoundHttpException  $e) {
+            return response()->json($e, 405);
+        } catch (\PDOException $e) {
+            return response()->json($e, 409);
+        } catch (QueryException $e) {
+            return response()->json('asdasd', 200);
+        } catch (Exception $e) {
+            return response()->json($e, 500);
+        } catch (Error $e) {
+            return response()->json($e, 500);
+        } catch (ErrorException $e) {
+            return response()->json($e, 500);
+        }
+    }
+
+    public function updateMatricula(Request $request)
+    {
+        try {
+            $data = $request->json()->all();
+            $dataMatricula = $data['matricula'];
+            $matricula = Matricula::findOrFail($dataMatricula['id']);
+
+            $matricula->update([
+                'jornada' => $dataMatricula['jornada']
+            ]);
+            $periodoAcademico = PeriodoAcademico::findOrFail($dataMatricula['periodo_academico']['id']);
+
+            $matricula->periodo_academico()->associate($periodoAcademico);
+            $matricula->save();
+
+
+            return response()->json(['matriculas' => $matricula], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 405);
         } catch (NotFoundHttpException  $e) {
@@ -318,9 +471,26 @@ class MatriculasController extends Controller
 
     public function validateCupo(Request $request)
     {
+        $now = new Carbon();
+        //date('F', strtotime($matricula->fecha))
         $matricula = Matricula::findOrFail($request->matricula_id);
-        if ($matricula && $matricula->estado != 'MATRICULADO') {
-            $matricula->update(['estado' => $request->estado]);
+        $periodoLectivo = PeriodoLectivo::findOrFail($matricula->periodo_lectivo_id);
+        $estudiante = Estudiante::findOrFail($matricula->estudiante_id);
+        $malla = Malla::findOrFail($matricula->malla_id);
+        $carrera = $malla->carrera()->first();
+        if ($matricula && $request->estado == 'MATRICULADO') {
+            $matricula->update([
+                'fecha' => $now,
+                'estado' => $request->estado,
+                'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
+                'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas
+            ]);
+            $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
+        } else {
+            $matricula->update([
+                'estado' => $request->estado,
+                'fecha' => $now
+            ]);
             $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
         }
         return response()->json(['matricula' => $matricula], 201);

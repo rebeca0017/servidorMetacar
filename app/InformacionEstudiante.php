@@ -12,6 +12,14 @@ class InformacionEstudiante extends Model
     }
 
     protected $fillable = [
+        'codigo_postal',
+        'contacto_emergencia_telefono',
+        'contacto_emergencia_parentesco',
+        'contacto_emergencia_nombres',
+        'habla_idioma_ancestral',
+        'idioma_ancestral',
+        'categoria_migratoria',
+        'posee_titulo_superior',
         'ha_repetido_asignatura',
         'ha_perdido_gratuidad',
         'ha_realizado_practicas',

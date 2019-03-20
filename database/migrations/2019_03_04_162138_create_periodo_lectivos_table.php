@@ -18,8 +18,16 @@ class CreatePeriodoLectivosTable extends Migration
             $table->timestamps();
             $table->string('codigo', 50);
             $table->string('nombre', 100);
-            $table->date('fecha_inicio');
-            $table->date('fecha_fin');
+            $table->date('fecha_inicio_periodo');
+            $table->date('fecha_fin_periodo');
+            $table->date('fecha_inicio_cupo')->nullable();
+            $table->date('fecha_fin_cupo')->nullable();
+            $table->date('fecha_inicio_ordinaria')->nullable();
+            $table->date('fecha_fin_ordinaria')->nullable();
+            $table->date('fecha_inicio_extraordinaria')->nullable();
+            $table->date('fecha_fin_extraordinaria')->nullable();
+            $table->date('fecha_inicio_especial')->nullable();
+            $table->date('fecha_fin_especial')->nullable();
             $table->string('estado', 20)->default('ACTIVO');;
         });
     }

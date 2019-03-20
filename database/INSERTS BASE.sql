@@ -6,7 +6,7 @@ INSERT INTO institutos(id,nombre) VALUES(4,'INSTITUTO TECNOLÓGICO SUPERIOR DE T
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
 VALUES(1,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','MALLA ACTUAL','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
-VALUES(2,'2','TECNOLOGÍA SUPERIOR EN MARKETING','MALLA ACTUAL','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MK','Tecnología');
+VALUES(2,'2','TECNOLOGÍA SUPERIOR EN MARKETING','MALLA ANTIGUA','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MK','Tecnología');
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
 VALUES(3,'3','DISEÑO DE MODAS CON NIVEL EQUIVALENTE A TECNOLOGÍA SUPERIOR','MALLA ACTUAL','PRESENCIAL','DISEÑADOR DE MODAS CON NIVEL EQUIVALENTE A TECNÓLOGO SUPERIOR','DM','Tecnología');
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
@@ -591,22 +591,54 @@ INSERT INTO asignaturas(id,malla_id, periodo_academico_id,codigo, nombre, horas_
 INSERT INTO asignaturas(id,malla_id, periodo_academico_id,codigo, nombre, horas_practica, horas_docente, horas_autonoma, tipo) VALUES(558,3,6,'7MK6PR0301','MARKETING ESTRATÉGICO II',0,3,0,'ASIGNATURA');
 INSERT INTO asignaturas(id,malla_id, periodo_academico_id,codigo, nombre, horas_practica, horas_docente, horas_autonoma, tipo) VALUES(559,3,6,'8MK6PR0301','GERENCIA DE VENTAS',0,3,0,'ASIGNATURA');
 
-INSERT INTO periodo_lectivos (id, nombre, fecha_inicio, fecha_fin, codigo, estado)
-    VALUES 
-    (1, 'MAYO 2017 - OCTUBRE 2017','2017-05-01','2018-10-31','2017-1','ACTIVO'),
-    (2, 'NOVIEMBRE 2017 - ABRIL 2018','2017-11-01','2018-04-30','2017-2','ACTIVO'),
-    (3, 'MAYO 2018 - OCTUBRE 2018','2018-05-01','2018-10-30','2018-1','ACTUAL'),
-    (4, 'NOVIEMBRE 2018 - ABRIL 2019','2018-11-06','2019-04-15','2018-2','ACTIVO');
+INSERT INTO periodo_lectivos (id, nombre,
+fecha_inicio_periodo, fecha_fin_periodo,
+fecha_inicio_cupo, fecha_fin_cupo,
+fecha_inicio_ordinaria, fecha_fin_ordinaria,
+fecha_inicio_extraordinaria, fecha_fin_extraordinaria,
+fecha_inicio_especial, fecha_fin_especial,
+codigo, estado)
+    VALUES
+    (1, 'MAYO 2017 - OCTUBRE 2017',
+    '2017-05-01','2018-10-31',
+    '2017-05-01','2018-10-31',
+    '2017-05-01','2018-10-31',
+    '2017-05-01','2018-10-31',
+    '2017-05-01','2018-10-31',
+    '2017-1','ACTIVO'),
+    (2, 'NOVIEMBRE 2017 - ABRIL 2018',
+    '2017-11-01','2018-04-30',
+    '2017-11-01','2018-04-30',
+    '2017-11-01','2018-04-30',
+    '2017-11-01','2018-04-30',
+    '2017-11-01','2018-04-30',
+    '2017-2','ACTIVO'),
+    (3, 'MAYO 2018 - OCTUBRE 2018',
+    '2018-05-01','2018-10-30',
+    '2018-05-01','2018-10-30',
+    '2018-05-01','2018-10-30',
+    '2018-05-01','2018-10-30',
+    '2018-05-01','2018-10-30',
+    '2018-1','ACTIVO'),
+    (4, 'NOVIEMBRE 2018 - ABRIL 2019',
+    '2018-11-06','2019-04-15',
+    '2018-11-06','2019-04-15',
+    '2018-11-06','2019-04-15',
+    '2018-11-06','2019-04-15',
+    '2018-11-06','2019-04-15',
+    '2018-2','ACTUAL');
 
 INSERT INTO tipo_matriculas (id, nombre, estado)
-    VALUES 
+    VALUES
     (1,'ORDINARIA','ACTIVO'),
     (2,'EXTRAORDINARIA','ACTIVO'),
-    (3,'ESPECIAL','ACTIVO');
+    (3,'ESPECIAL','ACTIVO'),
+    (4,'CUPO','ACTIVO'),
+    (5,'NA','ACTIVO');
 
     INSERT INTO ubicaciones
     (id,created_at,updated_at, codigo_padre_id, codigo, nombre, tipo, estado)
-VALUES 
+VALUES
     (1,'2019-03-04 00:00:00', '2019-03-04 00:00:00',null,'56','ECUADOR','PAIS','ACTIVO'),
     (2,'2019-03-04 00:00:00', '2019-03-04 00:00:00',1,'01','AZUAY','PROVINCIA','ACTIVO'),
     (3,'2019-03-04 00:00:00', '2019-03-04 00:00:00',1,'02','BOLIVAR','PROVINCIA','ACTIVO'),

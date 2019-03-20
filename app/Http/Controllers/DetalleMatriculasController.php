@@ -125,7 +125,7 @@ class DetalleMatriculasController extends Controller
                 'paralelo' => $dataDetalleMatricula['paralelo'],
                 'numero_matricula' => $dataDetalleMatricula['numero_matricula'],
                 'jornada' => $dataDetalleMatricula['jornada'],
-                'estado' => 'EN_PROCESO'
+                'estado' => $dataDetalleMatricula['estado']
             ]);
             $matricula = Matricula::findOrFail($data['detalle_matricula']['matricula']['id']);
             $tipoMatricula = TipoMatricula::findOrFail($dataDetalleMatricula['tipo_matricula']['id']);
@@ -135,6 +135,14 @@ class DetalleMatriculasController extends Controller
             $detalleMatricula->asignatura()->associate($asignatura);
             $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
             $detalleMatricula->save();
+
+            if ($dataDetalleMatricula['estado'] == 'EN_PROCESO') {
+                $matricula->update(['estado' => 'EN_PROCESO']);
+            }
+
+            if ($dataDetalleMatricula['estado'] == 'MATRICULADO') {
+                $matricula->update(['estado' => 'APROBADO']);
+            }
             return response()->json(['detalle_matricula' => $detalleMatricula], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 405);

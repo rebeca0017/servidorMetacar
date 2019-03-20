@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Estudiante;
+use App\InformacionEstudiante;
+use App\Matricula;
+use App\PeriodoLectivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,24 +23,17 @@ class EstudiantesController extends Controller
 
     public function getOne(Request $request)
     {
-        //$data = $request->json()->all();
 
-        $sql = 'SELECT estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $estudiante = DB::select($sql);
+        $estudiante = Estudiante::findOrFail($request->id);
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        $matricula = Matricula::where('estudiante_id', $request->id)
+            ->where('periodo_lectivo_id', $periodoLectivoActual->id)
+            ->first();
+        $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)->first();
 
-        $sql = 'SELECT informacion_estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $informacionEstudiante = DB::select($sql);
         return response()->json([
-            'estudiante' => $estudiante[0],
-            'informacion_estudiante' => $informacionEstudiante[0]
+            'estudiantes' => $estudiante,
+            'informacion_estudiante' => $informacionEstudiante
         ]);
     }
 
