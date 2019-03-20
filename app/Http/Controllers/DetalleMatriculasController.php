@@ -62,13 +62,13 @@ class DetalleMatriculasController extends Controller
                 ->where('matriculas.estado', 'ANULADO')
                 ->count();
         } else {
-            $enProcesoCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $enProcesoCount = DetalleMatricula::
+                where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'EN_PROCESO')
                 ->count();
-            $aprobadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $aprobadosCount = DetalleMatricula::
+                where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'APROBADO')
                 ->count();
