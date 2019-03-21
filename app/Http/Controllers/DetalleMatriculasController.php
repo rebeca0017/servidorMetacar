@@ -35,52 +35,46 @@ class DetalleMatriculasController extends Controller
     {
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
         if ($request->periodo_academico_id) {
-            $enProcesoCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $enProcesoCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
                 ->where('matriculas.estado', 'EN_PROCESO')
                 ->count();
-            $aprobadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $aprobadosCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
                 ->where('matriculas.estado', 'APROBADO')
                 ->count();
 
-            $matriculadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $matriculadosCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
                 ->where('matriculas.estado', 'MATRICULADO')
                 ->count();
 
-            $anuladosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $anuladosCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('periodo_academico_id', $request->periodo_academico_id)
                 ->where('matriculas.estado', 'ANULADO')
                 ->count();
         } else {
-            $enProcesoCount = DetalleMatricula::
-                where('malla_id', $malla->id)
+            $enProcesoCount = Matricula::
+            where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'EN_PROCESO')
                 ->count();
-            $aprobadosCount = DetalleMatricula::
-                where('malla_id', $malla->id)
+            $aprobadosCount = Matricula::
+            where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'APROBADO')
                 ->count();
 
-            $matriculadosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $matriculadosCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'MATRICULADO')
                 ->count();
 
-            $anuladosCount = DetalleMatricula::join('matriculas', 'matriculas.id', 'detalle_matriculas.matricula_id')
-                ->where('malla_id', $malla->id)
+            $anuladosCount = Matricula::where('malla_id', $malla->id)
                 ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
                 ->where('matriculas.estado', 'ANULADO')
                 ->count();

@@ -206,7 +206,7 @@ class MatriculasController extends Controller
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
-            ->orWhere(function ($cupo) use (&$request) {
+            ->where(function ($cupo) use (&$request) {
                 $cupo->orWhere('apellido1', 'like', '%' . $request->apellido1 . '%')
                     ->orWhere('apellido2', 'like', '%' . $request->apellido2 . '%')
                     ->orWhere('nombre1', 'like', '%' . $request->nombre1 . '%')
@@ -214,8 +214,7 @@ class MatriculasController extends Controller
                     ->orWhere('identificacion', 'like', '%' . $request->identificacion . '%');
             })
             ->where(function ($cupo) use (&$malla, &$periodoLectivoActual) {
-                $cupo->where('matriculas.estado', '<>', 'EN_PROCESO')
-                    ->where('matriculas.malla_id', '=', $malla->id)
+                $cupo->where('matriculas.malla_id', '=', $malla->id)
                     ->where('matriculas.periodo_lectivo_id', '=', $periodoLectivoActual->id);
             })
             ->get();
@@ -283,7 +282,7 @@ class MatriculasController extends Controller
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
-            ->orWhere(function ($cupo) use (&$request) {
+            ->where(function ($cupo) use (&$request) {
                 $cupo->orWhere('apellido1', 'like', '%' . $request->apellido1 . '%')
                     ->orWhere('apellido2', 'like', '%' . $request->apellido2 . '%')
                     ->orWhere('nombre1', 'like', '%' . $request->nombre1 . '%')
@@ -291,7 +290,8 @@ class MatriculasController extends Controller
                     ->orWhere('identificacion', 'like', '%' . $request->identificacion . '%');
             })
             ->where(function ($cupo) use (&$malla, &$periodoLectivoActual) {
-                $cupo->where('matriculas.estado', '<>', 'MATRICULADO')
+                $cupo->where('matriculas.estado', '=', 'EN_PROCESO')
+                    ->orwhere('matriculas.estado', '=', 'APROBADO')
                     ->where('matriculas.malla_id', '=', $malla->id)
                     ->where('matriculas.periodo_lectivo_id', '=', $periodoLectivoActual->id);
             })
