@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Carrera;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Collection as Collection;
 use Excel;
 use App\InformacionEstudiante;
+use App\InformacionEstudianteTransaccion;
 use Carbon\Carbon;
 use App\Asignatura;
 use App\DetalleMatricula;
+use App\DetalleMatriculaTransaccion;
 use App\Estudiante;
 use Illuminate\Support\Facades\DB;
 use App\Matricula;
+use App\MatriculaTransaccion;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
 use App\Malla;
@@ -22,6 +24,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ExcelController extends Controller
 {
+    public function exportErroresCupos(Request $request)
+    {
+        Excel::create('Errores Cupos', function ($excel) use (&$request) {
+            $excel->sheet('Errores', function ($sheet) use (&$request) {
+                $sheet->fromArray($request->errores);
+            });
+        })->download('xlsx');
+    }
+
     public function exportCuposCarrera(Request $request)
     {
         $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
@@ -229,18 +240,15 @@ class ExcelController extends Controller
 
     public function importCupos(Request $request)
     {
-
-//        $archivo = file_get_contents($_FILES['archivo']['tmp_name']);
-
         if ($request->file('archivo')) {
-
+            $errors = array();
             $pathFile = $request->file('archivo')->store('public/archivos');
             $path = storage_path() . '/app/' . $pathFile;
 
-            //$path = Storage::disk('public')->put('archivos', $request->file('archivo'));
-            // $post->fill(['file' => asset($path)])->save();
-
-            $response = Excel::load($path, function ($reader) use (&$request) {
+            $i = 0;
+            $countEstudiantes = 0;
+            $countAsignaturas = 0;
+            $response = Excel::load($path, function ($reader) use (&$request, &$errors, &$i, &$countEstudiantes, &$countAsignaturas) {
                 $now = Carbon::now();
                 try {
                     foreach ($reader->get() as $row) {
@@ -249,16 +257,16 @@ class ExcelController extends Controller
                             $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
                             if ($estudiante) {
                                 $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
-                                $existeMatricula = Matricula::where('estudiante_id', $estudiante->id)
+                                $existeMatricula = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
                                     ->where('periodo_lectivo_id', $periodoLectivo->id)
                                     ->first();
                                 if (!$existeMatricula) {
-
-                                    $matriculaAnterior = Matricula::where('estudiante_id', $estudiante->id)
+                                    $countEstudiantes++;
+                                    $matriculaAnterior = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
                                         ->where('estado', 'MATRICULADO')
                                         ->orderby('fecha', 'DESC')->first();
 
-                                    $matricula = new Matricula([
+                                    $matricula = new MatriculaTransaccion([
                                         'fecha' => $now,
                                         'jornada' => strtoupper($row->jornada_principal),
                                         'paralelo_principal' => strtoupper($row->paralelo_principal),
@@ -275,7 +283,7 @@ class ExcelController extends Controller
                                     $matricula->save();
 
                                     if ($matriculaAnterior) {
-                                        $informacionEstudiante = InformacionEstudiante::
+                                        $informacionEstudiante = InformacionEstudianteTransaccion::
                                         where('matricula_id', $matriculaAnterior->id)->first();
                                         $matricula->informacion_estudiantes()->create([
                                             'ha_repetido_asignatura' => $informacionEstudiante->ha_repetido_asignatura,
@@ -317,7 +325,7 @@ class ExcelController extends Controller
                                         $matricula->informacion_estudiantes()->create();
                                     }
 
-                                    $detalleMatriculas = new DetalleMatricula([
+                                    $detalleMatriculas = new DetalleMatriculaTransaccion([
                                         'paralelo' => strtoupper($row->paralelo_asignatura),
                                         'numero_matricula' => strtoupper($row->numero_matricula),
                                         'jornada' => strtoupper($row->jornada_asignatura),
@@ -327,13 +335,15 @@ class ExcelController extends Controller
                                     $asignatura = Asignatura::where('codigo', $row->codigo_asignatura)->first();
 
                                     if ($asignatura) {
+                                        $countAsignaturas++;
                                         $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula))->first();
                                         $detalleMatriculas->matricula()->associate($matricula);
                                         $detalleMatriculas->asignatura()->associate($asignatura);
                                         $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
                                         $detalleMatriculas->save();
                                     }
-                                } else if (!($existeMatricula->estado == 'MATRICULADO' || $existeMatricula->estado == 'APROBADO')) {
+                                } else if (!($existeMatricula->estado == 'MATRICULADO'
+                                    || $existeMatricula->estado == 'APROBADO')) {
 
                                     $existeMatricula->update([
                                         'fecha' => $now,
@@ -353,7 +363,7 @@ class ExcelController extends Controller
                                     $asignatura = Asignatura::where('codigo', strtoupper($row->codigo_asignatura))
                                         ->first();
                                     if ($asignatura) {
-                                        $existeDetalleMatricula = DetalleMatricula::where('asignatura_id', $asignatura->id)
+                                        $existeDetalleMatricula = DetalleMatriculaTransaccion::where('asignatura_id', $asignatura->id)
                                             ->where('matricula_id', $existeMatricula->id)->first();
 
                                         if ($existeDetalleMatricula) {
@@ -369,7 +379,7 @@ class ExcelController extends Controller
                                             $existeDetalleMatricula->tipo_matricula()->associate($tipoMatricula);
                                             $existeDetalleMatricula->save();
                                         } else {
-                                            $detalleMatriculas = new DetalleMatricula([
+                                            $detalleMatriculas = new DetalleMatriculaTransaccion([
                                                 'paralelo' => strtoupper($row->paralelo_asignatura),
                                                 'numero_matricula' => strtoupper($row->numero_matricula),
                                                 'jornada' => strtoupper($row->jornada_asignatura),
@@ -385,10 +395,15 @@ class ExcelController extends Controller
                                             }
 
                                         }
+                                    } else {
+                                        $errors['asignaturas'][$i] = 'codigo_asignatura: ' . $row->codigo_asignatura . ' - fila: ' . ($i + 1);
                                     }
                                 }
 
+                            } else {
+                                $errors['cedulas_estudiante'][$i] = 'cedula: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1);
                             }
+                            $i++;
                         } catch
                         (QueryException $e) {
                             return $e;
@@ -402,17 +417,21 @@ class ExcelController extends Controller
                     return $e;
                 }
             });
-            $cupos = Matricula::get();
-            //Storage::delete($pathFile);
-            return response()->json($response->parsed, 200);
+            Storage::delete($pathFile);
+//            return response()->json(['respuesta' => $response]);
+            return response()->json([
+                'errores' => $errors,
+                'registros' => $i,
+                'total_estudiantes' => $countEstudiantes,
+                'total_asignaturas' => $countAsignaturas
+            ], 200);
         } else {
             return "No valido";
         }
 
     }
 
-    public
-    function prueba()
+    public function prueba()
     {
         $now = Carbon::now();
         $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();

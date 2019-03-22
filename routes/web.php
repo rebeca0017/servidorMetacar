@@ -60,9 +60,13 @@ Route::get('/catalogos/carreras', 'CatalogosController@getCarreras');
 Route::get('/catalogos/periodo_academicos', 'CatalogosController@getPeriodoAcademicos');
 Route::get('/exports/cupos_carrera', 'ExcelController@exportCuposCarrera');
 Route::get('/exports/cupos_periodo_academico', 'ExcelController@exportCuposPeriodoAcademico');
-//Route::get('/import', 'ExcelController@import');
+
 Route::post('/imports/cupos', 'ExcelController@importCupos');
 Route::post('/imports/matriculas', 'ExcelController@importMatriculas');
 
 Route::get('/certificado-matricula/{matricula_id}', 'MatriculasController@getCertificadoMatriculaPublic');
 Route::get('/prueba', 'ExcelController@prueba');
+Route::get('/exports/errores_cupos', 'ExcelController@exportErroresCupos');
+
+Route::get('/email', 'PruebasController@email');
+Route::post('/emails/carga_cupos', 'PruebasController@email');

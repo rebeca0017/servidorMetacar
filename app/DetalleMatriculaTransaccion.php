@@ -3,18 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class DetalleMatricula extends Model implements Auditable
+
+class DetalleMatriculaTransaccion extends Model
 {
-    use \OwenIt\Auditing\Auditable;
+    protected $table='detalle_matriculas';
     protected $fillable = [
         'numero_matricula', 'paralelo', 'jornada', 'estado',
     ];
 
     public function matricula()
     {
-        return $this->belongsTo('App\Matricula');
+        return $this->belongsTo('App\MatriculaTransaccion');
     }
 
     public function tipo_matricula()

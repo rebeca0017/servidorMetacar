@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class InformacionEstudiante extends Model implements Auditable
+
+class InformacionEstudianteTransaccion extends Model
 {
-    use \OwenIt\Auditing\Auditable;
+    protected $table='informacion_estudiantes';
 
     public function __construct(array $attributes = [])
     {
@@ -63,6 +63,6 @@ class InformacionEstudiante extends Model implements Auditable
 
     public function matricula()
     {
-        return $this->belongsTo('App\Matricula');
+        return $this->belongsTo('App\MatriculaTransaccion');
     }
 }

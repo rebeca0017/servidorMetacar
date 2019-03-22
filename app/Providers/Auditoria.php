@@ -3,19 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class Asignatura extends Model implements Auditable
+class Auditoria extends Model
 {
-    use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'codigo',
-        'nombre',
-        'horas_practica',
-        'horas_docente',
-        'horas_autonoma',
-        'tipo',
-        'estado',
+        'user_id',
+        'tabla_id',
+        'nombre_tabla',
+        'accion',
+        'descripcion',
     ];
 
     public function matriculas(){

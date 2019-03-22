@@ -3,23 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class Matricula extends Model implements Auditable
+class MatriculaTransaccion extends Model
 {
-    use \OwenIt\Auditing\Auditable;
+
+    protected $table='matriculas';
     protected $fillable = [
         'codigo', 'codigo_sniese_paralelo', 'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
     ];
 
     public function detalle_matriculas()
     {
-        return $this->hasMany('App\DetalleMatricula');
+        return $this->hasMany('App\DetalleMatriculaTransaccion');
     }
 
     public function informacion_estudiantes()
     {
-        return $this->hasMany('App\InformacionEstudiante');
+        return $this->hasOne('App\InformacionEstudianteTransaccion','matricula_id');
     }
 
     public function estudiante()

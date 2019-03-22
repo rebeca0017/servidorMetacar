@@ -3,9 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
-class TipoMatricula extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+class TipoMatricula extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $fillable = [
         'nombre', 'fecha_aprobacion', 'numero_resolucion','fecha_finalizacion', 'estado',
     ];
