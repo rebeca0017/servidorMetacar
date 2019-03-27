@@ -26,8 +26,14 @@ class DetalleMatriculasController extends Controller
 
     public function get(Request $request)
     {
-        $detalleMatricula = DetalleMatricula::where('matricula_id', $request->id)
-            ->with('asignatura')->with('tipo_matricula')->get();
+
+        $detalleMatricula = DetalleMatricula::select('detalle_matriculas.*')
+            ->join('asignaturas', 'asignaturas.id', 'detalle_matriculas.asignatura_id')
+            ->where('matricula_id', $request->id)
+            ->with('asignatura')->with('tipo_matricula')
+            ->orderby('detalle_matriculas.tipo_matricula_id')
+            ->orderby('asignaturas.periodo_academico_id')
+            ->get();
         return response()->json(['detalle_matricula' => $detalleMatricula], 200);
     }
 
@@ -112,6 +118,7 @@ class DetalleMatriculasController extends Controller
     public function create(Request $request)
     {
         try {
+            DB::beginTransaction();
             $data = $request->json()->all();
             $dataDetalleMatricula = $data['detalle_matricula'];
 
@@ -137,6 +144,7 @@ class DetalleMatriculasController extends Controller
             if ($dataDetalleMatricula['estado'] == 'MATRICULADO') {
                 $matricula->update(['estado' => 'APROBADO']);
             }
+            DB::commit();
             return response()->json(['detalle_matricula' => $detalleMatricula], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 405);
@@ -157,42 +165,38 @@ class DetalleMatriculasController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->json()->all();
-        $dataEstudiante = $data['estudiante'];
-        $dataInformacionEstudiante = $data['estudiante'];
-        $parameters = [
-            $dataEstudiante['pais_nacionalidad_id'],
-            $dataEstudiante['pais_residencia_id'],
-            $dataEstudiante['identificacion'],
-            $dataEstudiante['nombre1'],
-            $dataEstudiante['nombre2'],
-            $dataEstudiante['apellido1'],
-            $dataEstudiante['apellido2'],
-            $dataEstudiante['fecha_nacimiento'],
-            $dataEstudiante['correo_personal'],
-            $dataEstudiante['correo_institucional'],
-            $dataEstudiante['sexo'],
-            $dataEstudiante['etnia'],
-            $dataEstudiante['tipo_sangre'],
-            $dataEstudiante['tipo_documento'],
-            $dataEstudiante['tipo_colegio'],
-        ];
-        $sql = 'SELECT estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $estudiante = DB::select($sql, null);
-
-        $sql = 'SELECT informacion_estudiantes.* 
-                FROM 
-                  matriculas inner join informacion_estudiantes on matriculas.id = informacion_estudiantes.matricula_id 
-	              inner join estudiantes on matriculas.estudiante_id = estudiantes.id 
-	            WHERE matriculas.periodo_lectivo_id = 1 and matriculas.estudiante_id =1';
-        $informacionEstudiante = DB::select($sql, null);
-        return response()->json([
-            'estudiante' => $estudiante,
-            'informacion_estudiante' => $informacionEstudiante
-        ]);
+        try {
+            DB::beginTransaction();
+            $data = $request->json()->all();
+            $dataDetalleMatricula = $data['detalle_matricula'];
+            $detalleMatricula = DetalleMatricula::findOrFail($dataDetalleMatricula['id']);
+            $detalleMatricula->update([
+                'paralelo' => $dataDetalleMatricula['paralelo'],
+                'jornada' => $dataDetalleMatricula['jornada'],
+                'numero_matricula' => $dataDetalleMatricula['numero_matricula']
+            ]);
+            $asignatura = Asignatura::findOrFail($dataDetalleMatricula['asignatura']['id']);
+            $tipoMatricula = TipoMatricula::findOrFail($dataDetalleMatricula['tipo_matricula']['id']);
+            $detalleMatricula->asignatura()->associate($asignatura);
+            $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
+            $detalleMatricula->save();
+            $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
+            DB::commit();
+            return response()->json(['detalle_matricula' => $detalleMatricula], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json($e, 405);
+        } catch (NotFoundHttpException  $e) {
+            return response()->json($e, 405);
+        } catch (\PDOException $e) {
+            return response()->json($e, 409);
+        } catch (QueryException $e) {
+            return response()->json('asdasd', 200);
+        } catch (Exception $e) {
+            return response()->json($e, 500);
+        } catch (Error $e) {
+            return response()->json($e, 500);
+        } catch (ErrorException $e) {
+            return response()->json($e, 500);
+        }
     }
 }

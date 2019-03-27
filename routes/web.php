@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/pruebas', 'PruebasController@get');
 
 Route::post('/detalle_matriculas', 'DetalleMatriculasController@create');
+Route::put('/detalle_matriculas', 'DetalleMatriculasController@update');
 Route::get('/detalle_matriculas', 'DetalleMatriculasController@get');
 Route::get('/detalle_matriculas/count', 'DetalleMatriculasController@getCountDetalleCuposCarrera');
 
@@ -47,7 +48,6 @@ Route::get('/matriculas/cupos', 'MatriculasController@getCupos');
 Route::get('/matriculas/aprobados', 'MatriculasController@getAprobados');
 Route::get('/matriculas/en_proceso', 'MatriculasController@getCuposEnProceso');
 Route::get('/matriculas/asignaturas', 'MatriculasController@getAsignaturasMalla');
-Route::put('/matriculas/update_detalle_matricula', 'MatriculasController@updateDetalleMatricula');
 Route::put('/matriculas', 'MatriculasController@updateMatricula');
 Route::get('/matriculas/count', 'MatriculasController@getCountMatriculas');
 Route::delete('/matriculas/delete_detalle_cupo', 'MatriculasController@deleteDetalleCupo');
@@ -69,4 +69,4 @@ Route::get('/prueba', 'ExcelController@prueba');
 Route::get('/exports/errores_cupos', 'ExcelController@exportErroresCupos');
 
 Route::get('/email', 'PruebasController@email');
-Route::post('/emails/carga_cupos', 'PruebasController@email');
+Route::post('/emails', 'EmailsController@send');

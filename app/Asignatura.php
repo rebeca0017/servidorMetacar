@@ -18,8 +18,8 @@ class Asignatura extends Model implements Auditable
         'estado',
     ];
 
-    public function matriculas(){
-        return $this->hasMany('App\Matricula');
+    public function detalle_matriculas(){
+        return $this->hasMany('App\DetalleMatricula');
     }
 
     public function periodo_academico()

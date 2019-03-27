@@ -307,47 +307,10 @@ class MatriculasController extends Controller
         return response()->json(['asignaturas' => $asignaturas], 200);
     }
 
-    public function updateDetalleMatricula(Request $request)
-    {
-        try {
-            $data = $request->json()->all();
-            $dataDetalleMatricula = $data['detalle_matricula'];
-            $detalleMatricula = DetalleMatricula::findOrFail($dataDetalleMatricula['id']);
-
-            $detalleMatricula->update([
-                'paralelo' => $dataDetalleMatricula['paralelo'],
-                'jornada' => $dataDetalleMatricula['jornada'],
-                'numero_matricula' => $dataDetalleMatricula['numero_matricula']
-            ]);
-            $asignatura = Asignatura::findOrFail($dataDetalleMatricula['asignatura']['id']);
-            $tipoMatricula = TipoMatricula::findOrFail($dataDetalleMatricula['tipo_matricula']['id']);
-
-            $detalleMatricula->asignatura()->associate($asignatura);
-            $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
-            $detalleMatricula->save();
-            $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
-
-            return response()->json(['detalle_matricula' => $detalleMatricula], 201);
-        } catch (ModelNotFoundException $e) {
-            return response()->json($e, 405);
-        } catch (NotFoundHttpException  $e) {
-            return response()->json($e, 405);
-        } catch (\PDOException $e) {
-            return response()->json($e, 409);
-        } catch (QueryException $e) {
-            return response()->json('asdasd', 200);
-        } catch (Exception $e) {
-            return response()->json($e, 500);
-        } catch (Error $e) {
-            return response()->json($e, 500);
-        } catch (ErrorException $e) {
-            return response()->json($e, 500);
-        }
-    }
-
     public function updateMatricula(Request $request)
     {
         try {
+            DB::beginTransaction();
             $data = $request->json()->all();
             $dataMatricula = $data['matricula'];
             $matricula = Matricula::findOrFail($dataMatricula['id']);
@@ -360,7 +323,7 @@ class MatriculasController extends Controller
             $matricula->periodo_academico()->associate($periodoAcademico);
             $matricula->save();
 
-
+            DB::commit();
             return response()->json(['matriculas' => $matricula], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 405);
@@ -381,14 +344,18 @@ class MatriculasController extends Controller
 
     public function deleteDetalleCupo(Request $request)
     {
-        $detalleMatricula = DetalleMatricula::findOrFail($request->id)->delete();
+        $detalleMatricula = DetalleMatricula::findOrFail($request->id);
+        $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
+        $detalleMatricula ->delete();
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
 
     public function deleteDetalleMatricula(Request $request)
     {
+        DB::beginTransaction();
         $detalleMatricula = DetalleMatricula::findOrFail($request->id);
         $detalleMatricula->update(['estado' => 'ANULADO']);
+        DB::commit();
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
 
@@ -473,6 +440,7 @@ class MatriculasController extends Controller
     {
         $now = new Carbon();
         //date('F', strtotime($matricula->fecha))
+        DB::beginTransaction();
         $matricula = Matricula::findOrFail($request->matricula_id);
         $periodoLectivo = PeriodoLectivo::findOrFail($matricula->periodo_lectivo_id);
         $estudiante = Estudiante::findOrFail($matricula->estudiante_id);
@@ -493,32 +461,41 @@ class MatriculasController extends Controller
             ]);
             $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
         }
+        DB::commit();
         return response()->json(['matricula' => $matricula], 201);
     }
 
     public function validateCuposCarrera(Request $request)
     {
+        DB::beginTransaction();
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
-        $malla->matriculas()->update(['estado' => 'APROBADO']);
         $matriculas = $malla->matriculas()->get();
+        $i = 0;
         foreach ($matriculas as $matricula) {
-
-            $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+            if ($matricula->estado != 'MATRICULADO') {
+                $matricula->update(['estado' => 'APROBADO']);
+                $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+            }
 
         }
+        DB::commit();
         return response()->json(['matricula' => $matriculas], 201);
     }
 
     public function validateCuposPeriodoAcademico(Request $request)
     {
+        DB::beginTransaction();
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
-        $malla->matriculas()->where('periodo_academico_id', $request->periodo_academico_id)->update(['estado' => 'APROBADO']);
+
         $matriculas = $malla->matriculas()->where('periodo_academico_id', $request->periodo_academico_id)->get();
         foreach ($matriculas as $matricula) {
-
-            $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+            if ($matricula->estado != 'MATRICULADO') {
+                $matricula->update(['estado' => 'APROBADO']);
+                $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
+            }
 
         }
+        DB::commit();
         return response()->json(['matricula' => $matriculas], 201);
     }
 }
