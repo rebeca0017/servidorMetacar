@@ -16,6 +16,12 @@ class CreateInformacionEstudiantesTable extends Migration
         Schema::create('informacion_estudiantes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->string('estado_civil', 20)->nullable();
+            $table->string('tiene_discapacidad', 10)->nullable();
+            $table->string('tipo_discapcidad', 100)->default('7');
+            $table->double('porcentaje_discapacidad', 8, 2)->nullable();
+            $table->string('numero_carnet_conadis', 50)->nullable();
+            $table->string('telefono_fijo', 20)->nullable();
             $table->integer('matricula_id');
             $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');
             $table->integer('provincia_residencia_id')->nullable();
@@ -30,11 +36,12 @@ class CreateInformacionEstudiantesTable extends Migration
             $table->string('idioma_ancestral')->nullable();
             $table->string('categoria_migratoria')->nullable();
             $table->string('posee_titulo_superior')->nullable();
+            $table->string('titulo_superior_obtenido')->nullable();
             $table->string('ha_repetido_asignatura', 10)->nullable();
             $table->string('ha_perdido_gratuidad', 10)->nullable();
             $table->string('ha_realizado_practicas', 10)->nullable();
             $table->integer('horas_practicas')->nullable();
-            $table->string('sector_economico_practica', 100)->nullable();
+            $table->string('sector_economico_practica', 100)->default('22');
             $table->string('tipo_institucion_practicas', 100)->nullable();
             $table->string('ha_realizado_vinculacion', 10)->nullable();
             $table->integer('horas_vinculacion')->nullable();
@@ -48,17 +55,19 @@ class CreateInformacionEstudiantesTable extends Migration
             $table->string('nivel_formacion_madre', 100)->nullable();
             $table->double('ingreso_familiar', 8, 2)->nullable();
             $table->integer('numero_miembros_hogar')->nullable();
-            $table->string('tiene_carnet_conadis', 10)->nullable();
-            $table->string('numero_carnet_conadis', 50)->nullable();
-            $table->string('tipo_discapcidad', 100)->nullable();
-            $table->double('porcentaje_discapacidad', 8, 2)->nullable();
-            $table->string('telefono_fijo', 20)->nullable();
+
+
             $table->string('telefono_celular', 20)->nullable();
             $table->string('direccion', 200)->nullable();
-            $table->string('estado_civil', 20)->nullable();
+
             $table->string('pension_diferenciada', 10)->nullable();
             $table->string('tipo_beca', 50)->nullable();
-            $table->string('razon_beca', 200)->nullable();
+            $table->string('razon_beca1', 200)->default('2');
+            $table->string('razon_beca2', 200)->default('2');
+            $table->string('razon_beca3', 200)->default('2');
+            $table->string('razon_beca4', 200)->default('2');
+            $table->string('razon_beca5', 200)->default('2');
+            $table->string('razon_beca6', 200)->default('2');
             $table->double('monto_beca', 8, 2)->nullable();
             $table->double('porciento_beca_cobertura_arancel', 8, 2)->nullable();
             $table->double('porciento_beca_cobertura_manutencion', 8, 2)->nullable();

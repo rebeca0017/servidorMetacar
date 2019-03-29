@@ -257,14 +257,17 @@ class ExcelController extends Controller
             $response = Excel::load($path, function ($reader)
             use (&$request, &$errors, &$i, &$countEstudiantes, &$countAsignaturas, &$countAsignaturasModificadas) {
                 $now = Carbon::now();
+                $identificacion = '';
+                $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+                $malla = Malla::where('carrera_id', $request->carrera_id)->first();
                 foreach ($reader->get() as $row) {
                     try {
                         DB::beginTransaction();
                         $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
                         $asignatura = Asignatura::where('codigo', strtoupper($row->codigo_asignatura))
+                            ->where('malla_id', $malla->id)
                             ->first();
                         if ($estudiante && $asignatura) {
-                            $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
                             $existeMatricula = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
                                 ->where('periodo_lectivo_id', $periodoLectivo->id)
                                 ->first();
@@ -283,7 +286,7 @@ class ExcelController extends Controller
 
                                 $periodoAcademico = PeriodoAcademico::where('id', strtoupper($row->periodo_academico_principal))
                                     ->first();
-                                $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+
                                 $matricula->estudiante()->associate($estudiante);
                                 $matricula->periodo_lectivo()->associate($periodoLectivo);
                                 $matricula->periodo_academico()->associate($periodoAcademico);
@@ -350,20 +353,22 @@ class ExcelController extends Controller
                             } else if (!($existeMatricula->estado == 'MATRICULADO'
                                 || $existeMatricula->estado == 'APROBADO')) {
 
-                                $existeMatricula->update([
-                                    'fecha' => $now,
-                                    'jornada' => strtoupper($row->jornada_principal),
-                                    'paralelo_principal' => strtoupper($row->paralelo_principal),
-                                    'estado' => 'EN_PROCESO'
-                                ]);
+                                if ($identificacion != $row->cedula_estudiante) {
+                                    $identificacion = $row->cedula_estudiante;
+                                    $existeMatricula->update([
+                                        'fecha' => $now,
+                                        'jornada' => strtoupper($row->jornada_principal),
+                                        'paralelo_principal' => strtoupper($row->paralelo_principal),
+                                        'estado' => 'EN_PROCESO'
+                                    ]);
+                                    $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
+                                    $existeMatricula->estudiante()->associate($estudiante);
+                                    $existeMatricula->periodo_lectivo()->associate($periodoLectivo);
+                                    $existeMatricula->periodo_academico()->associate($periodoAcademico);
+                                    $existeMatricula->malla()->associate($malla);
+                                    $existeMatricula->save();
+                                }
 
-                                $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
-                                $malla = Malla::where('carrera_id', $request->carrera_id)->first();
-                                $existeMatricula->estudiante()->associate($estudiante);
-                                $existeMatricula->periodo_lectivo()->associate($periodoLectivo);
-                                $existeMatricula->periodo_academico()->associate($periodoAcademico);
-                                $existeMatricula->malla()->associate($malla);
-                                $existeMatricula->save();
 
                                 $existeDetalleMatricula = DetalleMatriculaTransaccion::where('asignatura_id', $asignatura->id)
                                     ->where('matricula_id', $existeMatricula->id)->first();

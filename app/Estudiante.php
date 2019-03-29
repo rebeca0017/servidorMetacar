@@ -9,19 +9,23 @@ class Estudiante extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
+        'tipo_identificacion',
         'identificacion',
-        'nombre1',
-        'nombre2',
         'apellido1',
         'apellido2',
+        'nombre1',
+        'nombre2',
+        'sexo',
+        'genero',
+        'etnia',
+        'pueblo_nacionalidad',
+        'tipo_sangre',
         'fecha_nacimiento',
+        'tipo_colegio',
+
         'correo_personal',
         'correo_institucional',
-        'sexo',
-        'etnia',
-        'tipo_sangre',
-        'tipo_identificacion',
-        'tipo_colegio',
+
         'tipo_bachillerato',
         'pueblo_nacionalidad',
         'anio_graduacion',

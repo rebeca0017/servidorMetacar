@@ -32,7 +32,7 @@ class EstudiantesController extends Controller
         $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)->first();
 
         return response()->json([
-            'estudiantes' => $estudiante,
+            'estudiante' => $estudiante,
             'informacion_estudiante' => $informacionEstudiante
         ]);
     }

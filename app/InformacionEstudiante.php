@@ -15,6 +15,11 @@ class InformacionEstudiante extends Model implements Auditable
     }
 
     protected $fillable = [
+        'estado_civil',
+        'tiene_discapacidad',
+        'tipo_discapcidad',
+        'numero_carnet_conadis',
+        'porcentaje_discapacidad',
         'codigo_postal',
         'contacto_emergencia_telefono',
         'contacto_emergencia_parentesco',
@@ -23,6 +28,7 @@ class InformacionEstudiante extends Model implements Auditable
         'idioma_ancestral',
         'categoria_migratoria',
         'posee_titulo_superior',
+        'titulo_superior_obtenido',
         'ha_repetido_asignatura',
         'ha_perdido_gratuidad',
         'ha_realizado_practicas',
@@ -41,14 +47,11 @@ class InformacionEstudiante extends Model implements Auditable
         'nivel_formacion_madre',
         'ingreso_familiar',
         'numero_miembros_hogar',
-        'tiene_carnet_conadis',
-        'numero_carnet_conadis',
-        'tipo_discapcidad',
-        'porcentaje_discapacidad',
+
         'telefono_fijo',
         'telefono_celular',
         'direccion',
-        'estado_civil',
+
         'pension_diferenciada',
         'tipo_beca',
         'razon_beca',
