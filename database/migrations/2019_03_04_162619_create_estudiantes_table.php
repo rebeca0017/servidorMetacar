@@ -16,34 +16,31 @@ class CreateEstudiantesTable extends Migration
         Schema::create('estudiantes', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('pais_nacionalidad_id')->nullable();
+            $table->integer('pais_nacionalidad_id')->default(0);
             $table->foreign('pais_nacionalidad_id')->references('id')->on('ubicaciones')->nullable();
-            $table->integer('provincia_nacimiento_id')->nullable();
+            $table->integer('provincia_nacimiento_id')->default(0);
             $table->foreign('provincia_nacimiento_id')->references('id')->on('ubicaciones')->nullable();
-            $table->integer('canton_nacimiento_id')->nullable();
+            $table->integer('canton_nacimiento_id')->default(0);
             $table->foreign('canton_nacimiento_id')->references('id')->on('ubicaciones')->nullable();
-            $table->integer('pais_residencia_id')->nullable();
+            $table->integer('pais_residencia_id')->default(0);
             $table->foreign('pais_residencia_id')->references('id')->on('ubicaciones')->nullable();
-            $table->string('tipo_identificacion', 50);
+            $table->string('tipo_identificacion', 50)->default(0);
             $table->string('identificacion', 50);
             $table->string('apellido1', 50);
             $table->string('apellido2', 50)->default('NA');
             $table->string('nombre1', 50);
             $table->string('nombre2', 50)->default('NA');
-            $table->string('sexo', 50);
-            $table->string('genero', 50)->nullable();
-            $table->string('etnia', 50)->nullable();
-            $table->string('pueblo_nacionalidad', 50)->nullable();
-            $table->string('tipo_sangre', 50)->nullable();
+            $table->string('sexo', 50)->default(0);
+            $table->string('genero', 50)->default(0);
+            $table->string('etnia', 50)->default(0);
+            $table->string('pueblo_nacionalidad', 50)->default(34);
+            $table->string('tipo_sangre', 50)->default(0);
             $table->date('fecha_nacimiento')->nullable();
-            $table->string('tipo_colegio', 50)->nullable();
-
+            $table->string('tipo_colegio', 50)->default(0);
             $table->date('fecha_inicio_carrera')->nullable();
             $table->string('correo_personal', 100)->nullable();
             $table->string('correo_institucional', 100)->nullable();
-
-
-            $table->string('tipo_bachillerato', 50)->nullable();
+            $table->string('tipo_bachillerato', 50)->default(0);
             $table->string('anio_graduacion')->nullable();
             $table->string('corte')->nullable();
             $table->string('estado', 20)->default('ACTIVO');

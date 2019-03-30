@@ -20,7 +20,7 @@ class CatalogosController extends Controller
 
     public function getPaises()
     {
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='PAIS'";
+        $sql = "SELECT * FROM ubicaciones WHERE tipo='PAIS' AND estado = 'ACTIVO'";
         $paises = DB::select($sql);
 
         return response()->json(['paises' => $paises], 200);
@@ -28,7 +28,7 @@ class CatalogosController extends Controller
 
     public function getProvincias()
     {
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='PROVINCIA'";
+        $sql = "SELECT * FROM ubicaciones WHERE tipo='PROVINCIA' AND estado = 'ACTIVO'";
         $provincias = DB::select($sql);
 
         return response()->json(['provincias' => $provincias], 200);
@@ -37,7 +37,7 @@ class CatalogosController extends Controller
     public function getCantones(Request $request)
     {
 
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND codigo_padre_id=" . $request->provincia_id;
+        $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND estado = 'ACTIVO' AND codigo_padre_id=" . $request->provincia_id;
         $cantones = DB::select($sql);
 
         return response()->json(['cantones' => $cantones], 200);

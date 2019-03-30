@@ -639,6 +639,7 @@ INSERT INTO tipo_matriculas (id, nombre, estado)
     INSERT INTO ubicaciones
     (id,created_at,updated_at, codigo_padre_id, codigo, nombre, tipo, estado)
 VALUES
+    (0,'2019-03-04 00:00:00', '2019-03-04 00:00:00',null,'0','','PAIS','ELIMINADO'),
     (1,'2019-03-04 00:00:00', '2019-03-04 00:00:00',null,'56','ECUADOR','PAIS','ACTIVO'),
     (2,'2019-03-04 00:00:00', '2019-03-04 00:00:00',1,'01','AZUAY','PROVINCIA','ACTIVO'),
     (3,'2019-03-04 00:00:00', '2019-03-04 00:00:00',1,'02','BOLIVAR','PROVINCIA','ACTIVO'),
@@ -1137,7 +1138,7 @@ VALUES
 (496,'2019-03-04 00:00:00', '2019-03-04 00:00:00',null,'249','TERRITORIOS AUSTRALES FRANCESES','PAIS','ACTIVO'),
 (497,'2019-03-04 00:00:00', '2019-03-04 00:00:00',null,'999','NO REGISTRA','PAIS','ACTIVO');
 
-INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(3,'1716346802','AREVALO','MOSQUERA','HECTOR','FABIAN','','harevalo@yavirac.edu.ec','1','26','1','1');
+INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(3,'1716346802','AREVALO','MOSQUERA','HECTOR','FABIAN','','harevalo@yavirac.edu.ec','1','2','1','1');
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(76,'1720364049','SALAZAR','VACA','LUIS','ALFONSO','LUISSALAZARVACA1986@GMAIL.COM','LSALAZAR@YAVIRAC.EDU.EC','1','26','3','1');
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(81,'AS956330','LOPEZ','HERNANDEZ','ELVIS','MANUEL','','emlopez@yavirac.edu.ec','1','26','','');
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(82,'401541875','PEÑA','PROAÑO','WILSON','XAVIER','','wxp.pena@yavirac.edu.ec','1','26','1','1');

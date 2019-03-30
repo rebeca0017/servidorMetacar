@@ -22,12 +22,9 @@ class Estudiante extends Model implements Auditable
         'tipo_sangre',
         'fecha_nacimiento',
         'tipo_colegio',
-
         'correo_personal',
         'correo_institucional',
-
         'tipo_bachillerato',
-        'pueblo_nacionalidad',
         'anio_graduacion',
         'fecha_inicio_carrera',
         'corte',
@@ -38,4 +35,26 @@ class Estudiante extends Model implements Auditable
     {
         return $this->hasMany('App\Matricula');
     }
+
+    public function pais_nacionalidad()
+    {
+        return $this->belongsTo('App\Ubicacion');
+    }
+
+    public function provincia_nacimiento()
+    {
+        return $this->belongsTo('App\Ubicacion');
+    }
+
+    public function canton_nacimiento()
+    {
+        return $this->belongsTo('App\Ubicacion');
+    }
+
+    public function pais_residencia()
+    {
+        return $this->belongsTo('App\Ubicacion');
+    }
+
+
 }

@@ -17,7 +17,7 @@ class InformacionEstudiante extends Model implements Auditable
     protected $fillable = [
         'estado_civil',
         'tiene_discapacidad',
-        'tipo_discapcidad',
+        'tipo_discapacidad',
         'numero_carnet_conadis',
         'porcentaje_discapacidad',
         'codigo_postal',
@@ -67,5 +67,15 @@ class InformacionEstudiante extends Model implements Auditable
     public function matricula()
     {
         return $this->belongsTo('App\Matricula');
+    }
+
+    public function provincia_residencia()
+    {
+        return $this->belongsTo('App\Ubicacion');
+    }
+
+    public function canton_residencia()
+    {
+        return $this->belongsTo('App\Ubicacion');
     }
 }

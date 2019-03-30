@@ -77,6 +77,8 @@ class MatriculasController extends Controller
             ->with('periodo_academico')
             ->with('periodo_lectivo')
             ->where('matriculas.id', $request->matricula_id)
+            ->where('matriculas.estado', 'MATRICULADO')
+            ->where('detalle_matriculas.estado', 'MATRICULADO')
             ->get();
 
         return response()->json(['certificado' => $certificadoMatricula], 200);
@@ -106,6 +108,8 @@ class MatriculasController extends Controller
             ->with('periodo_academico')
             ->with('periodo_lectivo')
             ->where('matriculas.id', $request->matricula_id)
+            ->where('matriculas.estado', 'MATRICULADO')
+            ->where('detalle_matriculas.estado', 'MATRICULADO')
             ->get();
 
         return response()->json(['certificado' => $certificadoMatricula], 200);

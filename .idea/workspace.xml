@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b53bc611-7523-40fd-90e7-b2f46fd9ff92" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Providers/Ubicacion.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Ubicacion.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Estudiante.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Estudiante.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/InformacionEstudiante.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/InformacionEstudiante.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/INSERTS BASE.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database/INSERTS BASE.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+            <state relative-caret-position="145">
+              <caret line="35" column="65" selection-start-line="35" selection-start-column="65" selection-end-line="35" selection-end-column="65" />
             </state>
           </provider>
         </entry>
@@ -39,49 +40,21 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="34" column="52" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_162347_create_ubicaciones_table.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="19" column="40" lean-forward="true" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+            <state relative-caret-position="216">
+              <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/database/INSERTS BASE.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="2771" lean-forward="true" selection-start-line="2771" selection-end-line="2771" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
+            <state relative-caret-position="394">
+              <caret line="53" column="37" lean-forward="true" selection-start-line="53" selection-start-column="37" selection-end-line="53" selection-end-column="37" />
               <folding>
                 <element signature="e#252#331#0#PHP" />
                 <element signature="e#336#388#0#PHP" />
-                <element signature="e#607#723#0#PHP" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/web.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="33" column="61" selection-start-line="33" selection-start-column="61" selection-end-line="33" selection-end-column="61" />
             </state>
           </provider>
         </entry>
@@ -89,8 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/InformacionEstudiante.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+            <state relative-caret-position="596">
+              <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
               <folding>
                 <element signature="e#23#62#0#PHP" expanded="true" />
               </folding>
@@ -101,28 +74,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Estudiante.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+            <state relative-caret-position="519">
+              <caret line="58" selection-start-line="58" selection-end-line="58" />
               <folding>
-                <element signature="e#23#62#0#PHP" expanded="true" />
+                <element signature="e#221#737#0#PHP" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_carreras_table.php">
+        <entry file="file://$PROJECT_DIR$/app/Ubicacion.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
-              <folding>
-                <element signature="e#185#250#0#PHP" />
-                <element signature="n#up#0;n#CreateCarrerasTable#0;n#!!top" />
-                <element signature="e#290#1074#0#PHP" />
-                <element signature="e#317#1073#1#PHP" />
-                <element signature="e#1087#1156#0#PHP" />
-                <element signature="n#down#0;n#CreateCarrerasTable#0;n#!!top" />
-              </folding>
+            <state relative-caret-position="425">
+              <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/web.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="34" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
@@ -139,18 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$row-&gt;tipo_matricula</find>
-      <find>en_proceso_count</find>
-      <find>$countAsignaturasModificacdas</find>
-      <find>$countEstudiantesModificados</find>
-      <find>$countAsignaturas</find>
-      <find>cedulas</find>
-      <find>DetalleMatricula</find>
-      <find>$detalleMatriculas</find>
-      <find>MatriculaTransaccion</find>
-      <find>Matricula</find>
-      <find>InformacionEstudiante</find>
-      <find>$matricula</find>
       <find>MAIL</find>
       <find>_establishSocketConnection</find>
       <find>strea</find>
@@ -162,13 +124,25 @@
       <find>delete_detalle_cupo</find>
       <find>deleteDetalleCupo</find>
       <find>estado</find>
-      <find>disca</find>
       <find>dis</find>
       <find>SUPER</find>
       <find>TITU</find>
       <find>estudi</find>
       <find>titulo</find>
       <find>ecuador</find>
+      <find>matr</find>
+      <find>matricular</find>
+      <find>estudiantes</find>
+      <find>disc</find>
+      <find>ubi</find>
+      <find>reside</find>
+      <find>disca</find>
+      <find>pai</find>
+      <find>posee_titulo_superior</find>
+      <find>pueblo</find>
+      <find>validate</find>
+      <find>etnia</find>
+      <find>pue</find>
     </findStrings>
     <replaceStrings>
       <replace>Route::</replace>
@@ -184,7 +158,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_matriculas_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_mallas_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_04_1_create_institutos_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_04_2_create_carreras_table.php" />
@@ -219,22 +192,23 @@
         <option value="$PROJECT_DIR$/resources/views/notificacion.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PruebasController.php" />
         <option value="$PROJECT_DIR$/app/Asignatura.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/EmailsController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_05_2_notificacion_correos_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_notificacion_correos_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/DetalleMatriculasController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" />
         <option value="$PROJECT_DIR$/app/Providers/Ubicacion.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" />
-        <option value="$PROJECT_DIR$/app/Estudiante.php" />
         <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" />
+        <option value="$PROJECT_DIR$/app/Estudiante.php" />
         <option value="$PROJECT_DIR$/app/InformacionEstudiante.php" />
+        <option value="$PROJECT_DIR$/app/Ubicacion.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php" />
         <option value="$PROJECT_DIR$/database/INSERTS BASE.sql" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php" />
       </list>
     </option>
   </component>
@@ -344,6 +318,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -380,11 +355,15 @@
               <item name="database" type="462c0819:PsiDirectoryNode" />
               <item name="migrations" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="excel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="excel" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -398,11 +377,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\cesar\Desktop\excel\app" />
       <recent name="C:\Users\cesar\Desktop\excel\app\Providers" />
       <recent name="C:\Users\cesar\Desktop\excel\database\migrations" />
       <recent name="C:\Users\cesar\Desktop\excel\app\Http\Controllers" />
       <recent name="C:\Users\cesar\Desktop\excel\resources\views" />
-      <recent name="C:\Users\cesar\Desktop\excel\app" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -468,18 +447,19 @@
       <workItem from="1553656365496" duration="13059000" />
       <workItem from="1553692947934" duration="658000" />
       <workItem from="1553727956610" duration="8283000" />
-      <workItem from="1553783798145" duration="12694000" />
+      <workItem from="1553783798145" duration="13372000" />
+      <workItem from="1553868033418" duration="10479000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="337690000" />
+    <option name="totallyTimeSpent" value="348847000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3261745" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.33087248" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" weight="0.3295302" />
@@ -529,13 +509,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/js/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret column="24625" selection-start-column="24625" selection-end-column="24625" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/js/bootstrap.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -798,19 +771,177 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Providers/Ubicacion.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExcelController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="406" column="47" selection-start-line="406" selection-start-column="47" selection-end-line="406" selection-end-column="47" />
+          <folding>
+            <element signature="e#592#904#0#PHP" />
+            <element signature="e#659#879#0#PHP" />
+            <element signature="e#690#878#1#PHP" />
+            <element signature="e#738#867#0#PHP" />
+            <element signature="e#763#866#1#PHP" />
+            <element signature="e#659#897#0#PHP" />
+            <element signature="e#910#3311#0#PHP" />
+            <element signature="e#1238#2152#0#PHP" />
+            <element signature="e#1238#2250#0#PHP" />
+            <element signature="e#1238#2335#0#PHP" />
+            <element signature="e#1238#2428#0#PHP" />
+            <element signature="e#1238#2498#0#PHP" />
+            <element signature="e#1238#2570#0#PHP" />
+            <element signature="e#1238#2675#0#PHP" />
+            <element signature="e#1238#2730#0#PHP" />
+            <element signature="e#1238#2810#0#PHP" />
+            <element signature="e#1238#2861#0#PHP" />
+            <element signature="e#1238#2918#0#PHP" />
+            <element signature="e#1238#2965#0#PHP" />
+            <element signature="e#2996#3286#0#PHP" />
+            <element signature="e#3087#3285#1#PHP" />
+            <element signature="e#3137#3270#0#PHP" />
+            <element signature="e#3160#3269#1#PHP" />
+            <element signature="e#2996#3304#0#PHP" />
+            <element signature="e#3317#5261#0#PHP" />
+            <element signature="e#3654#4138#0#PHP" />
+            <element signature="e#3654#4236#0#PHP" />
+            <element signature="e#3654#4321#0#PHP" />
+            <element signature="e#3654#4414#0#PHP" />
+            <element signature="e#3654#4484#0#PHP" />
+            <element signature="e#3654#4556#0#PHP" />
+            <element signature="e#3654#4643#0#PHP" />
+            <element signature="e#3654#4698#0#PHP" />
+            <element signature="e#3654#4778#0#PHP" />
+            <element signature="e#3654#4829#0#PHP" />
+            <element signature="e#3654#4876#0#PHP" />
+            <element signature="e#4907#5236#0#PHP" />
+            <element signature="e#5037#5235#1#PHP" />
+            <element signature="e#5087#5220#0#PHP" />
+            <element signature="e#5110#5219#1#PHP" />
+            <element signature="e#4907#5254#0#PHP" />
+            <element signature="e#5267#14364#0#PHP" />
+            <element signature="e#5332#14357#0#PHP" />
+            <element signature="e#5516#14158#0#PHP" />
+            <element signature="e#5535#14157#1#PHP" />
+            <element signature="e#5572#14143#0#PHP" />
+            <element signature="e#5598#14047#0#PHP" />
+            <element signature="e#5798#13987#0#PHP" />
+            <element signature="e#5964#6097#0#PHP" />
+            <element signature="e#6136#12556#0#PHP" />
+            <element signature="e#6220#6717#1#PHP" />
+            <element signature="e#6773#6892#0#PHP" />
+            <element signature="e#6773#6955#0#PHP" />
+            <element signature="e#7603#11937#0#PHP" />
+            <element signature="e#7690#7795#0#PHP" />
+            <element signature="e#7843#11776#0#PHP" />
+            <element signature="e#7889#11775#1#PHP" />
+            <element signature="e#11812#11937#0#PHP" />
+            <element signature="e#11969#12556#0#PHP" />
+            <element signature="e#12071#12525#0#PHP" />
+            <element signature="e#12090#12524#1#PHP" />
+            <element signature="e#12690#13960#0#PHP" />
+            <element signature="e#12761#12894#0#PHP" />
+            <element signature="e#12937#13930#0#PHP" />
+            <element signature="e#13041#13428#1#PHP" />
+            <element signature="e#14066#14143#0#PHP" />
+            <element signature="e#14313#14357#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_2_create_notificacion_correos_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_1_create_tipo_matriculas_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="27" lean-forward="true" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_carreras_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+          <folding>
+            <element signature="e#185#250#0#PHP" />
+            <element signature="n#up#0;n#CreateCarrerasTable#0;n#!!top" />
+            <element signature="e#290#1074#0#PHP" />
+            <element signature="e#317#1073#1#PHP" />
+            <element signature="e#1087#1156#0#PHP" />
+            <element signature="n#down#0;n#CreateCarrerasTable#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_162347_create_ubicaciones_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Estudiante.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+          <folding>
+            <element signature="e#221#737#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/InformacionEstudiante.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="596">
+          <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
+          <folding>
+            <element signature="e#23#62#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Ubicacion.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="359" column="5" selection-end-line="501" />
+        <state relative-caret-position="596">
+          <caret line="106" column="32" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
           <folding>
             <element signature="e#367#446#0#PHP" />
             <element signature="e#451#503#0#PHP" />
             <element signature="e#509#1692#0#PHP" />
-            <element signature="e#760#1148#0#PHP" />
             <element signature="e#1171#1562#0#PHP" />
             <element signature="e#1581#1685#0#PHP" />
             <element signature="e#1598#1679#0#PHP" />
-            <element signature="e#1698#3053#0#PHP" />
             <element signature="e#1792#2275#0#PHP" />
             <element signature="e#1792#2360#0#PHP" />
             <element signature="e#1792#2458#0#PHP" />
@@ -821,9 +952,6 @@
             <element signature="e#1792#2806#0#PHP" />
             <element signature="e#1792#2846#0#PHP" />
             <element signature="e#1792#2884#0#PHP" />
-            <element signature="e#1792#2945#0#PHP" />
-            <element signature="e#3059#4487#0#PHP" />
-            <element signature="e#3155#3709#0#PHP" />
             <element signature="e#3155#3794#0#PHP" />
             <element signature="e#3155#3892#0#PHP" />
             <element signature="e#3155#3985#0#PHP" />
@@ -832,8 +960,6 @@
             <element signature="e#3155#4207#0#PHP" />
             <element signature="e#3155#4240#0#PHP" />
             <element signature="e#3155#4280#0#PHP" />
-            <element signature="e#3155#4318#0#PHP" />
-            <element signature="e#3155#4379#0#PHP" />
             <element signature="e#4493#5973#0#PHP" />
             <element signature="e#4595#5149#0#PHP" />
             <element signature="e#4595#5234#0#PHP" />
@@ -946,211 +1072,85 @@
             <element signature="e#13580#13768#0#PHP" />
             <element signature="e#13580#13861#0#PHP" />
             <element signature="e#13968#14280#0#PHP" />
+            <element signature="e#14286#15583#0#PHP" />
+            <element signature="e#14350#15577#0#PHP" />
+            <element signature="e#14569#14659#0#PHP" />
+            <element signature="e#14588#14658#1#PHP" />
+            <element signature="e#14983#15074#0#PHP" />
+            <element signature="e#15075#15166#0#PHP" />
+            <element signature="e#15167#15249#0#PHP" />
+            <element signature="e#15250#15339#0#PHP" />
+            <element signature="e#15340#15418#0#PHP" />
+            <element signature="e#15419#15493#0#PHP" />
+            <element signature="e#15494#15577#0#PHP" />
+            <element signature="e#15589#15920#0#PHP" />
+            <element signature="e#15926#16262#0#PHP" />
+            <element signature="e#16268#16731#0#PHP" />
+            <element signature="e#16737#17284#0#PHP" />
+            <element signature="e#17290#19169#0#PHP" />
+            <element signature="e#17505#18192#0#PHP" />
+            <element signature="e#19029#19162#0#PHP" />
+            <element signature="e#19046#19161#1#PHP" />
+            <element signature="e#19175#19374#0#PHP" />
+            <element signature="e#19380#19703#0#PHP" />
+            <element signature="e#20280#20584#0#PHP" />
+            <element signature="e#20299#20583#1#PHP" />
+            <element signature="e#20701#20814#0#PHP" />
+            <element signature="e#20720#20813#1#PHP" />
+            <element signature="e#21012#21615#0#PHP" />
+            <element signature="e#21256#21519#0#PHP" />
+            <element signature="e#21306#21508#0#PHP" />
+            <element signature="e#21621#22281#0#PHP" />
+            <element signature="e#21922#22185#0#PHP" />
+            <element signature="e#21972#22174#0#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Providers/Ubicacion.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-          <folding>
-            <element signature="e#40#56#0#PHP" expanded="true" />
-            <element signature="e#156#235#0#PHP" />
-            <element signature="e#240#292#0#PHP" />
-            <element signature="e#298#499#0#PHP" />
-            <element signature="e#0#43#2" />
-            <element signature="e#505#725#0#PHP" />
-            <element signature="e#0#48#2" />
-            <element signature="e#1267#1568#0#PHP" />
-            <element signature="e#0#56#2" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExcelController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="406" column="47" selection-start-line="406" selection-start-column="47" selection-end-line="406" selection-end-column="47" />
-          <folding>
-            <element signature="e#592#904#0#PHP" />
-            <element signature="e#659#879#0#PHP" />
-            <element signature="e#690#878#1#PHP" />
-            <element signature="e#738#867#0#PHP" />
-            <element signature="e#763#866#1#PHP" />
-            <element signature="e#659#897#0#PHP" />
-            <element signature="e#910#3311#0#PHP" />
-            <element signature="e#1238#2152#0#PHP" />
-            <element signature="e#1238#2250#0#PHP" />
-            <element signature="e#1238#2335#0#PHP" />
-            <element signature="e#1238#2428#0#PHP" />
-            <element signature="e#1238#2498#0#PHP" />
-            <element signature="e#1238#2570#0#PHP" />
-            <element signature="e#1238#2675#0#PHP" />
-            <element signature="e#1238#2730#0#PHP" />
-            <element signature="e#1238#2810#0#PHP" />
-            <element signature="e#1238#2861#0#PHP" />
-            <element signature="e#1238#2918#0#PHP" />
-            <element signature="e#1238#2965#0#PHP" />
-            <element signature="e#2996#3286#0#PHP" />
-            <element signature="e#3087#3285#1#PHP" />
-            <element signature="e#3137#3270#0#PHP" />
-            <element signature="e#3160#3269#1#PHP" />
-            <element signature="e#2996#3304#0#PHP" />
-            <element signature="e#3317#5261#0#PHP" />
-            <element signature="e#3654#4138#0#PHP" />
-            <element signature="e#3654#4236#0#PHP" />
-            <element signature="e#3654#4321#0#PHP" />
-            <element signature="e#3654#4414#0#PHP" />
-            <element signature="e#3654#4484#0#PHP" />
-            <element signature="e#3654#4556#0#PHP" />
-            <element signature="e#3654#4643#0#PHP" />
-            <element signature="e#3654#4698#0#PHP" />
-            <element signature="e#3654#4778#0#PHP" />
-            <element signature="e#3654#4829#0#PHP" />
-            <element signature="e#3654#4876#0#PHP" />
-            <element signature="e#4907#5236#0#PHP" />
-            <element signature="e#5037#5235#1#PHP" />
-            <element signature="e#5087#5220#0#PHP" />
-            <element signature="e#5110#5219#1#PHP" />
-            <element signature="e#4907#5254#0#PHP" />
-            <element signature="e#5267#14364#0#PHP" />
-            <element signature="e#5332#14357#0#PHP" />
-            <element signature="e#5516#14158#0#PHP" />
-            <element signature="e#5535#14157#1#PHP" />
-            <element signature="e#5572#14143#0#PHP" />
-            <element signature="e#5598#14047#0#PHP" />
-            <element signature="e#5798#13987#0#PHP" />
-            <element signature="e#5964#6097#0#PHP" />
-            <element signature="e#6136#12556#0#PHP" />
-            <element signature="e#6220#6717#1#PHP" />
-            <element signature="e#6773#6892#0#PHP" />
-            <element signature="e#6773#6955#0#PHP" />
-            <element signature="e#7603#11937#0#PHP" />
-            <element signature="e#7690#7795#0#PHP" />
-            <element signature="e#7843#11776#0#PHP" />
-            <element signature="e#7889#11775#1#PHP" />
-            <element signature="e#11812#11937#0#PHP" />
-            <element signature="e#11969#12556#0#PHP" />
-            <element signature="e#12071#12525#0#PHP" />
-            <element signature="e#12090#12524#1#PHP" />
-            <element signature="e#12690#13960#0#PHP" />
-            <element signature="e#12761#12894#0#PHP" />
-            <element signature="e#12937#13930#0#PHP" />
-            <element signature="e#13041#13428#1#PHP" />
-            <element signature="e#14066#14143#0#PHP" />
-            <element signature="e#14313#14357#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_2_create_notificacion_correos_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Estudiante.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
-          <folding>
-            <element signature="e#23#62#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_2_create_carreras_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
-          <folding>
-            <element signature="e#185#250#0#PHP" />
-            <element signature="n#up#0;n#CreateCarrerasTable#0;n#!!top" />
-            <element signature="e#290#1074#0#PHP" />
-            <element signature="e#317#1073#1#PHP" />
-            <element signature="e#1087#1156#0#PHP" />
-            <element signature="n#down#0;n#CreateCarrerasTable#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="33" column="61" selection-start-line="33" selection-start-column="61" selection-end-line="33" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_1_create_tipo_matriculas_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="15" column="27" lean-forward="true" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_162619_create_estudiantes_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+        <state relative-caret-position="145">
+          <caret line="35" column="65" selection-start-line="35" selection-start-column="65" selection-end-line="35" selection-end-column="65" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php">
+    <entry file="file://$PROJECT_DIR$/database/INSERTS BASE.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
-          <folding>
-            <element signature="e#252#331#0#PHP" />
-            <element signature="e#336#388#0#PHP" />
-            <element signature="e#607#723#0#PHP" />
-          </folding>
+        <state relative-caret-position="141">
+          <caret line="1141" column="6" selection-end-line="2772" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/InformacionEstudiante.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CatalogosController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        <state relative-caret-position="621">
+          <caret line="51" column="33" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="33" />
           <folding>
-            <element signature="e#23#62#0#PHP" expanded="true" />
+            <element signature="e#173#252#0#PHP" />
+            <element signature="e#257#309#0#PHP" />
+            <element signature="e#1080#1151#0#PHP" />
+            <element signature="e#1080#1183#0#PHP" />
+            <element signature="e#1281#1582#0#PHP" />
+            <element signature="e#0#56#2" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="34" column="52" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
+        <state relative-caret-position="216">
+          <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_04_162347_create_ubicaciones_table.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="19" column="40" lean-forward="true" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/INSERTS BASE.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="2771" lean-forward="true" selection-start-line="2771" selection-end-line="2771" />
+        <state relative-caret-position="394">
+          <caret line="53" column="37" lean-forward="true" selection-start-line="53" selection-start-column="37" selection-end-line="53" selection-end-column="37" />
+          <folding>
+            <element signature="e#252#331#0#PHP" />
+            <element signature="e#336#388#0#PHP" />
+          </folding>
         </state>
       </provider>
     </entry>
