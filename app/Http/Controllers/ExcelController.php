@@ -139,8 +139,8 @@ class ExcelController extends Controller
                                     'codigo' => strtoupper($row->codigo_matricula),
                                     'folio' => strtoupper($row->folio),
                                     'fecha' => $row->fecha,
-                                    'jornada' => strtoupper($row->jornada_principal),
-                                    'paralelo_principal' => strtoupper($row->paralelo_principal),
+                                    'jornada' => $this->changeJornada($row->jornada_principal),
+                                    'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
                                     'estado' => 'MATRICULADO'
                                 ]);
                                 $matriculaAnterior = Matricula::where('estudiante_id', $estudiante->id)
@@ -204,8 +204,8 @@ class ExcelController extends Controller
                                     'codigo' => strtoupper($row->codigo_matricula),
                                     'folio' => strtoupper($row->folio),
                                     'fecha' => $row->fecha,
-                                    'jornada' => strtoupper($row->jornada_principal),
-                                    'paralelo_principal' => strtoupper($row->paralelo_principal)
+                                    'jornada' => $this->changeJornada($row->jornada_principal),
+                                    'paralelo_principal' => $this->changeParalelo($row->paralelo_principal)
                                 ]);
                             }
                             $asignatura = Asignatura::where('codigo', $row->codigo_asignatura)->first();
@@ -214,9 +214,9 @@ class ExcelController extends Controller
                                     ->where('matricula_id', $matricula->id)->first();
                                 if (!$existeAsignatura) {
                                     $detalleMatriculas = new DetalleMatricula([
-                                        'paralelo' => strtoupper($row->paralelo_asignatura),
-                                        'numero_matricula' => strtoupper($row->numero_matricula),
-                                        'jornada' => strtoupper($row->jornada_asignatura),
+                                        'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                        'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                        'jornada' => $this->changeJornada($row->jornada_asignatura),
                                         'estado' => 'MATRICULADO'
                                     ]);
                                     $tipoMatricula = TipoMatricula::where('id', $row->tipo_matricula_id)->first();
@@ -272,6 +272,7 @@ class ExcelController extends Controller
                                 ->where('periodo_lectivo_id', $periodoLectivo->id)
                                 ->first();
                             if (!$existeMatricula) {
+                                $identificacion = $row->cedula_estudiante;
                                 $countEstudiantes++;
                                 $matriculaAnterior = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
                                     ->where('estado', 'MATRICULADO')
@@ -279,8 +280,8 @@ class ExcelController extends Controller
 
                                 $matricula = new MatriculaTransaccion([
                                     'fecha' => $now,
-                                    'jornada' => strtoupper($row->jornada_principal),
-                                    'paralelo_principal' => strtoupper($row->paralelo_principal),
+                                    'jornada' => $this->changeJornada($row->jornada_principal),
+                                    'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
                                     'estado' => 'EN_PROCESO'
                                 ]);
 
@@ -337,9 +338,9 @@ class ExcelController extends Controller
                                 }
 
                                 $detalleMatriculas = new DetalleMatriculaTransaccion([
-                                    'paralelo' => strtoupper($row->paralelo_asignatura),
-                                    'numero_matricula' => strtoupper($row->numero_matricula),
-                                    'jornada' => strtoupper($row->jornada_asignatura),
+                                    'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                    'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                    'jornada' => $this->changeJornada($row->jornada_asignatura),
                                     'estado' => 'EN_PROCESO'
                                 ]);
 
@@ -357,8 +358,8 @@ class ExcelController extends Controller
                                     $identificacion = $row->cedula_estudiante;
                                     $existeMatricula->update([
                                         'fecha' => $now,
-                                        'jornada' => strtoupper($row->jornada_principal),
-                                        'paralelo_principal' => strtoupper($row->paralelo_principal),
+                                        'jornada' => $this->changeJornada($row->jornada_principal),
+                                        'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
                                         'estado' => 'EN_PROCESO'
                                     ]);
                                     $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
@@ -376,9 +377,9 @@ class ExcelController extends Controller
                                 if ($existeDetalleMatricula) {
                                     $countAsignaturasModificadas++;
                                     $existeDetalleMatricula->update([
-                                        'paralelo' => strtoupper($row->paralelo_asignatura),
-                                        'numero_matricula' => strtoupper($row->numero_matricula),
-                                        'jornada' => strtoupper($row->jornada_asignatura)
+                                        'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                        'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                        'jornada' => $this->changeJornada($row->jornada_asignatura)
                                     ]);
                                     $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula))
                                         ->first();
@@ -389,9 +390,9 @@ class ExcelController extends Controller
                                 } else {
                                     $countAsignaturas++;
                                     $detalleMatriculas = new DetalleMatriculaTransaccion([
-                                        'paralelo' => strtoupper($row->paralelo_asignatura),
-                                        'numero_matricula' => strtoupper($row->numero_matricula),
-                                        'jornada' => strtoupper($row->jornada_asignatura),
+                                        'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                        'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                        'jornada' => $this->changeJornada($row->jornada_asignatura),
                                         'estado' => 'EN_PROCESO'
                                     ]);
                                     $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula))
@@ -419,7 +420,7 @@ class ExcelController extends Controller
                 }
             });
             Storage::delete($pathFile);
-//            return response()->json(['respuesta' => $response]);
+            return response()->json(['respuesta' => $response]);
 
             return response()->json([
                 'errores' => $errors,
@@ -466,4 +467,42 @@ class ExcelController extends Controller
 
         return $tipoMatricula;
     }
+
+    public function changeJornada($jornada)
+    {
+        $jornada = strtoupper(trim($jornada));
+        $jornadas = array("MATUTINA", "VESPERTINA", "NOCTURNA", "INTENSIVA", "POR_DETERMINAR");
+        $indice = array_search($jornada, $jornadas, false);
+        if ($indice >= 0) {
+            return $indice + 1;
+        } else {
+            return '';
+        }
+    }
+
+    public function changeNumeroMatricula($numeroMatricula)
+    {
+        $numeroMatricula = strtoupper(trim($numeroMatricula));
+        $numerosMatricula = array('PRIMERA', 'SEGUNDA', 'TERCERA');
+        $indice = array_search($numeroMatricula, $numerosMatricula, false);
+        if ($indice >= 0) {
+            return $indice + 1;
+        } else {
+            return '';
+        }
+    }
+
+//    public function changeParalelo($paralelo)
+    public function changeParalelo($paralelo)
+    {
+        $paralelo = strtoupper($paralelo);
+        $paralelos = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T');
+        $indice = array_search($paralelo, $paralelos, false);
+        if ($indice >= 0) {
+            return $indice + 1;
+        } else {
+            return '';
+        }
+    }
+
 }

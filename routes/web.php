@@ -71,3 +71,5 @@ Route::get('/exports/errores_cupos', 'ExcelController@exportErroresCupos');
 
 Route::get('/email', 'PruebasController@email');
 Route::post('/emails', 'EmailsController@send');
+
+Route::get('/paralelos', 'ExcelController@changeParalelo');
