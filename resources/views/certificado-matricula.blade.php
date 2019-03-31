@@ -17,22 +17,22 @@
     <div class="card row">
         <div class="col-lg-12">
             <div class="row">
-                <div class="col-lg-12 col-sm-12 text-right mt-5">
-                    <img src="{{ asset('images/logo_carrera_1.jpg') }}">
+                <div class="col-lg-12 col-xs-12 text-right mt-5 text-center">
+                    <img src="{{ asset('images/logo_carrera_'.$certificado[0]->instituto_id.'.png') }}">
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12 col-sm-12">
-                    <p class="text-right">{{$certificado[0]->fecha}}</p>
+                <div class="col-lg-12 col-xs-12 text-center">
+                    <p>{{$certificado[0]->fecha}}</p>
                 </div>
             </div>
             <div class="row m-2">
-                <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-12 col-xs-12">
                     <h2 class="text-center">CERTIFICADO DE MATRÍCULA</h2>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6 col-sm-12 text-center">
+                <div class="col-lg-6 col-xs-12 text-center">
                     <h3>MATRÍCULA</h3>
                     <p>{{$certificado[0]->codigo}}</p>
                 </div>
@@ -65,7 +65,7 @@
 
             <div class="row ml-2 mr-2">
                 <div class="col-lg-12">
-                    <table class="table table-bordered table-striped table-sm table-responsive">
+                    <table class="table table-sm table-responsive">
                         <tr>
                             <th>
                                 CÓDIGO
@@ -74,7 +74,7 @@
                                 ASIGNATURA
                             </th>
                             <th>
-                                PERIODO
+                                PERIODO ACADÉMICO
                             </th>
                             <th>
                                 NÚMERO MATRÍCULA
@@ -101,13 +101,31 @@
                                     {{$asignatura->asignatura}}
                                 </td>
                                 <td>
-                                    {{$asignatura->periodo}}
+                                    <select name="" id="" value="{{$asignatura->periodo}}" disabled>
+                                        <option value="1">PRIMERO</option>
+                                        <option value="2">SEGUNDO</option>
+                                        <option value="3">TERCERO</option>
+                                        <option value="4">CUARTO</option>
+                                        <option value="5">QUINTO</option>
+                                        <option value="6">SEXTO</option>
+                                    </select>
+
                                 </td>
                                 <td>
-                                    {{$asignatura->numero_matricula}}
+                                    <select name="" id="" value="{{$asignatura->numero_matricula}}" disabled>
+                                        <option value="1">PRIMERA</option>
+                                        <option value="2">SEGUNDA</option>
+                                        <option value="3">TERCERA</option>
+                                    </select>
                                 </td>
                                 <td>
-                                    {{$asignatura->jornada}}
+                                    <select name="" id="" value="{{$asignatura->jornada}}" disabled>
+                                        <option value="1">MATUTINA</option>
+                                        <option value="2">VESPERTINA</option>
+                                        <option value="3">NOCTURNA</option>
+                                        <option value="4">INTENSIVA</option>
+                                    </select>
+
                                 </td>
                                 <td width="10%">
                                     {{$asignatura->horas_docente}}

@@ -26,13 +26,12 @@ class DetalleMatriculasController extends Controller
 
     public function get(Request $request)
     {
-
         $detalleMatricula = DetalleMatricula::select('detalle_matriculas.*')
             ->join('asignaturas', 'asignaturas.id', 'detalle_matriculas.asignatura_id')
             ->where('matricula_id', $request->id)
             ->with('asignatura')->with('tipo_matricula')
-            ->orderby('detalle_matriculas.tipo_matricula_id')
             ->orderby('asignaturas.periodo_academico_id')
+            ->orderby('asignaturas.nombre')
             ->get();
         return response()->json(['detalle_matricula' => $detalleMatricula], 200);
     }

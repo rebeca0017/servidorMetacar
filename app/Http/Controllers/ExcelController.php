@@ -420,7 +420,7 @@ class ExcelController extends Controller
                 }
             });
             Storage::delete($pathFile);
-            return response()->json(['respuesta' => $response]);
+//            return response()->json(['respuesta' => $response]);
 
             return response()->json([
                 'errores' => $errors,
@@ -429,6 +429,59 @@ class ExcelController extends Controller
                 'total_asignaturas' => $countAsignaturas,
                 'total_asignaturas_modificadas' => $countAsignaturasModificadas
             ], 200);
+        } else {
+            return response()->json([
+                'errores' => 'Archivo no valido',
+                'registros' => 0,
+                'total_estudiantes' => 0,
+                'total_asignaturas' => 0
+            ], 500);
+        }
+
+    }
+
+    public function importEstudiantes(Request $request)
+    {
+        if ($request->file('archivo')) {
+            $pathFile = $request->file('archivo')->store('public/archivos');
+            $path = storage_path() . '/app/' . $pathFile;
+
+            $countEstudiantes = 0;
+
+            $response = Excel::load($path, function ($reader)
+            use (&$request, &$countEstudiantes) {
+
+                foreach ($reader->get() as $row) {
+                    try {
+                        DB::beginTransaction();
+                        $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
+
+                        if ($estudiante) {
+                            $countEstudiantes++;
+                            $estudiante->update([
+                                'nombre1' => strtoupper($row->nombre1),
+                                'nombre2' => strtoupper($row->nombre2),
+                                'apellido1' => strtoupper($row->apellido1),
+                                'apellido2' => strtoupper($row->apellido2)
+                            ]);
+                        } else {
+                            $estudiante->create([
+                                'nombre1' => strtoupper($row->nombre1),
+                                'nombre2' => strtoupper($row->nombre2),
+                                'apellido1' => strtoupper($row->apellido1),
+                                'apellido2' => strtoupper($row->apellido2)
+                            ]);
+                        }
+                        DB::commit();
+                    } catch (QueryException $e) {
+                        return $e;
+                    }
+                }
+            });
+            Storage::delete($pathFile);
+//            return response()->json(['respuesta' => $response]);
+
+            return response()->json(['total_estudiantes' => $countEstudiantes], 200);
         } else {
             return response()->json([
                 'errores' => 'Archivo no valido',
@@ -468,7 +521,7 @@ class ExcelController extends Controller
         return $tipoMatricula;
     }
 
-    public function changeJornada($jornada)
+    private function changeJornada($jornada)
     {
         $jornada = strtoupper(trim($jornada));
         $jornadas = array("MATUTINA", "VESPERTINA", "NOCTURNA", "INTENSIVA", "POR_DETERMINAR");
@@ -480,7 +533,7 @@ class ExcelController extends Controller
         }
     }
 
-    public function changeNumeroMatricula($numeroMatricula)
+    private function changeNumeroMatricula($numeroMatricula)
     {
         $numeroMatricula = strtoupper(trim($numeroMatricula));
         $numerosMatricula = array('PRIMERA', 'SEGUNDA', 'TERCERA');
@@ -492,8 +545,7 @@ class ExcelController extends Controller
         }
     }
 
-//    public function changeParalelo($paralelo)
-    public function changeParalelo($paralelo)
+    private function changeParalelo($paralelo)
     {
         $paralelo = strtoupper($paralelo);
         $paralelos = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T');

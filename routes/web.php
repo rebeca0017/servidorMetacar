@@ -63,6 +63,7 @@ Route::get('/exports/cupos_carrera', 'ExcelController@exportCuposCarrera');
 Route::get('/exports/cupos_periodo_academico', 'ExcelController@exportCuposPeriodoAcademico');
 
 Route::post('/imports/cupos', 'ExcelController@importCupos');
+Route::post('/imports/estudiantes', 'ExcelController@importCupos');
 Route::post('/imports/matriculas', 'ExcelController@importMatriculas');
 
 Route::get('/certificado-matricula/{matricula_id}', 'MatriculasController@getCertificadoMatriculaPublic');

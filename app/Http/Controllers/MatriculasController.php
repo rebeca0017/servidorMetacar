@@ -28,30 +28,26 @@ class MatriculasController extends Controller
         //
     }
 
-    public function getCountMatriculas(Request $request)
+    public function getCountMatriculas()
     {
-        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
-
-        $parameters = [$periodoLectivoActual->id, 'MATRICULADO', 'APROBADO'];
         $matriculadosCount = DB::select
-        ('select carreras.id,carreras.nombre,matriculas.estado 
-                from matriculas inner join mallas on matriculas.malla_id = mallas.id 
-                inner join carreras on carreras.id = mallas.carrera_id
-                where periodo_lectivo_id=? and (matriculas.estado=? or matriculas.estado=?)
-                order by carreras.id'
-            , $parameters);
+        ("select count(*) total, 
+                    sum(case when m.estado = 'MATRICULADO' then 1 else 0 end) matriculados,
+                    sum(case when m.estado = 'EN_PROCESO' then 1 else 0 end) en_proceso,
+                    sum(case when m.estado = 'APROBADO' then 1 else 0 end) aprobados,
+                    i.id as instituto,
+                    c.nombre as carrera,
+                    c.descripcion as malla, 
+                    m.malla_id  
+                from MATRICULAS m 
+                    inner join mallas ma on ma.id = m.malla_id
+                    inner join carreras c on c.id = ma.carrera_id
+                    inner join institutos i on i.id = c.instituto_id
+                where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTUAL' limit 1)
+                    group by i.id, c.nombre,c.descripcion, m.malla_id
+                    order by malla");
 
-        $carreras = DB::select
-        ('select carreras.id,carreras.nombre,carreras.descripcion 
-                from matriculas inner join mallas on matriculas.malla_id = mallas.id 
-                inner join carreras on carreras.id = mallas.carrera_id
-                where periodo_lectivo_id=? and (matriculas.estado=? or matriculas.estado=?)
-                group by carreras.id'
-            , $parameters);
-
-
-        return response()->json(['matriculados_count' => $matriculadosCount,
-            'carreras' => $carreras], 200);
+        return response()->json(['matriculados_count' => $matriculadosCount], 200);
     }
 
     public function getSolicitudMatricula(Request $request)
@@ -79,6 +75,8 @@ class MatriculasController extends Controller
             ->where('matriculas.id', $request->matricula_id)
             ->where('matriculas.estado', 'MATRICULADO')
             ->where('detalle_matriculas.estado', 'MATRICULADO')
+            ->orderby('asignaturas.periodo_academico_id')
+            ->orderby('asignaturas.nombre')
             ->get();
 
         return response()->json(['certificado' => $certificadoMatricula], 200);
@@ -88,6 +86,7 @@ class MatriculasController extends Controller
     {
         $certificadoMatricula = Matricula::select(
             'matriculas.*',
+            'institutos.id as instituto_id',
             'institutos.nombre as instituto',
             'carreras.nombre as carrera',
             'asignaturas.nombre as asignatura',
@@ -110,6 +109,8 @@ class MatriculasController extends Controller
             ->where('matriculas.id', $request->matricula_id)
             ->where('matriculas.estado', 'MATRICULADO')
             ->where('detalle_matriculas.estado', 'MATRICULADO')
+            ->orderby('asignaturas.periodo_academico_id')
+            ->orderby('asignaturas.nombre')
             ->get();
 
         return response()->json(['certificado' => $certificadoMatricula], 200);
@@ -119,6 +120,7 @@ class MatriculasController extends Controller
     {
         $certificadoMatricula = Matricula::select(
             'matriculas.*',
+            'institutos.id as instituto_id',
             'institutos.nombre as instituto',
             'carreras.nombre as carrera',
             'asignaturas.nombre as asignatura',
@@ -350,7 +352,7 @@ class MatriculasController extends Controller
     {
         $detalleMatricula = DetalleMatricula::findOrFail($request->id);
         $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
-        $detalleMatricula ->delete();
+        $detalleMatricula->delete();
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
 
