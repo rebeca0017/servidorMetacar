@@ -35,7 +35,7 @@ class PruebasController extends Controller
         $carrera = Carrera::findOrFail($request->carrera_id);
         $notificacion = new Notificacion($request->asunto, $carrera->nombre, $request->body);
         $subject = $request->asunto;
-        $for = "ctamayo@yavirac.edu.ec";
+        $for = ["ctamayo@yavirac.edu.ec","cesar.tamayo0204@gmail.com"];
         Mail::send('notificacion', array('notificacion' => $notificacion), function ($msj) use ($subject, $for) {
             $msj->subject($subject);
             $msj->to($for);

@@ -26,10 +26,16 @@ class EmailsController extends Controller
 
     public function send(Request $request)
     {
+        $for = array();
+        $correos = DB::select("select correo from notificacion_correos where estado = 'ACTIVO'");
+        foreach ($correos as $correo) {
+            $for = array($correo->correo);
+        }
+
         $carrera = Carrera::findOrFail($request->carrera_id);
         $notificacion = new Notificacion($request->asunto, $carrera->nombre, $request->body);
         $subject = $request->asunto;
-        $for = "ctamayo@yavirac.edu.ec";
+
         Mail::send('notificacion', array('notificacion' => $notificacion), function ($msj) use ($subject, $for) {
             $msj->subject($subject);
             $msj->to($for);
