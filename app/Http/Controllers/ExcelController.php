@@ -524,7 +524,7 @@ class ExcelController extends Controller
     private function changeJornada($jornada)
     {
         $jornada = strtoupper(trim($jornada));
-        $jornadas = array("MATUTINA", "VESPERTINA", "NOCTURNA", "INTENSIVA", "POR_DETERMINAR");
+        $jornadas = array("MATUTINA", "VESPERTINA", "NOCTURNA", "INTENSIVA", "POR_DEFINIR");
         $indice = array_search($jornada, $jornadas, false);
         if ($indice >= 0) {
             return $indice + 1;

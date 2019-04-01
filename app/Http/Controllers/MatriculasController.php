@@ -35,16 +35,15 @@ class MatriculasController extends Controller
                     sum(case when m.estado = 'MATRICULADO' then 1 else 0 end) matriculados,
                     sum(case when m.estado = 'EN_PROCESO' then 1 else 0 end) en_proceso,
                     sum(case when m.estado = 'APROBADO' then 1 else 0 end) aprobados,
-                    i.id as instituto,
+                    c.id as carrera_id,
                     c.nombre as carrera,
                     c.descripcion as malla, 
                     m.malla_id  
                 from MATRICULAS m 
                     inner join mallas ma on ma.id = m.malla_id
                     inner join carreras c on c.id = ma.carrera_id
-                    inner join institutos i on i.id = c.instituto_id
                 where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTUAL' limit 1)
-                    group by i.id, c.nombre,c.descripcion, m.malla_id
+                    group by c.id,c.nombre,c.descripcion, m.malla_id
                     order by malla");
 
         return response()->json(['matriculados_count' => $matriculadosCount], 200);

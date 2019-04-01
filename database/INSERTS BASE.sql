@@ -2771,4 +2771,4 @@ INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(1931,'1719220368','COLLAHUAZO','QUIGALOMBO','FAUSTO','HERNAN','','fhq.collahuazo@yavirac.edu.ec','1','','','1');
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(1932,'1711910552','PULLUCUTIN','TAIPE','MARTHA','CECILIA','mct.pullucutin@gmail.com','mct.pullucutin@yavirac.edu.ec','2','26','7','1');
 
-INSERT INTO public.notificacion_correos(nombre, apellido, correo, tipo, estado) VALUES ('Mauricio','Tamayo','Correo','ctamayo@yavirac.edu.ec','ACTIVO');
+INSERT INTO public.notificacion_correos(nombre, apellido, correo, tipo, estado) VALUES ('Mauricio','Tamayo','ctamayo@yavirac.edu.ec','MATRICULAS','ACTIVO');
