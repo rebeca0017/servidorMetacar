@@ -9,7 +9,9 @@ class Matricula extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'codigo', 'codigo_sniese_paralelo', 'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
+        'codigo',
+        'codigo_sniese_paralelo',
+        'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
     ];
 
     public function detalle_matriculas()

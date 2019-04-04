@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Carrera;
-use Illuminate\Database\QueryException;
-use Excel;
-use App\InformacionEstudiante;
-use App\InformacionEstudianteTransaccion;
-use Carbon\Carbon;
 use App\Asignatura;
+use App\Carrera;
 use App\DetalleMatricula;
 use App\DetalleMatriculaTransaccion;
 use App\Estudiante;
-use Illuminate\Support\Facades\DB;
+use App\InformacionEstudiante;
+use App\InformacionEstudianteTransaccion;
+use App\Malla;
 use App\Matricula;
 use App\MatriculaTransaccion;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
-use App\Malla;
 use App\TipoMatricula;
+use Carbon\Carbon;
+use Excel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ExcelController extends Controller
@@ -446,31 +446,43 @@ class ExcelController extends Controller
             $pathFile = $request->file('archivo')->store('public/archivos');
             $path = storage_path() . '/app/' . $pathFile;
 
-            $countEstudiantes = 0;
+            $countEstudiantesNuevos = 0;
+            $countEstudiantesModificados = 0;
+            $errors = array();
 
             $response = Excel::load($path, function ($reader)
-            use (&$request, &$countEstudiantes) {
-
+            use (&$request, &$countEstudiantesModificados, &$countEstudiantesNuevos, &$errors) {
+                $i = 0;
                 foreach ($reader->get() as $row) {
                     try {
+                        $i++;
                         DB::beginTransaction();
                         $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
-
+                        $existeCorreo = Estudiante::where('correo_institucional', $row->correo)->first();
+                        if ($existeCorreo) {
+                            $errors['correos'][] = 'correo: ' . $row->correo . ' - fila: ' . $i;
+                        }
                         if ($estudiante) {
-                            $countEstudiantes++;
                             $estudiante->update([
+                                'identificacion' => strtoupper($row->cedula_estudiante),
                                 'nombre1' => strtoupper($row->nombre1),
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
-                                'apellido2' => strtoupper($row->apellido2)
+                                'apellido2' => strtoupper($row->apellido2),
+                                'correo_institucional' => strtolower($row->correo)
                             ]);
+                            $countEstudiantesModificados++;
                         } else {
+                            $estudiante = new Estudiante();
                             $estudiante->create([
+                                'identificacion' => strtoupper($row->cedula_estudiante),
                                 'nombre1' => strtoupper($row->nombre1),
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
-                                'apellido2' => strtoupper($row->apellido2)
+                                'apellido2' => strtoupper($row->apellido2),
+                                'correo_institucional' => strtolower($row->correo)
                             ]);
+                            $countEstudiantesNuevos++;
                         }
                         DB::commit();
                     } catch (QueryException $e) {
@@ -481,7 +493,10 @@ class ExcelController extends Controller
             Storage::delete($pathFile);
 //            return response()->json(['respuesta' => $response]);
 
-            return response()->json(['total_estudiantes' => $countEstudiantes], 200);
+            return response()->json([
+                'errores' => $errors,
+                'total_estudiantes_nuevos' => $countEstudiantesNuevos,
+                'total_estudiantes_modificados' => $countEstudiantesModificados], 200);
         } else {
             return response()->json([
                 'errores' => 'Archivo no valido',

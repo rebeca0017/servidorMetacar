@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Asignatura;
 use App\DetalleMatricula;
 use App\Malla;
-use App\Carrera;
 use App\Matricula;
-use App\PeriodoAcademico;
 use App\TipoMatricula;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -179,7 +177,12 @@ class DetalleMatriculasController extends Controller
             $detalleMatricula->asignatura()->associate($asignatura);
             $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
             $detalleMatricula->save();
-            $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
+            if ($detalleMatricula->estado == 'MATRICULADO') {
+
+            } else {
+                $detalleMatricula->matricula()->update(['estado' => 'EN_PROCESO']);
+            }
+
             DB::commit();
             return response()->json(['detalle_matricula' => $detalleMatricula], 201);
         } catch (ModelNotFoundException $e) {

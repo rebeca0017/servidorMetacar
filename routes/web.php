@@ -42,6 +42,8 @@ Route::get('/matriculas/validate_cupo', 'MatriculasController@validateCupo');
 Route::get('/matriculas/validate_cupos_carrera', 'MatriculasController@validateCuposCarrera');
 Route::get('/matriculas/validate_cupos_periodo_academico', 'MatriculasController@validateCuposPeriodoAcademico');
 
+Route::delete('/matriculas/delete_cupos_carrera', 'MatriculasController@deleteCuposCarrera');
+Route::delete('/matriculas/delete_cupos_periodo_academico', 'MatriculasController@deleteCuposPeriodo');
 Route::get('/matriculas/certificado_matricula', 'MatriculasController@getCertificadoMatricula');
 Route::get('/matriculas/carreras', 'MatriculasController@getMatriculasCarreras');
 Route::get('/matriculas/periodo_academicos', 'MatriculasController@getMatriculasPeriodoAcademicos');
@@ -63,7 +65,7 @@ Route::get('/exports/cupos_carrera', 'ExcelController@exportCuposCarrera');
 Route::get('/exports/cupos_periodo_academico', 'ExcelController@exportCuposPeriodoAcademico');
 
 Route::post('/imports/cupos', 'ExcelController@importCupos');
-Route::post('/imports/estudiantes', 'ExcelController@importCupos');
+Route::post('/imports/estudiantes', 'ExcelController@importEstudiantes');
 Route::post('/imports/matriculas', 'ExcelController@importMatriculas');
 
 Route::get('/certificado-matricula/{matricula_id}', 'MatriculasController@getCertificadoMatriculaPublic');

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Asignatura;
+use App\Carrera;
 use App\DetalleMatricula;
 use App\Estudiante;
 use App\Malla;
-use App\Carrera;
 use App\Matricula;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
-use App\TipoMatricula;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDOException;
 
 
 class MatriculasController extends Controller
@@ -278,6 +278,33 @@ class MatriculasController extends Controller
         ], 'cupos' => $cupos], 200);
     }
 
+    public function deleteCuposCarrera(Request $request)
+    {
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $periodoLectioActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        if ($periodoLectioActual) {
+            $cupos = Matricula::where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $periodoLectioActual->id)
+                ->where('estado', 'EN_PROCESO')
+                ->delete();
+        }
+        return response()->json(['cupos' => $cupos], 200);
+    }
+
+    public function deleteCuposPeriodo(Request $request)
+    {
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $periodoLectioActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        if ($periodoLectioActual) {
+            $cupos = Matricula::where('malla_id', $malla->id)
+                ->where('periodo_lectivo_id', $periodoLectioActual->id)
+                ->where('periodo_academico_id', $request->periodo_academico_id)
+                ->where('estado', 'EN_PROCESO')
+                ->delete();
+        }
+        return response()->json(['cupos' => $cupos], 200);
+    }
+
     public function getCupo(Request $request)
     {
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
@@ -334,7 +361,7 @@ class MatriculasController extends Controller
             return response()->json($e, 405);
         } catch (NotFoundHttpException  $e) {
             return response()->json($e, 405);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             return response()->json($e, 409);
         } catch (QueryException $e) {
             return response()->json('asdasd', 200);

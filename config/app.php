@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */

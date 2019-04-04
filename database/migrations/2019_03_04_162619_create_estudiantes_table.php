@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEstudiantesTable extends Migration
 {
@@ -17,13 +17,13 @@ class CreateEstudiantesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->integer('pais_nacionalidad_id')->default(0);
-            $table->foreign('pais_nacionalidad_id')->references('id')->on('ubicaciones')->nullable();
+            $table->foreign('pais_nacionalidad_id')->references('id')->on('ubicaciones');
             $table->integer('provincia_nacimiento_id')->default(0);
-            $table->foreign('provincia_nacimiento_id')->references('id')->on('ubicaciones')->nullable();
+            $table->foreign('provincia_nacimiento_id')->references('id')->on('ubicaciones');
             $table->integer('canton_nacimiento_id')->default(0);
-            $table->foreign('canton_nacimiento_id')->references('id')->on('ubicaciones')->nullable();
+            $table->foreign('canton_nacimiento_id')->references('id')->on('ubicaciones');
             $table->integer('pais_residencia_id')->default(0);
-            $table->foreign('pais_residencia_id')->references('id')->on('ubicaciones')->nullable();
+            $table->foreign('pais_residencia_id')->references('id')->on('ubicaciones');
             $table->string('tipo_identificacion', 50)->default(0);
             $table->string('identificacion', 50);
             $table->string('apellido1', 50);
