@@ -251,11 +251,11 @@ class ExcelController extends Controller
             $pathFile = $request->file('archivo')->store('public/archivos');
             $path = storage_path() . '/app/' . $pathFile;
             $i = 0;
-            $countEstudiantes = 0;
-            $countAsignaturas = 0;
-            $countAsignaturasModificadas = 0;
+            $countCuposNuevos = 0;
+            $countCuposModificados = 0;
+
             $response = Excel::load($path, function ($reader)
-            use (&$request, &$errors, &$i, &$countEstudiantes, &$countAsignaturas, &$countAsignaturasModificadas) {
+            use (&$request, &$errors, &$i, &$countCuposNuevos, &$countCuposModificados) {
                 $now = Carbon::now();
                 $identificacion = '';
                 $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
@@ -273,7 +273,7 @@ class ExcelController extends Controller
                                 ->first();
                             if (!$existeMatricula) {
                                 $identificacion = $row->cedula_estudiante;
-                                $countEstudiantes++;
+                                $countCuposNuevos++;
                                 $matriculaAnterior = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
                                     ->where('estado', 'MATRICULADO')
                                     ->orderby('fecha', 'DESC')->first();
@@ -344,7 +344,7 @@ class ExcelController extends Controller
                                     'estado' => 'EN_PROCESO'
                                 ]);
 
-                                $countAsignaturas++;
+
                                 $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula))->first();
                                 $detalleMatriculas->matricula()->associate($matricula);
                                 $detalleMatriculas->asignatura()->associate($asignatura);
@@ -355,6 +355,7 @@ class ExcelController extends Controller
                                 || $existeMatricula->estado == 'APROBADO')) {
 
                                 if ($identificacion != $row->cedula_estudiante) {
+                                    $countCuposModificados++;
                                     $identificacion = $row->cedula_estudiante;
                                     $existeMatricula->update([
                                         'fecha' => $now,
@@ -375,7 +376,7 @@ class ExcelController extends Controller
                                     ->where('matricula_id', $existeMatricula->id)->first();
 
                                 if ($existeDetalleMatricula) {
-                                    $countAsignaturasModificadas++;
+
                                     $existeDetalleMatricula->update([
                                         'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
                                         'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
@@ -388,7 +389,7 @@ class ExcelController extends Controller
                                     $existeDetalleMatricula->tipo_matricula()->associate($tipoMatricula);
                                     $existeDetalleMatricula->save();
                                 } else {
-                                    $countAsignaturas++;
+
                                     $detalleMatriculas = new DetalleMatriculaTransaccion([
                                         'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
                                         'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
@@ -425,9 +426,8 @@ class ExcelController extends Controller
             return response()->json([
                 'errores' => $errors,
                 'registros' => $i,
-                'total_estudiantes' => $countEstudiantes,
-                'total_asignaturas' => $countAsignaturas,
-                'total_asignaturas_modificadas' => $countAsignaturasModificadas
+                'total_cupos_nuevos' => $countCuposNuevos,
+                'total_cupos_modificados' => $countCuposModificados
             ], 200);
         } else {
             return response()->json([

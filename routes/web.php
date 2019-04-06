@@ -76,3 +76,7 @@ Route::get('/email', 'PruebasController@email');
 Route::post('/emails', 'EmailsController@send');
 
 Route::get('/paralelos', 'ExcelController@changeParalelo');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
