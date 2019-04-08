@@ -406,8 +406,12 @@ class ExcelController extends Controller
 
                             }
                         } else {
+
                             if (!$estudiante) {
                                 $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1);
+                                Estudiante::create([
+                                    'tipo_identificacion' => $row->cedula_estudiante
+                                ]);
                             }
                             if (!$asignatura) {
                                 $errors['asignaturas'][] = 'codigo_asignatura: ' . $row->codigo_asignatura . ' - fila: ' . ($i + 1);
@@ -460,9 +464,9 @@ class ExcelController extends Controller
                         $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
                         $existeCorreo = Estudiante::where('correo_institucional', $row->correo_institucional)->first();
                         if ($existeCorreo) {
-                            $errors['correos'][] = 'correo: ' . $row->correo_institucional . ' - fila: ' . $i.' - Ya existe';
+                            $errors['correos'][] = 'correo: ' . $row->correo_institucional . ' - fila: ' . $i . ' - Ya existe';
                         }
-                        if ($estudiante && $estudiante->estado=='EN_PROCESO') {
+                        if ($estudiante && $estudiante->estado == 'EN_PROCESO') {
                             $estudiante->update([
                                 'identificacion' => strtoupper($row->cedula_estudiante),
                                 'nombre1' => strtoupper($row->nombre1),
