@@ -458,18 +458,19 @@ class ExcelController extends Controller
                         $i++;
                         DB::beginTransaction();
                         $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
-                        $existeCorreo = Estudiante::where('correo_institucional', $row->correo)->first();
+                        $existeCorreo = Estudiante::where('correo_institucional', $row->correo_institucional)->first();
                         if ($existeCorreo) {
-                            $errors['correos'][] = 'correo: ' . $row->correo . ' - fila: ' . $i;
+                            $errors['correos'][] = 'correo: ' . $row->correo_institucional . ' - fila: ' . $i.' - Ya existe';
                         }
-                        if ($estudiante) {
+                        if ($estudiante && $estudiante->estado=='EN_PROCESO') {
                             $estudiante->update([
                                 'identificacion' => strtoupper($row->cedula_estudiante),
                                 'nombre1' => strtoupper($row->nombre1),
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
                                 'apellido2' => strtoupper($row->apellido2),
-                                'correo_institucional' => strtolower($row->correo)
+                                'correo_institucional' => strtolower($row->correo_institucional),
+                                'estado' => strtoupper('EN_PROCESO')
                             ]);
                             $countEstudiantesModificados++;
                         } else {
@@ -480,7 +481,8 @@ class ExcelController extends Controller
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
                                 'apellido2' => strtoupper($row->apellido2),
-                                'correo_institucional' => strtolower($row->correo)
+                                'correo_institucional' => strtolower($row->correo_institucional),
+                                'estado' => strtoupper('EN_PROCESO')
                             ]);
                             $countEstudiantesNuevos++;
                         }

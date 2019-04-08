@@ -31,8 +31,8 @@ Route::get('/periodo_lectivos/{id}', 'PeriodoLectivosController@getOne');
 
 Route::get('/tipo_matriculas', 'TipoMatriculasController@get');
 Route::get('/tipo_matriculas/{id}', 'TipoMatriculasController@getOne');
-Route::get('/estudiantes/{id}', 'EstudiantesController@getOne');
 Route::put('/estudiantes/update_perfil', 'EstudiantesController@updatePerfil');
+Route::get('/estudiantes/en_proceso', 'EstudiantesController@getEnProceso');
 
 Route::get('/matriculas/cupo', 'MatriculasController@getCupo');
 Route::get('/matriculas/aprobado', 'MatriculasController@getAprobado');

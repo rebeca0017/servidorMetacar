@@ -23,7 +23,6 @@ class EstudiantesController extends Controller
 
     public function getOne(Request $request)
     {
-
         $estudiante = Estudiante::where('id', $request->id)
             ->with('pais_nacionalidad')
             ->with('provincia_nacimiento')
@@ -43,6 +42,21 @@ class EstudiantesController extends Controller
             'estudiante' => $estudiante,
             'informacion_estudiante' => $informacionEstudiante
         ]);
+    }
+
+    public function getEnProceso(Request $request)
+    {
+
+        $estudiantes = Estudiante::where('estado', 'EN_PROCESO')->paginate($request->records_per_page);;
+
+        return response()->json(['pagination' => [
+            'total' => $estudiantes->total(),
+            'current_page' => $estudiantes->currentPage(),
+            'per_page' => $estudiantes->perPage(),
+            'last_page' => $estudiantes->lastPage(),
+            'from' => $estudiantes->firstItem(),
+            'to' => $estudiantes->lastItem()],
+            'estudiantes' => $estudiantes], 200);
     }
 
     public function updatePerfil(Request $request)
