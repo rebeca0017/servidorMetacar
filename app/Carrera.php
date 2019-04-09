@@ -17,4 +17,9 @@ class Carrera extends Model implements Auditable
     {
         return $this->hasMany('App\Malla');
     }
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
 }

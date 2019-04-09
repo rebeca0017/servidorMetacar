@@ -43,9 +43,12 @@ class CatalogosController extends Controller
         return response()->json(['cantones' => $cantones], 200);
     }
 
-    public function getCarreras()
+    public function getCarreras(Request $request)
     {
-        $carreras = Carrera::where('estado', 'ACTIVO')
+        $carreras = Carrera::select('carreras.*')
+            ->join('users', 'users.carrera_id', 'carreras.id')
+            ->where('carreras.estado', 'ACTIVO')
+            ->where('users.id', $request->user_id)
             ->orderby('descripcion')
             ->orderby('nombre')
             ->get();

@@ -16,6 +16,8 @@ class CreateEstudiantesTable extends Migration
         Schema::create('estudiantes', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->integer('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->nullable();
             $table->integer('pais_nacionalidad_id')->default(0);
             $table->foreign('pais_nacionalidad_id')->references('id')->on('ubicaciones');
             $table->integer('provincia_nacimiento_id')->default(0);
