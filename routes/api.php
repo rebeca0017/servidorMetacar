@@ -76,5 +76,5 @@ Route::get('/email', 'PruebasController@email')->middleware('auth:api');
 Route::post('/emails', 'EmailsController@send')->middleware('auth:api');
 
 Route::get('/paralelos', 'ExcelController@changeParalelo')->middleware('auth:api');
-Route::get('/users', 'UsersController@getOne')->middleware('auth:api');
+
 

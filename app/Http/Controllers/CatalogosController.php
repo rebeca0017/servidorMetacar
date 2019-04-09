@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Carrera;
+use App\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,8 +21,7 @@ class CatalogosController extends Controller
 
     public function getPaises()
     {
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='PAIS' AND estado = 'ACTIVO'";
-        $paises = DB::select($sql);
+        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO');
 
         return response()->json(['paises' => $paises], 200);
     }
@@ -46,9 +46,10 @@ class CatalogosController extends Controller
     public function getCarreras(Request $request)
     {
         $carreras = Carrera::select('carreras.*')
-            ->join('users', 'users.carrera_id', 'carreras.id')
+            ->join('carrera_user', 'carrera_user.carrera_id', 'carreras.id')
+            ->join('users', 'users.id', 'carrera_user.user_id')
             ->where('carreras.estado', 'ACTIVO')
-            ->where('users.id', $request->user_id)
+            ->where('carrera_user.user_id', $request->user_id)
             ->orderby('descripcion')
             ->orderby('nombre')
             ->get();

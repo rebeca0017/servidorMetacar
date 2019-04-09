@@ -406,7 +406,6 @@ class ExcelController extends Controller
 
                             }
                         } else {
-
                             if (!$estudiante) {
                                 $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1);
                                 Estudiante::create([

@@ -21,7 +21,7 @@ class UsersController extends Controller
     public function getOne(Request $request)
     {
         $user = User::where('email', $request->email)
-            ->with('rol')
+            ->with('role')
             ->first();
         return response()->json(['user' => $user], 200);
     }
