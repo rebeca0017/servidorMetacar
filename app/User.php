@@ -7,9 +7,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable implements Auditable
+class User extends Authenticatable //implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
+    // use \OwenIt\Auditing\Auditable;
     use HasApiTokens, Notifiable;
 
     /**
@@ -18,7 +18,7 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $fillable = [
-        'user_name','name', 'email', 'password',
+        'user_name', 'name', 'email', 'password',
     ];
 
     /**
@@ -39,4 +39,13 @@ class User extends Authenticatable implements Auditable
         'email_verified_at' => 'datetime',
     ];
 
+    public function rol()
+    {
+        return $this->belongsTo('App\Rol');
+    }
+
+    public function carrera()
+    {
+        return $this->belongsTo('App\Carrera');
+    }
 }

@@ -2771,4 +2771,13 @@ INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(1931,'1719220368','COLLAHUAZO','QUIGALOMBO','FAUSTO','HERNAN','','fhq.collahuazo@yavirac.edu.ec','1','','','1');
 INSERT INTO estudiantes(id,identificacion, apellido1, apellido2, nombre1, nombre2, correo_personal, correo_institucional, sexo, etnia, tipo_sangre, tipo_identificacion) VALUES(1932,'1711910552','PULLUCUTIN','TAIPE','MARTHA','CECILIA','mct.pullucutin@gmail.com','mct.pullucutin@yavirac.edu.ec','2','26','7','1');
 
-INSERT INTO public.notificacion_correos(nombre, apellido, correo, tipo, estado) VALUES ('Mauricio','Tamayo','ctamayo@yavirac.edu.ec','MATRICULAS','ACTIVO');
+INSERT INTO notificacion_correos(nombre, apellido, correo, tipo, estado) VALUES ('Mauricio','Tamayo','ctamayo@yavirac.edu.ec','MATRICULAS','ACTIVO');
+
+INSERT INTO roles(descripcion, rol)
+	VALUES ('COORDINADOR',1),('ESTUDIANTE',2),('SECRETARIA',3),('VICERRECTOR',4);
+
+	INSERT INTO users(rol_id, carrera_id, name, user_name, email, password)
+	VALUES (1,1,'C1','C1','c1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(2,null,'E1','E1','e1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(3,1,'S1','S1','s1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(4,1,'V1','V1','v1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO');
