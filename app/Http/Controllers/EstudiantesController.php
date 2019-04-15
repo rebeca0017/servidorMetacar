@@ -34,7 +34,6 @@ class EstudiantesController extends Controller
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
             ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
-            ->join('ubicaciones', 'ubicaciones.id', '=', 'estudiantes.pais_nacionalidad_id')
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
@@ -87,8 +86,6 @@ from
             'matricula' => $matricula,
             'estudiante' => $estudiante,
             'informacion_estudiante' => $informacionEstudiante,
-            'instituto' => $instituto,
-            'carrera' => $carrera,
             'ubicacion_nacimiento' => $ubicacionNacimiento,
             'ubicacion_residencia' => $ubicacionResidencia,
         ], 200);
@@ -117,50 +114,86 @@ from
 
         $informacionEstudiante = InformacionEstudiante::findOrFail($dataInformacionEstudiante['id']);
         $estudiante = Estudiante::findOrFail($dataEstudiante['id']);
-
         $estudiante->update([
-            'sexo' => $dataEstudiante['sexo'],
-            'genero' => $dataEstudiante['genero'],
-            'etnia' => $dataEstudiante['etnia'],
-            'pueblo_nacionalidad' => $dataEstudiante['pueblo_nacionalidad'],
-            'tipo_sangre' => $dataEstudiante['tipo_sangre'],
-            'fecha_nacimiento' => $dataEstudiante['fecha_nacimiento'],
-            'tipo_colegio' => $dataEstudiante['tipo_colegio'],
             'correo_personal' => $dataEstudiante['correo_personal'],
-            'tipo_bachillerato' => $dataEstudiante['tipo_bachillerato'],
-            'anio_graduacion' => $dataEstudiante['anio_graduacion']
+            'etnia' => $dataEstudiante['etnia'],
+            'genero' => $dataEstudiante['genero'],
+            'pueblo_nacionalidad' => $dataEstudiante['pueblo_nacionalidad'],
+            'sexo' => $dataEstudiante['sexo']
         ]);
+
         $informacionEstudiante->update([
-            'estado_civil' => $dataInformacionEstudiante ['estado_civil'],
-            'tiene_discapacidad' => $dataInformacionEstudiante ['tiene_discapacidad'],
-            'tipo_discapacidad' => $dataInformacionEstudiante ['tipo_discapacidad'],
-            'numero_carnet_conadis' => $dataInformacionEstudiante ['numero_carnet_conadis'],
-            'porcentaje_discapacidad' => $dataInformacionEstudiante ['porcentaje_discapacidad'],
+            'alcance_vinculacion' => $dataInformacionEstudiante ['alcance_vinculacion'],
+            'area_trabajo_empresa' => $dataInformacionEstudiante ['area_trabajo_empresa'],
+            'categoria_migratoria' => $dataInformacionEstudiante ['categoria_migratoria'],
             'codigo_postal' => $dataInformacionEstudiante ['codigo_postal'],
-            'contacto_emergencia_telefono' => $dataInformacionEstudiante ['contacto_emergencia_telefono'],
-            'contacto_emergencia_parentesco' => $dataInformacionEstudiante ['contacto_emergencia_parentesco'],
             'contacto_emergencia_nombres' => $dataInformacionEstudiante ['contacto_emergencia_nombres'],
+            'contacto_emergencia_parentesco' => $dataInformacionEstudiante ['contacto_emergencia_parentesco'],
+            'contacto_emergencia_telefono' => $dataInformacionEstudiante ['contacto_emergencia_telefono'],
+            'destino_ingreso' => $dataInformacionEstudiante ['destino_ingreso'],
+            'direccion' => $dataInformacionEstudiante ['direccion'],
+            'estado_civil' => $dataInformacionEstudiante ['estado_civil'],
             'habla_idioma_ancestral' => $dataInformacionEstudiante ['habla_idioma_ancestral'],
             'idioma_ancestral' => $dataInformacionEstudiante ['idioma_ancestral'],
-            'categoria_migratoria' => $dataInformacionEstudiante ['categoria_migratoria'],
-            'posee_titulo_superior' => $dataInformacionEstudiante ['posee_titulo_superior'],
-            'titulo_superior_obtenido' => $dataInformacionEstudiante ['titulo_superior_obtenido'],
-            'ocupacion' => $dataInformacionEstudiante ['ocupacion'],
-            'nombre_empresa_labora' => $dataInformacionEstudiante ['nombre_empresa_labora'],
-            'area_trabajo_empresa' => $dataInformacionEstudiante ['area_trabajo_empresa'],
-            'destino_ingreso' => $dataInformacionEstudiante ['destino_ingreso'],
-            'recibe_bono_desarrollo' => $dataInformacionEstudiante ['recibe_bono_desarrollo'],
-            'nivel_formacion_padre' => $dataInformacionEstudiante ['nivel_formacion_padre'],
-            'nivel_formacion_madre' => $dataInformacionEstudiante ['nivel_formacion_madre'],
             'ingreso_familiar' => $dataInformacionEstudiante ['ingreso_familiar'],
+            'nivel_formacion_madre' => $dataInformacionEstudiante ['nivel_formacion_madre'],
+            'nivel_formacion_padre' => $dataInformacionEstudiante ['nivel_formacion_padre'],
+            'nombre_empresa_labora' => $dataInformacionEstudiante ['nombre_empresa_labora'],
+            'numero_carnet_conadis' => $dataInformacionEstudiante ['numero_carnet_conadis'],
             'numero_miembros_hogar' => $dataInformacionEstudiante ['numero_miembros_hogar'],
-            'telefono_fijo' => $dataInformacionEstudiante ['telefono_fijo'],
+            'ocupacion' => $dataInformacionEstudiante ['ocupacion'],
+            'porcentaje_discapacidad' => $dataInformacionEstudiante ['porcentaje_discapacidad'],
+            'posee_titulo_superior' => $dataInformacionEstudiante ['posee_titulo_superior'],
+            'recibe_bono_desarrollo' => $dataInformacionEstudiante ['recibe_bono_desarrollo'],
             'telefono_celular' => $dataInformacionEstudiante ['telefono_celular'],
-            'direccion' => $dataInformacionEstudiante ['direccion'],
+            'telefono_fijo' => $dataInformacionEstudiante ['telefono_fijo'],
+            'tiene_discapacidad' => $dataInformacionEstudiante ['tiene_discapacidad'],
+
+            'tipo_discapacidad' => $dataInformacionEstudiante ['tipo_discapacidad'],
+            'titulo_superior_obtenido' => $dataInformacionEstudiante ['titulo_superior_obtenido']
         ]);
+
+        $ubicacionNacimiento = DB::select('select
+    canton.id as canton_id,
+    canton.nombre as canton_nombre,
+    provincia.id as provincia_id,
+    provincia.nombre as provincia_nombre,
+    pais.id as pais_id,
+    pais.nombre as pais_nombre
+from
+(select canton.* from ubicaciones as canton inner join estudiantes on canton.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id =' . $estudiante->id . ' limit 1) as canton,
+(select provincia.* from ubicaciones as provincia where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $estudiante->id . ' limit 1)) as provincia,
+(select pais.* from ubicaciones as pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $estudiante->id . ' limit 1))
+) as pais');
+        $ubicacionResidencia = DB::select('select 
+	        canton.id as canton_id,
+    canton.nombre as canton_nombre,
+    provincia.id as provincia_id,
+    provincia.nombre as provincia_nombre,
+    pais.id as pais_id,
+    pais.nombre as pais_nombre
+from
+(select canton.* from ubicaciones as canton inner join informacion_estudiantes on canton.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id =' . $informacionEstudiante->id . 'limit 1) as canton,
+(select provincia.* from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . 'limit 1)) as provincia,
+(select pais.* from ubicaciones pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . ' limit 1))
+) as pais');
         return response()->json([
             'estudiante' => $estudiante,
-            'informacion_estudiante' => $informacionEstudiante
+            'informacion_estudiante' => $informacionEstudiante,
+            'ubicacion_nacimiento' => $ubicacionNacimiento,
+            'ubicacion_residencia' => $ubicacionResidencia
         ]);
     }
 
