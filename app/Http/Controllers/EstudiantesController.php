@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrera;
 use App\Estudiante;
 use App\InformacionEstudiante;
+use App\Instituto;
 use App\Matricula;
 use App\PeriodoLectivo;
 use Illuminate\Http\Request;
@@ -23,25 +25,73 @@ class EstudiantesController extends Controller
 
     public function getOne(Request $request)
     {
-        $estudiante = Estudiante::where('id', $request->id)
-            ->with('pais_nacionalidad')
-            ->with('provincia_nacimiento')
-            ->with('canton_nacimiento')
-            ->with('pais_residencia')
-            ->first();
         $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
-        $matricula = Matricula::where('estudiante_id', $request->id)
-            ->where('periodo_lectivo_id', $periodoLectivoActual->id)
+        $matricula = Matricula::select(
+            'matriculas.*',
+            'carreras.id as carrera_id'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
+            ->join('ubicaciones', 'ubicaciones.id', '=', 'estudiantes.pais_nacionalidad_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->with('periodo_lectivo')
+            ->with('tipo_matricula')
+            ->where('matriculas.estudiante_id', $request->id)
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->first();
-        $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)
-            ->with('provincia_residencia')
-            ->with('canton_residencia')
-            ->first();
+        $estudiante = Estudiante::where('id', $request->id)->with('canton_nacimiento')->first();
+        $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)->with('canton_residencia')->first();
+        $carrera = Carrera::findOrFail($matricula->carrera_id);
+        $instituto = Instituto::findOrFail($carrera->instituto_id);
+        $ubicacionNacimiento = DB::select('select
+    canton.id as canton_id,
+    canton.nombre as canton_nombre,
+    provincia.id as provincia_id,
+    provincia.nombre as provincia_nombre,
+    pais.id as pais_id,
+    pais.nombre as pais_nombre
+from
+(select canton.* from ubicaciones as canton inner join estudiantes on canton.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id =' . $matricula->estudiante->id . ' limit 1) as canton,
+(select provincia.* from ubicaciones as provincia where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1)) as provincia,
+(select pais.* from ubicaciones as pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1))
+) as pais');
+        $ubicacionResidencia = DB::select('select 
+	        canton.id as canton_id,
+    canton.nombre as canton_nombre,
+    provincia.id as provincia_id,
+    provincia.nombre as provincia_nombre,
+    pais.id as pais_id,
+    pais.nombre as pais_nombre
+from
+(select canton.* from ubicaciones as canton inner join informacion_estudiantes on canton.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id =' . $informacionEstudiante->id . 'limit 1) as canton,
+(select provincia.* from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . 'limit 1)) as provincia,
+(select pais.* from ubicaciones pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . ' limit 1))
+) as pais');
 
         return response()->json([
+            'matricula' => $matricula,
             'estudiante' => $estudiante,
-            'informacion_estudiante' => $informacionEstudiante
-        ]);
+            'informacion_estudiante' => $informacionEstudiante,
+            'instituto' => $instituto,
+            'carrera' => $carrera,
+            'ubicacion_nacimiento' => $ubicacionNacimiento,
+            'ubicacion_residencia' => $ubicacionResidencia,
+        ], 200);
     }
 
     public function getEnProceso(Request $request)
@@ -113,4 +163,97 @@ class EstudiantesController extends Controller
             'informacion_estudiante' => $informacionEstudiante
         ]);
     }
+
+    public function getFormulario(Request $request)
+    {
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        $matricula = Matricula::select(
+            'matriculas.*',
+            'institutos.id as instituto_id',
+            'institutos.nombre as instituto',
+            'carreras.id as carrera_id',
+            'ubicaciones.id as pais_nacionalidad'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('institutos', 'institutos.id', '=', 'carreras.instituto_id')
+            ->join('ubicaciones', 'ubicaciones.id', '=', 'estudiantes.pais_nacionalidad_id')
+            ->with('estudiante')
+            ->with('periodo_academico')
+            ->with('periodo_lectivo')
+            ->with('tipo_matricula')
+            ->where('matriculas.estudiante_id', $request->id)
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->first();
+        $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)->first();
+        $carrera = Carrera::findOrFail($matricula->carrera_id);
+        $instituto = Instituto::findOrFail($carrera->instituto_id);
+        $ubicacionNacimiento = DB::select('select 
+	canton.nombre canton,
+	provincia.nombre provincia,
+	pais.nombre pais
+from
+(select * from ubicaciones inner join estudiantes on ubicaciones.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id =' . $matricula->estudiante->id . ' limit 1) as canton,
+(select * from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1)) as provincia,
+(select * from ubicaciones pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1))
+) as pais');
+        $ubicacionResidencia = DB::select('select 
+	        canton.nombre canton,
+	provincia.nombre provincia,
+	pais.nombre pais
+from
+(select * from ubicaciones inner join informacion_estudiantes on ubicaciones.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id =' . $informacionEstudiante->id . 'limit 1) as canton,
+(select * from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . 'limit 1)) as provincia,
+(select * from ubicaciones pais where pais.id =
+(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+ (select codigo_padre_id from ubicaciones cantones_r inner join informacion_estudiantes on cantones_r.id = informacion_estudiantes.canton_residencia_id
+	where informacion_estudiantes.id = ' . $informacionEstudiante->id . ' limit 1))
+) as pais');
+
+
+        return response()->json([
+            'matricula' => $matricula,
+            'informacion_estudiante' => $informacionEstudiante,
+            'instituto' => $instituto,
+            'carrera' => $carrera,
+            'ubicacion_nacimiento' => $ubicacionNacimiento,
+            'ubicacion_residencia' => $ubicacionResidencia,
+        ], 200);
+    }
+
+    public function invoice()
+    {
+        $pdf = \PDF::loadView('invoice');
+        return $pdf->download('ejemplo.pdf');
+        return view('invoice');
+        $data = $this->getData();
+        $date = date('Y-m-d');
+        $invoice = "2222";
+        $view = \View::make('invoice', compact('data', 'date', 'invoice'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('invoice');
+    }
+
+    public function getData()
+    {
+        $data = [
+            'quantity' => '1',
+            'description' => 'some ramdom text',
+            'price' => '500',
+            'total' => '500'
+        ];
+        return $data;
+    }
+
 }

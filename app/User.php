@@ -48,4 +48,9 @@ class User extends Authenticatable //implements Auditable
     {
         return $this->belongsToMany('App\Carrera');
     }
+
+    public function estudiante()
+    {
+        return $this->hasOne('App\Estudiante');
+    }
 }

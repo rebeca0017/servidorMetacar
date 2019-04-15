@@ -31,8 +31,7 @@ Route::get('/periodo_lectivos/{id}', 'PeriodoLectivosController@getOne')->middle
 
 Route::get('/tipo_matriculas', 'TipoMatriculasController@get')->middleware('auth:api');
 Route::get('/tipo_matriculas/{id}', 'TipoMatriculasController@getOne')->middleware('auth:api');
-Route::put('/estudiantes/update_perfil', 'EstudiantesController@updatePerfil')->middleware('auth:api');
-Route::get('/estudiantes/en_proceso', 'EstudiantesController@getEnProceso')->middleware('auth:api');
+
 
 Route::get('/matriculas/cupo', 'MatriculasController@getCupo')->middleware('auth:api');
 Route::get('/matriculas/aprobado', 'MatriculasController@getAprobado')->middleware('auth:api');
@@ -76,5 +75,10 @@ Route::get('/email', 'PruebasController@email')->middleware('auth:api');
 Route::post('/emails', 'EmailsController@send')->middleware('auth:api');
 
 Route::get('/paralelos', 'ExcelController@changeParalelo')->middleware('auth:api');
+Route::get('/users', 'UsersController@getOne')->middleware('auth:api');
+Route::get('/estudiantes/en_proceso', 'EstudiantesController@getEnProceso')->middleware('auth:api');
+Route::get('/estudiantes/{id}', 'EstudiantesController@getOne')->middleware('auth:api');
+Route::get('/estudiantes/formulario/{id}', 'EstudiantesController@getFormulario')->middleware('auth:api');
+Route::put('/estudiantes/update_perfil', 'EstudiantesController@updatePerfil')->middleware('auth:api');
 
 

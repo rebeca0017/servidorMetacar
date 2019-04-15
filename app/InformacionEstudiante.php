@@ -69,11 +69,6 @@ class InformacionEstudiante extends Model implements Auditable
         return $this->belongsTo('App\Matricula');
     }
 
-    public function provincia_residencia()
-    {
-        return $this->belongsTo('App\Ubicacion');
-    }
-
     public function canton_residencia()
     {
         return $this->belongsTo('App\Ubicacion');

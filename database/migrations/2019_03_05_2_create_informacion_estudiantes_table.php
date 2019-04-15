@@ -16,19 +16,17 @@ class CreateInformacionEstudiantesTable extends Migration
         Schema::create('informacion_estudiantes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->integer('matricula_id');
+            $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');
+            $table->integer('canton_residencia_id')->default(0);
+            $table->foreign('canton_residencia_id')->references('id')->on('ubicaciones')->nullable();
+            $table->string('codigo_postal')->nullable();
             $table->string('estado_civil', 20)->default('');
             $table->string('tiene_discapacidad', 10)->default('');
             $table->string('tipo_discapacidad', 100)->default('7');
             $table->double('porcentaje_discapacidad', 8, 2)->nullable();
             $table->string('numero_carnet_conadis', 50)->nullable();
             $table->string('telefono_fijo', 20)->nullable();
-            $table->integer('matricula_id');
-            $table->foreign('matricula_id')->references('id')->on('matriculas')->onDelete('cascade');
-            $table->integer('provincia_residencia_id')->default(0);
-            $table->foreign('provincia_residencia_id')->references('id')->on('ubicaciones')->nullable();
-            $table->integer('canton_residencia_id')->default(0);
-            $table->foreign('canton_residencia_id')->references('id')->on('ubicaciones')->nullable();
-            $table->string('codigo_postal')->nullable();
             $table->string('contacto_emergencia_telefono')->nullable();
             $table->string('contacto_emergencia_parentesco')->nullable();
             $table->string('contacto_emergencia_nombres')->nullable();

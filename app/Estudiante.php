@@ -36,25 +36,13 @@ class Estudiante extends Model implements Auditable
         return $this->hasMany('App\Matricula');
     }
 
-    public function pais_nacionalidad()
-    {
-        return $this->belongsTo('App\Ubicacion');
-    }
-
-    public function provincia_nacimiento()
-    {
-        return $this->belongsTo('App\Ubicacion');
-    }
-
     public function canton_nacimiento()
     {
         return $this->belongsTo('App\Ubicacion');
     }
 
-    public function pais_residencia()
+    public function user()
     {
-        return $this->belongsTo('App\Ubicacion');
+        return $this->belongsTo('App\User');
     }
-
-
 }

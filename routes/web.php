@@ -19,4 +19,4 @@ Route::get('/pruebas', 'PruebasController@get');
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Auth::routes();
 
-Route::get('/users', 'UsersController@getOne')->middleware('auth:api');
+Route::get('pdf', 'EstudiantesController@invoice');

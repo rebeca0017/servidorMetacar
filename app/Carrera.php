@@ -22,4 +22,9 @@ class Carrera extends Model implements Auditable
     {
         return $this->belongsToMany('App\User');
     }
+
+    public function matriculas()
+    {
+        return $this->hasManyThrough('App\Matricucla', 'App\Malla');
+    }
 }

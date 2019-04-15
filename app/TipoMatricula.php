@@ -4,14 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+
 class TipoMatricula extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nombre', 'fecha_aprobacion', 'numero_resolucion','fecha_finalizacion', 'estado',
+        'nombre', 'estado',
     ];
 
-    public function matriculas(){
+    public function matriculas()
+    {
         return $this->hasMany('App\Matricula');
+    }
+
+    public function detalle_matriculas()
+    {
+        return $this->hasMany('App\DetalleMatricula');
     }
 }
