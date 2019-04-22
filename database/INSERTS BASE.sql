@@ -4,7 +4,7 @@ INSERT INTO institutos(id,nombre) VALUES(3,'INSTITUTO TECNOLÓGICO SUPERIOR GRAN
 INSERT INTO institutos(id,nombre) VALUES(4,'INSTITUTO TECNOLÓGICO SUPERIOR DE TURISMO Y PATRIMONIO YAVIRAC');
 
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
-VALUES(1,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','DESARROLLO DE SOFTWARE','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
+VALUES(1,'1','TECNOLOGÍA SUPERIOR EN DESARROLLO DE SOFTWARE','DESARROLLO DE SOFTWARE MALLA ACTUAL','SEMIPRESENCIAL','TECNÓLOGO SUPERIOR EN DESARROLLO DE SOFTWARE','DS','Tecnología');
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
 VALUES(2,'2','TECNOLOGÍA SUPERIOR EN MARKETING','MARKETING MALLA ANTIGUA','PRESENCIAL','TECNÓLOGO SUPERIOR EN MARKETING','MK','Tecnología');
 INSERT INTO carreras(id,instituto_id, nombre, descripcion, modalidad, titulo_otorga, siglas, tipo_carrera)
@@ -2776,11 +2776,11 @@ INSERT INTO notificacion_correos(nombre, apellido, correo, tipo, estado) VALUES 
 INSERT INTO roles(descripcion, rol)
 	VALUES ('COORDINADOR',1),('ESTUDIANTE',2),('SECRETARIA',3),('VICERRECTOR',4);
 
-	INSERT INTO users(role_id, carrera_id, name, user_name, email, password)
-	VALUES (1,1,'C1','C1','c1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
-	(2,null,'E1','E1','e1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
-	(3,1,'S1','S1','s1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
-	(4,1,'V1','V1','v1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO');
+	INSERT INTO users(role_id, name, user_name, email, password)
+	VALUES (1,'C1','C1','c1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(2,'E1','E1','e1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(3,'S1','S1','s1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO'),
+	(4,'V1','V1','v1','$2y$10$rS2A7ZOWfpofQ/7eA75JKuvedgZZjUZxA4yT9yQ/ZLOroXY/sSDUO');
 
 
 	INSERT INTO carrera_user(user_id, carrera_id)

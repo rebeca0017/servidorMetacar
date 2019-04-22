@@ -53,7 +53,7 @@ class CreateInformacionEstudiantesTable extends Migration
             $table->string('numero_carnet_conadis', 50)->nullable();
             $table->string('ocupacion', 50)->nullable();
             $table->string('pension_diferenciada', 10)->nullable();
-            $table->string('posee_titulo_superior')->default('');
+            $table->string('posee_titulo_superior')->default('0');
             $table->string('razon_beca1', 200)->default('2');
             $table->string('razon_beca2', 200)->default('2');
             $table->string('razon_beca3', 200)->default('2');

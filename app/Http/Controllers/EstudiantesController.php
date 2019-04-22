@@ -48,28 +48,29 @@ class EstudiantesController extends Controller
         $informacionEstudiante = InformacionEstudiante::where('matricula_id', $matricula->id)->with('canton_residencia')->first();
         $carrera = Carrera::findOrFail($matricula->carrera_id);
         $instituto = Instituto::findOrFail($carrera->instituto_id);
+
         if ($estudiante->canton_nacimiento->tipo == 'PAIS') {
             $ubicacionNacimiento = array(['canton_id ' => 0, 'canton_nombre' => '', 'provincia_id' => '0'
                 , 'provincia_nombre' => '', 'pais_id' => $estudiante->canton_nacimiento_id, 'pais_nombre' => '']);
         } else {
             $ubicacionNacimiento = DB::select('select
-    canton.id as canton_id,
-    canton.nombre as canton_nombre,
-    provincia.id as provincia_id,
-    provincia.nombre as provincia_nombre,
-    pais.id as pais_id,
-    pais.nombre as pais_nombre
-from
-(select canton.* from ubicaciones as canton inner join estudiantes on canton.id = estudiantes.canton_nacimiento_id
-	where estudiantes.id =' . $matricula->estudiante->id . ' limit 1) as canton,
-(select provincia.* from ubicaciones as provincia where provincia.id = 
- (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
-	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1)) as provincia,
-(select pais.* from ubicaciones as pais where pais.id =
-(select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
- (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
-	where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1))
-) as pais');
+                canton.id as canton_id,
+                canton.nombre as canton_nombre,
+                provincia.id as provincia_id,
+                provincia.nombre as provincia_nombre,
+                pais.id as pais_id,
+                pais.nombre as pais_nombre
+            from
+                (select canton.* from ubicaciones as canton inner join estudiantes on canton.id = estudiantes.canton_nacimiento_id
+                    where estudiantes.id =' . $matricula->estudiante->id . ' limit 1) as canton,
+                (select provincia.* from ubicaciones as provincia where provincia.id = 
+                 (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+                    where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1)) as provincia,
+                (select pais.* from ubicaciones as pais where pais.id =
+                (select codigo_padre_id from ubicaciones  provincia  where provincia.id = 
+                 (select codigo_padre_id from ubicaciones cantones_n inner join estudiantes on cantones_n.id = estudiantes.canton_nacimiento_id
+                    where estudiantes.id = ' . $matricula->estudiante->id . ' limit 1))
+                ) as pais');
         }
 
         if ($informacionEstudiante->canton_residencia->tipo == 'PAIS') {

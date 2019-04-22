@@ -247,7 +247,7 @@ class ExcelController extends Controller
 
     }
 
-    public function importCupos2(Request $request)
+    public function importCupos(Request $request)
     {
         if ($request->file('archivo')) {
             $errors = array();
@@ -378,7 +378,6 @@ class ExcelController extends Controller
                                     $existeMatricula->save();
                                 }
 
-
                                 $existeDetalleMatricula = DetalleMatriculaTransaccion::where('asignatura_id', $asignatura->id)
                                     ->where('matricula_id', $existeMatricula->id)->first();
 
@@ -417,7 +416,7 @@ class ExcelController extends Controller
                                 $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
                                 $countCuposNuevos++;
                                 $usuario = new User([
-                                    'name' => strtoupper($row->apellido1 . ' ' . $row->apellido2 . ' ' . $row->nombre1 . ' ' . $row->nombre2),
+                                    'name' => strtoupper($row->apellido1 . ' ' . $row->nombre1),
                                     'user_name' => strtoupper($row->cedula_estudiante),
                                     'email' => strtolower($row->correo_institucional),
                                     'user_name' => $row->cedula_estudiante,
@@ -439,10 +438,10 @@ class ExcelController extends Controller
                                     'nombre2' => strtoupper($row->nombre2),
                                     'correo_institucional' => strtolower($row->correo_institucional),
                                     'fecha_nacimiento' => $row->fecha_nacimiento,
-                                    'tipo_sangre' => $row->tipo_sangre,
+                                    'tipo_sangre' => $this->changeTiposangre($row->tipo_sangre),
                                     'tipo_colegio' => $row->tipo_colegio,
                                     'tipo_bachillerato' => $row->tipo_bachillerato,
-                                    'anio_graduacion' => $row->anio_graduacion,
+                                    //'anio_graduacion' => $row->anio_graduacion,
                                     'fecha_inicio_carrera' => $row->fecha_inicio_carrera
                                 ]);
 
@@ -462,6 +461,11 @@ class ExcelController extends Controller
                                 $matricula->malla()->associate($malla);
                                 $matricula->tipo_matricula()->associate($tipoMatricula);
                                 $matricula->save();
+
+                                $matricula->informacion_estudiantes()->create([
+                                    'ha_repetido_asignatura' => $row->ha_repetido_asignatura,
+                                    'ha_perdido_gratuidad' => $row->ha_perdido_gratuidad
+                                ]);
 
                                 $detalleMatriculas = new DetalleMatriculaTransaccion([
                                     'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
@@ -508,7 +512,7 @@ class ExcelController extends Controller
 
     }
 
-    public function importCupos(Request $request)
+    public function importCupos2(Request $request)
     {
         if ($request->file('archivo')) {
             $errors = array();
@@ -526,8 +530,8 @@ class ExcelController extends Controller
                 $malla = Malla::where('carrera_id', $request->carrera_id)->first();
 
                 foreach ($reader->get() as $row) {
+                    DB::beginTransaction();
                     try {
-                        DB::beginTransaction();
                         $estudiante = Estudiante::where('identificacion', trim($row->cedula_estudiante))->first();
                         $asignatura = Asignatura::where('codigo', trim(strtoupper($row->codigo_asignatura)))
                             ->where('malla_id', $malla->id)
@@ -546,10 +550,10 @@ class ExcelController extends Controller
                                 'nombre2' => strtoupper($row->nombre2),
                                 'correo_institucional' => strtolower($row->correo_institucional),
                                 'fecha_nacimiento' => $row->fecha_nacimiento,
-                                'tipo_sangre' => $row->tipo_sangre,
+                                'tipo_sangre' => $this->changeTiposangre($row->tipo_sangre),
                                 'tipo_colegio' => $row->tipo_colegio,
                                 'tipo_bachillerato' => $row->tipo_bachillerato,
-                                'anio_graduacion' => $row->anio_graduacion,
+                                //'anio_graduacion' => $row->anio_graduacion,
                                 'fecha_inicio_carrera' => $row->fecha_inicio_carrera
                             ]);
                             if (!$existeMatricula) {
@@ -644,8 +648,6 @@ class ExcelController extends Controller
                             }
                         } else {
                             if (!$estudiante) {
-                                $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante
-                                    . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
                                 $countCuposNuevos++;
                                 $usuario = new User([
                                     'name' => strtoupper($row->apellido1 . ' ' . $row->nombre1),
@@ -669,10 +671,10 @@ class ExcelController extends Controller
                                     'nombre2' => strtoupper($row->nombre2),
                                     'correo_institucional' => strtolower($row->correo_institucional),
                                     'fecha_nacimiento' => $row->fecha_nacimiento,
-                                    'tipo_sangre' => $row->tipo_sangre,
+                                    'tipo_sangre' => $this->changeTiposangre($row->tipo_sangre),
                                     'tipo_colegio' => $row->tipo_colegio,
                                     'tipo_bachillerato' => $row->tipo_bachillerato,
-                                    'anio_graduacion' => $row->anio_graduacion,
+//                                    'anio_graduacion' => $row->anio_graduacion,
                                     'fecha_inicio_carrera' => $row->fecha_inicio_carrera
                                 ]);
 
@@ -708,7 +710,8 @@ class ExcelController extends Controller
                                 $detalleMatriculas->asignatura()->associate($asignatura);
                                 $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
                                 $detalleMatriculas->save();
-
+                                $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante
+                                    . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
                             }
                             if (!$asignatura) {
                                 $errors['asignaturas'][] = 'codigo_asignatura: ' . $row->codigo_asignatura . ' - fila: ' . ($i + 1) . ' no existe';
@@ -759,9 +762,9 @@ class ExcelController extends Controller
                         $i++;
                         DB::beginTransaction();
                         $estudiante = Estudiante::where('identificacion', $row->cedula_estudiante)->first();
-                        $existeCorreo = Estudiante::where('correo_institucional', $row->correo_institucional)->first();
+                        $existeCorreo = Estudiante::where('correo_institucional', strtolower($row->correo_institucional))->first();
                         if ($existeCorreo) {
-                            $errors['correos'][] = 'correo: ' . $row->correo_institucional . ' - fila: ' . $i . ' - Ya existe';
+                            $errors['correos'][] = 'correo: ' . strtolower($row->correo_institucional) . ' - fila: ' . $i . ' - Ya existe';
                         }
                         if ($estudiante && $estudiante->estado == 'EN_PROCESO') {
                             $estudiante->update([
@@ -770,7 +773,7 @@ class ExcelController extends Controller
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
                                 'apellido2' => strtoupper($row->apellido2),
-                                'correo_institucional' => strtoupper($row->correo_institucional),
+                                'correo_institucional' => strtolower($row->correo_institucional),
                                 'estado' => strtoupper('EN_PROCESO')
                             ]);
                             $countEstudiantesModificados++;
@@ -782,7 +785,7 @@ class ExcelController extends Controller
                                 'nombre2' => strtoupper($row->nombre2),
                                 'apellido1' => strtoupper($row->apellido1),
                                 'apellido2' => strtoupper($row->apellido2),
-                                'correo_institucional' => strtoupper($row->correo_institucional),
+                                'correo_institucional' => strtolower($row->correo_institucional),
                                 'estado' => strtoupper('EN_PROCESO')
                             ]);
                             $countEstudiantesNuevos++;
@@ -868,6 +871,18 @@ class ExcelController extends Controller
         $paralelo = strtoupper($paralelo);
         $paralelos = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T');
         $indice = array_search($paralelo, $paralelos, false);
+        if ($indice >= 0) {
+            return $indice + 1;
+        } else {
+            return '';
+        }
+    }
+
+    private function changeTipoSangre($tipoSangre)
+    {
+        $tipoSangre = strtoupper($tipoSangre);
+        $tiposSangre = array('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-');
+        $indice = array_search($tipoSangre, $tiposSangre, false);
         if ($indice >= 0) {
             return $indice + 1;
         } else {

@@ -77,7 +77,6 @@ class MatriculasController extends Controller
             ->with('periodo_lectivo')
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->where('matriculas.estudiante_id', $estudiante->id)
-
             ->where('detalle_matriculas.estado', 'APROBADO')
             ->orderby('asignaturas.periodo_academico_id')
             ->orderby('asignaturas.nombre')
