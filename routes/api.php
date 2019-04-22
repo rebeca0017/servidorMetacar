@@ -44,6 +44,7 @@ Route::get('/matriculas/validate_cupos_periodo_academico', 'MatriculasController
 Route::delete('/matriculas/delete_cupos_carrera', 'MatriculasController@deleteCuposCarrera')->middleware('auth:api');
 Route::delete('/matriculas/delete_cupos_periodo_academico', 'MatriculasController@deleteCuposPeriodo')->middleware('auth:api');
 Route::get('/matriculas/certificado_matricula', 'MatriculasController@getCertificadoMatricula')->middleware('auth:api');
+Route::get('/matriculas/solicitud_matricula', 'MatriculasController@getSolicitudMatricula')->middleware('auth:api');
 Route::get('/matriculas/carreras', 'MatriculasController@getMatriculasCarreras')->middleware('auth:api');
 Route::get('/matriculas/periodo_academicos', 'MatriculasController@getMatriculasPeriodoAcademicos')->middleware('auth:api');
 Route::get('/matriculas/cupos', 'MatriculasController@getCupos')->middleware('auth:api');
@@ -56,8 +57,8 @@ Route::delete('/matriculas/delete_detalle_cupo', 'MatriculasController@deleteDet
 Route::delete('/matriculas/delete_detalle_matricula', 'MatriculasController@deleteDetalleMatricula')->middleware('auth:api');
 
 Route::get('/catalogos/paises', 'CatalogosController@getPaises')->middleware('auth:api');
-Route::get('/catalogos/provincias', 'CatalogosController@getProvincias')->middleware('auth:api');
-Route::get('/catalogos/cantones', 'CatalogosController@getCantones')->middleware('auth:api');
+Route::get('/catalogos/provincias', 'CatalogosController@getProvincias');
+Route::get('/catalogos/cantones', 'CatalogosController@getCantones');
 Route::get('/catalogos/carreras', 'CatalogosController@getCarreras')->middleware('auth:api');
 Route::get('/catalogos/periodo_academicos', 'CatalogosController@getPeriodoAcademicos')->middleware('auth:api');
 Route::get('/exports/cupos_carrera', 'ExcelController@exportCuposCarrera')->middleware('auth:api');

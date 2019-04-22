@@ -51,8 +51,11 @@ class MatriculasController extends Controller
 
     public function getSolicitudMatricula(Request $request)
     {
+        $estudiante = Estudiante::where('user_id', $request->user_id)->first();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
         $certificadoMatricula = Matricula::select(
             'matriculas.*',
+            'institutos.id as instituto_id',
             'institutos.nombre as instituto',
             'carreras.nombre as carrera',
             'asignaturas.nombre as asignatura',
@@ -60,7 +63,8 @@ class MatriculasController extends Controller
             'asignaturas.horas_practica as horas_practica',
             'asignaturas.horas_autonoma as horas_autonoma',
             'asignaturas.codigo as asignatura_codigo',
-            'asignaturas.periodo_academico_id as periodo'
+            'asignaturas.periodo_academico_id as periodo',
+            'detalle_matriculas.numero_matricula as numero_matricula'
         )
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
@@ -71,14 +75,15 @@ class MatriculasController extends Controller
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
-            ->where('matriculas.id', $request->matricula_id)
-            ->where('matriculas.estado', 'MATRICULADO')
-            ->where('detalle_matriculas.estado', 'MATRICULADO')
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->where('matriculas.estudiante_id', $estudiante->id)
+
+            ->where('detalle_matriculas.estado', 'APROBADO')
             ->orderby('asignaturas.periodo_academico_id')
             ->orderby('asignaturas.nombre')
             ->get();
 
-        return response()->json(['certificado' => $certificadoMatricula], 200);
+        return response()->json(['solicitud' => $certificadoMatricula], 200);
     }
 
     public function getCertificadoMatricula(Request $request)
@@ -488,6 +493,8 @@ class MatriculasController extends Controller
             $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
         } else {
             $matricula->update([
+                'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
+                'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas,
                 'estado' => $request->estado,
                 'fecha' => $now
             ]);

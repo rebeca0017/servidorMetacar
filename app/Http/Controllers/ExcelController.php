@@ -644,16 +644,16 @@ class ExcelController extends Controller
                             }
                         } else {
                             if (!$estudiante) {
-                                $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
+                                $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante
+                                    . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
                                 $countCuposNuevos++;
                                 $usuario = new User([
-                                    'name' => strtoupper($row->apellido1 . ' ' . $row->apellido2 . ' ' . $row->nombre1 . ' ' . $row->nombre2),
+                                    'name' => strtoupper($row->apellido1 . ' ' . $row->nombre1),
                                     'user_name' => strtoupper($row->cedula_estudiante),
                                     'email' => strtolower($row->correo_institucional),
                                     'user_name' => $row->cedula_estudiante,
                                     'password' => Hash::make($row->cedula_estudiante),
                                 ]);
-
 
                                 $rol = Role::findOrFail(2);
                                 $usuario->role()->associate($rol);

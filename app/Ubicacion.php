@@ -19,7 +19,7 @@ class Ubicacion extends Model implements Auditable
 
     public function informacion_estudiantes()
     {
-        return $this->hasMany('App\InformacionEstudiantes');
+        return $this->hasMany('App\InformacionEstudiante');
     }
 
     public function estudiantes()

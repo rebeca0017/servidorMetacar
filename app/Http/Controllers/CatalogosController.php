@@ -21,7 +21,7 @@ class CatalogosController extends Controller
 
     public function getPaises()
     {
-        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO');
+        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO')->get();
 
         return response()->json(['paises' => $paises], 200);
     }
@@ -37,9 +37,12 @@ class CatalogosController extends Controller
     public function getCantones(Request $request)
     {
 
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND estado = 'ACTIVO' AND codigo_padre_id=" . $request->provincia_id;
-        $cantones = DB::select($sql);
-
+        if ($request->provincia_id) {
+            $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND estado = 'ACTIVO' AND codigo_padre_id=" . $request->provincia_id;
+            $cantones = DB::select($sql);
+        } else {
+            $cantones = array(['id' => 0,'nombre'=>'']);
+        }
         return response()->json(['cantones' => $cantones], 200);
     }
 
