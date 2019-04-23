@@ -412,8 +412,9 @@ class ExcelController extends Controller
 
                             }
                         } else {
-                            if (!$estudiante) {
+                            if (!$estudiante && $row->cedula_estudiante!='') {
                                 $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
+
                                 $countCuposNuevos++;
                                 $usuario = new User([
                                     'name' => strtoupper($row->apellido1 . ' ' . $row->nombre1),
