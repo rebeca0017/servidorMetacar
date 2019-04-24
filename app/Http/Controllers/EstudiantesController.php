@@ -138,7 +138,7 @@ from
         $informacionEstudiante->save();
 
         $estudiante->update([
-            'correo_personal' => $dataEstudiante['correo_personal'],
+            'correo_personal' => strtolower($dataEstudiante['correo_personal']),
             'etnia' => $dataEstudiante['etnia'],
             'genero' => $dataEstudiante['genero'],
             'pueblo_nacionalidad' => $dataEstudiante['pueblo_nacionalidad'],
@@ -154,11 +154,11 @@ from
             'area_trabajo_empresa' => $dataInformacionEstudiante ['area_trabajo_empresa'],
             'categoria_migratoria' => $dataInformacionEstudiante ['categoria_migratoria'],
             'codigo_postal' => $dataInformacionEstudiante ['codigo_postal'],
-            'contacto_emergencia_nombres' => $dataInformacionEstudiante ['contacto_emergencia_nombres'],
-            'contacto_emergencia_parentesco' => $dataInformacionEstudiante ['contacto_emergencia_parentesco'],
-            'contacto_emergencia_telefono' => $dataInformacionEstudiante ['contacto_emergencia_telefono'],
+            'contacto_emergencia_nombres' => strtoupper($dataInformacionEstudiante ['contacto_emergencia_nombres']),
+            'contacto_emergencia_parentesco' => strtoupper($dataInformacionEstudiante ['contacto_emergencia_parentesco'],
+            'contacto_emergencia_telefono' => $dataInformacionEstudiante ['contacto_emergencia_telefono']),
             'destino_ingreso' => $dataInformacionEstudiante ['destino_ingreso'],
-            'direccion' => $dataInformacionEstudiante ['direccion'],
+            'direccion' => strtoupper($dataInformacionEstudiante ['direccion']),
             'estado_civil' => $dataInformacionEstudiante ['estado_civil'],
             'ha_realizado_practicas' => $dataInformacionEstudiante ['ha_realizado_practicas'],
             'ha_realizado_vinculacion' => $dataInformacionEstudiante ['ha_realizado_vinculacion'],
@@ -169,7 +169,7 @@ from
             'ingreso_familiar' => $dataInformacionEstudiante ['ingreso_familiar'],
             'nivel_formacion_madre' => $dataInformacionEstudiante ['nivel_formacion_madre'],
             'nivel_formacion_padre' => $dataInformacionEstudiante ['nivel_formacion_padre'],
-            'nombre_empresa_labora' => $dataInformacionEstudiante ['nombre_empresa_labora'],
+            'nombre_empresa_labora' => strtoupper($dataInformacionEstudiante ['nombre_empresa_labora']),
             'numero_carnet_conadis' => $dataInformacionEstudiante ['numero_carnet_conadis'],
             'numero_miembros_hogar' => $dataInformacionEstudiante ['numero_miembros_hogar'],
             'ocupacion' => $dataInformacionEstudiante ['ocupacion'],
