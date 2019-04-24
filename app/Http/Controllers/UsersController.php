@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -65,5 +66,16 @@ class UsersController extends Controller
             'estudiante' => $estudiante,
             'informacion_estudiante' => $informacionEstudiante
         ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $data = $request->json()->all();
+        $dataUser = $data['user'];
+        $user = User::findOrFail($dataUser['id']);
+        $user->update([
+            'password' => Hash::make($dataUser['password']),
+        ]);
+        return $user;
     }
 }

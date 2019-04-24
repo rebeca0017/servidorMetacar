@@ -33,7 +33,7 @@ class CreateInformacionEstudiantesTable extends Migration
             $table->string('alcance_vinculacion', 50)->nullable();
             $table->string('area_trabajo_empresa', 100)->nullable();
             $table->string('categoria_migratoria')->nullable();
-            $table->string('codigo_postal')->nullable();
+            $table->string('codigo_postal')->default('0')->nullable();
             $table->string('contacto_emergencia_nombres')->nullable();
             $table->string('contacto_emergencia_parentesco')->nullable();
             $table->string('contacto_emergencia_telefono')->nullable();

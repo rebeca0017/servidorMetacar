@@ -81,5 +81,6 @@ Route::get('/estudiantes/en_proceso', 'EstudiantesController@getEnProceso');
 Route::get('/estudiantes/{id}', 'EstudiantesController@getOne');
 Route::get('/estudiantes/formulario/{id}', 'EstudiantesController@getFormulario');
 Route::put('/estudiantes/update_perfil', 'EstudiantesController@updatePerfil');
+Route::put('/users/reset_password', 'UsersController@resetPassword');
 
 

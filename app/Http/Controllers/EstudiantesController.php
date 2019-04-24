@@ -142,7 +142,11 @@ from
             'etnia' => $dataEstudiante['etnia'],
             'genero' => $dataEstudiante['genero'],
             'pueblo_nacionalidad' => $dataEstudiante['pueblo_nacionalidad'],
-            'sexo' => $dataEstudiante['sexo']
+            'sexo' => $dataEstudiante['sexo'],
+            'tipo_colegio' => $dataEstudiante['tipo_colegio'],
+            'tipo_bachillerato' => $dataEstudiante['tipo_bachillerato'],
+            'anio_graduacion' => $dataEstudiante['anio_graduacion'],
+            'tipo_sangre' => $dataEstudiante['tipo_sangre']
         ]);
 
         $informacionEstudiante->update([
@@ -221,6 +225,7 @@ from
         $matricula = Matricula::select(
             'matriculas.*',
             'institutos.id as instituto_id',
+            'institutos.codigo_sniese as instituto_codigo_sniese',
             'institutos.nombre as instituto',
             'carreras.id as carrera_id'
         )
