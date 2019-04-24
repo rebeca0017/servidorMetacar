@@ -51,8 +51,11 @@ class MatriculasController extends Controller
 
     public function getSolicitudMatricula(Request $request)
     {
+        $estudiante = Estudiante::where('user_id', $request->user_id)->first();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
         $certificadoMatricula = Matricula::select(
             'matriculas.*',
+            'institutos.id as instituto_id',
             'institutos.nombre as instituto',
             'carreras.nombre as carrera',
             'asignaturas.nombre as asignatura',
@@ -60,7 +63,8 @@ class MatriculasController extends Controller
             'asignaturas.horas_practica as horas_practica',
             'asignaturas.horas_autonoma as horas_autonoma',
             'asignaturas.codigo as asignatura_codigo',
-            'asignaturas.periodo_academico_id as periodo'
+            'asignaturas.periodo_academico_id as periodo',
+            'detalle_matriculas.numero_matricula as numero_matricula'
         )
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
@@ -71,14 +75,14 @@ class MatriculasController extends Controller
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
-            ->where('matriculas.id', $request->matricula_id)
-            ->where('matriculas.estado', 'MATRICULADO')
-            ->where('detalle_matriculas.estado', 'MATRICULADO')
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->where('matriculas.estudiante_id', $estudiante->id)
+            ->where('detalle_matriculas.estado', 'APROBADO')
             ->orderby('asignaturas.periodo_academico_id')
             ->orderby('asignaturas.nombre')
             ->get();
 
-        return response()->json(['certificado' => $certificadoMatricula], 200);
+        return response()->json(['solicitud' => $certificadoMatricula], 200);
     }
 
     public function getCertificadoMatricula(Request $request)
@@ -246,7 +250,7 @@ class MatriculasController extends Controller
                     $cupos->orWhere('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                //->orderby('matriculas.estado', 'DESC')
+                ->orderby('matriculas.estado', 'DESC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
@@ -263,7 +267,7 @@ class MatriculasController extends Controller
                     $cupos->where('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                //->orderby('matriculas.estado', 'DESC')
+                ->orderby('matriculas.estado', 'DESC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -478,6 +482,7 @@ class MatriculasController extends Controller
         $estudiante = Estudiante::findOrFail($matricula->estudiante_id);
         $malla = Malla::findOrFail($matricula->malla_id);
         $carrera = $malla->carrera()->first();
+        //esto es para matricula
         if ($matricula && $request->estado == 'MATRICULADO') {
             $matricula->update([
                 'fecha' => $now,
@@ -486,8 +491,11 @@ class MatriculasController extends Controller
                 'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas
             ]);
             $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
-        } else {
+        } //esto es para aprobar el cupo
+        else {
             $matricula->update([
+                'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
+                'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas,
                 'estado' => $request->estado,
                 'fecha' => $now
             ]);
@@ -499,13 +507,21 @@ class MatriculasController extends Controller
 
     public function validateCuposCarrera(Request $request)
     {
+        $now = new Carbon();
         DB::beginTransaction();
+        $carrera = Carrera::findOrFail($request->carrera_id);
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
         $matriculas = $malla->matriculas()->get();
         $i = 0;
         foreach ($matriculas as $matricula) {
             if ($matricula->estado != 'MATRICULADO') {
-                $matricula->update(['estado' => 'APROBADO']);
+                $estudiante = Estudiante::findOrFail($matricula->estudiante_id);
+                $matricula->update([
+                    'estado' => 'APROBADO',
+                    'fecha' => $now,
+                    'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
+                    'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas]);
                 $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
             }
 
@@ -516,16 +532,22 @@ class MatriculasController extends Controller
 
     public function validateCuposPeriodoAcademico(Request $request)
     {
+        $now = new Carbon();
         DB::beginTransaction();
+        $carrera = Carrera::findOrFail($request->carrera_id);
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
-
+        $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
         $matriculas = $malla->matriculas()->where('periodo_academico_id', $request->periodo_academico_id)->get();
         foreach ($matriculas as $matricula) {
             if ($matricula->estado != 'MATRICULADO') {
-                $matricula->update(['estado' => 'APROBADO']);
+                $estudiante = Estudiante::findOrFail($matricula->estudiante_id);
+                $matricula->update([
+                    'estado' => 'APROBADO',
+                    'fecha' => $now,
+                    'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
+                    'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas]);
                 $matricula->detalle_matriculas()->update(['estado' => 'APROBADO']);
             }
-
         }
         DB::commit();
         return response()->json(['matricula' => $matriculas], 201);

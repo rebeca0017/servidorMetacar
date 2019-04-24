@@ -14,6 +14,11 @@ class Matricula extends Model implements Auditable
         'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
     ];
 
+    public function tipo_matricula()
+    {
+        return $this->belongsTo('App\TipoMatricula');
+    }
+
     public function detalle_matriculas()
     {
         return $this->hasMany('App\DetalleMatricula');
@@ -43,4 +48,6 @@ class Matricula extends Model implements Auditable
     {
         return $this->belongsTo('App\PeriodoAcademico');
     }
+
+
 }

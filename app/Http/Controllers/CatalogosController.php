@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Carrera;
+use App\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,8 +21,7 @@ class CatalogosController extends Controller
 
     public function getPaises()
     {
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='PAIS' AND estado = 'ACTIVO'";
-        $paises = DB::select($sql);
+        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO')->get();
 
         return response()->json(['paises' => $paises], 200);
     }
@@ -37,18 +37,22 @@ class CatalogosController extends Controller
     public function getCantones(Request $request)
     {
 
-        $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND estado = 'ACTIVO' AND codigo_padre_id=" . $request->provincia_id;
-        $cantones = DB::select($sql);
-
+        if ($request->provincia_id) {
+            $sql = "SELECT * FROM ubicaciones WHERE tipo='CANTON' AND estado = 'ACTIVO' AND codigo_padre_id=" . $request->provincia_id;
+            $cantones = DB::select($sql);
+        } else {
+            $cantones = array(['id' => 0,'nombre'=>'']);
+        }
         return response()->json(['cantones' => $cantones], 200);
     }
 
     public function getCarreras(Request $request)
     {
         $carreras = Carrera::select('carreras.*')
-            ->join('users', 'users.carrera_id', 'carreras.id')
+            ->join('carrera_user', 'carrera_user.carrera_id', 'carreras.id')
+            ->join('users', 'users.id', 'carrera_user.user_id')
             ->where('carreras.estado', 'ACTIVO')
-            ->where('users.id', $request->user_id)
+            ->where('carrera_user.user_id', $request->user_id)
             ->orderby('descripcion')
             ->orderby('nombre')
             ->get();

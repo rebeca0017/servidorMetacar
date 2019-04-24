@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class MatriculaTransaccion extends Model
 {
 
-    protected $table='matriculas';
+    protected $table = 'matriculas';
     protected $fillable = [
         'codigo', 'codigo_sniese_paralelo', 'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
     ];
+
+    public function tipo_matricula()
+    {
+        return $this->belongsTo('App\TipoMatricula');
+    }
 
     public function detalle_matriculas()
     {
@@ -19,7 +24,7 @@ class MatriculaTransaccion extends Model
 
     public function informacion_estudiantes()
     {
-        return $this->hasOne('App\InformacionEstudianteTransaccion','matricula_id');
+        return $this->hasOne('App\InformacionEstudianteTransaccion', 'matricula_id');
     }
 
     public function estudiante()

@@ -39,13 +39,18 @@ class User extends Authenticatable //implements Auditable
         'email_verified_at' => 'datetime',
     ];
 
-    public function rol()
+    public function role()
     {
-        return $this->belongsTo('App\Rol');
+        return $this->belongsTo('App\Role');
     }
 
-    public function carrera()
+    public function carreras()
     {
-        return $this->belongsTo('App\Carrera');
+        return $this->belongsToMany('App\Carrera');
+    }
+
+    public function estudiante()
+    {
+        return $this->hasOne('App\Estudiante');
     }
 }

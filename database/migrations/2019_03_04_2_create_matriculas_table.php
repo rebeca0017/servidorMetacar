@@ -24,6 +24,8 @@ class CreateMatriculasTable extends Migration
             $table->foreign('periodo_lectivo_id')->references('id')->on('periodo_lectivos');
             $table->integer('periodo_academico_id');
             $table->foreign('periodo_academico_id')->references('id')->on('periodo_academicos');
+            $table->integer('tipo_matricula_id');
+            $table->foreign('tipo_matricula_id')->references('id')->on('tipo_matriculas');
             $table->string('codigo', 50)->nullable();
             $table->dateTime('fecha')->nullable();
             $table->string('folio', 50)->nullable();

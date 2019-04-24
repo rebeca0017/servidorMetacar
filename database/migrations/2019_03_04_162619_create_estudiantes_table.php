@@ -18,14 +18,8 @@ class CreateEstudiantesTable extends Migration
             $table->timestamps();
             $table->integer('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->nullable();
-            $table->integer('pais_nacionalidad_id')->default(0);
-            $table->foreign('pais_nacionalidad_id')->references('id')->on('ubicaciones');
-            $table->integer('provincia_nacimiento_id')->default(0);
-            $table->foreign('provincia_nacimiento_id')->references('id')->on('ubicaciones');
             $table->integer('canton_nacimiento_id')->default(0);
             $table->foreign('canton_nacimiento_id')->references('id')->on('ubicaciones');
-            $table->integer('pais_residencia_id')->default(0);
-            $table->foreign('pais_residencia_id')->references('id')->on('ubicaciones');
             $table->string('tipo_identificacion', 50)->default(0);
             $table->string('identificacion', 50);
             $table->string('apellido1', 50);

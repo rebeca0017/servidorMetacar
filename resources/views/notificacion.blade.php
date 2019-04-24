@@ -9,6 +9,7 @@
 <ul>
     <li>Carrera: {{ $notificacion->carrera}}</li>
     <li>Resumen: {{ $notificacion->body}}</li>
+    <li>Usuario: {{ $notificacion->user}}</li>
 </ul>
 </body>
 </html>

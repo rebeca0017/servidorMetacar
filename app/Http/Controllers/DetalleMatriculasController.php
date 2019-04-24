@@ -138,7 +138,7 @@ class DetalleMatriculasController extends Controller
                 $matricula->update(['estado' => 'EN_PROCESO']);
             }
 
-            if ($dataDetalleMatricula['estado'] == 'MATRICULADO') {
+            if ($dataDetalleMatricula['estado'] == 'MATRICULADO' || $dataDetalleMatricula['estado'] == 'APROBADO') {
                 $matricula->update(['estado' => 'APROBADO']);
             }
             DB::commit();

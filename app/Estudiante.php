@@ -9,26 +9,26 @@ class Estudiante extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'tipo_identificacion',
-        'identificacion',
+        'anio_graduacion',
         'apellido1',
         'apellido2',
-        'nombre1',
-        'nombre2',
-        'sexo',
-        'genero',
-        'etnia',
-        'pueblo_nacionalidad',
-        'tipo_sangre',
-        'fecha_nacimiento',
-        'tipo_colegio',
-        'correo_personal',
         'correo_institucional',
-        'tipo_bachillerato',
-        'anio_graduacion',
-        'fecha_inicio_carrera',
+        'correo_personal',
         'corte',
         'estado',
+        'etnia',
+        'fecha_inicio_carrera',
+        'fecha_nacimiento',
+        'genero',
+        'identificacion',
+        'nombre1',
+        'nombre2',
+        'pueblo_nacionalidad',
+        'sexo',
+        'tipo_bachillerato',
+        'tipo_colegio',
+        'tipo_identificacion',
+        'tipo_sangre',
     ];
 
     public function matriculas()
@@ -36,25 +36,13 @@ class Estudiante extends Model implements Auditable
         return $this->hasMany('App\Matricula');
     }
 
-    public function pais_nacionalidad()
-    {
-        return $this->belongsTo('App\Ubicacion');
-    }
-
-    public function provincia_nacimiento()
-    {
-        return $this->belongsTo('App\Ubicacion');
-    }
-
     public function canton_nacimiento()
     {
         return $this->belongsTo('App\Ubicacion');
     }
 
-    public function pais_residencia()
+    public function user()
     {
-        return $this->belongsTo('App\Ubicacion');
+        return $this->belongsTo('App\User');
     }
-
-
 }
