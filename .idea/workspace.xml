@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b53bc611-7523-40fd-90e7-b2f46fd9ff92" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ExcelController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/MatriculasController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UsersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UsersController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_03_05_2_create_informacion_estudiantes_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -277,9 +270,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="227" column="64" selection-start-line="227" selection-start-column="64" selection-end-line="227" selection-end-column="64" />
+            <state relative-caret-position="247">
+              <caret line="158" column="99" selection-start-line="158" selection-start-column="99" selection-end-line="158" selection-end-column="99" />
               <folding>
+                <element signature="e#40#56#0#PHP" expanded="true" />
                 <element signature="e#307#386#0#PHP" />
                 <element signature="e#391#443#0#PHP" />
                 <element signature="e#449#5155#0#PHP" />
@@ -321,11 +315,8 @@
                 <element signature="e#5336#5725#0#PHP" />
                 <element signature="e#5353#5719#0#PHP" />
                 <element signature="e#5370#5675#1#PHP" />
-                <element signature="e#5738#13032#0#PHP" />
-                <element signature="e#6569#7159#0#PHP" />
-                <element signature="e#6589#7158#1#PHP" />
-                <element signature="e#7170#10183#0#PHP" />
-                <element signature="e#7201#10182#1#PHP" />
+                <element signature="e#6569#7171#0#PHP" />
+                <element signature="e#6589#7170#1#PHP" />
                 <element signature="e#10217#11412#0#PHP" />
                 <element signature="e#0#1114#2" />
                 <element signature="e#244#410#0" />
@@ -839,12 +830,12 @@
       <workItem from="1555903550880" duration="280000" />
       <workItem from="1555941396946" duration="20558000" />
       <workItem from="1556025746830" duration="12385000" />
-      <workItem from="1556115287753" duration="8727000" />
+      <workItem from="1556115287753" duration="11252000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="566984000" />
+    <option name="totallyTimeSpent" value="569509000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -859,7 +850,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23892617" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23892617" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" weight="0.3295302" />
@@ -874,7 +865,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067115" side_tool="true" weight="0.32152975" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26487252" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26487252" />
       <window_info anchor="bottom" id="Command Line Tools Console" order="12" weight="0.3286119" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1700,9 +1691,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EstudiantesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="227" column="64" selection-start-line="227" selection-start-column="64" selection-end-line="227" selection-end-column="64" />
+        <state relative-caret-position="247">
+          <caret line="158" column="99" selection-start-line="158" selection-start-column="99" selection-end-line="158" selection-end-column="99" />
           <folding>
+            <element signature="e#40#56#0#PHP" expanded="true" />
             <element signature="e#307#386#0#PHP" />
             <element signature="e#391#443#0#PHP" />
             <element signature="e#449#5155#0#PHP" />
@@ -1744,11 +1736,8 @@
             <element signature="e#5336#5725#0#PHP" />
             <element signature="e#5353#5719#0#PHP" />
             <element signature="e#5370#5675#1#PHP" />
-            <element signature="e#5738#13032#0#PHP" />
-            <element signature="e#6569#7159#0#PHP" />
-            <element signature="e#6589#7158#1#PHP" />
-            <element signature="e#7170#10183#0#PHP" />
-            <element signature="e#7201#10182#1#PHP" />
+            <element signature="e#6569#7171#0#PHP" />
+            <element signature="e#6589#7170#1#PHP" />
             <element signature="e#10217#11412#0#PHP" />
             <element signature="e#0#1114#2" />
             <element signature="e#244#410#0" />
