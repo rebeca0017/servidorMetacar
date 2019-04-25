@@ -17,7 +17,7 @@ class CreateInstitutosTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('codigo',50)->nullable();
-            $table->string('codigo_seniese',50)->nullable();
+            $table->string('codigo_sniese',50)->nullable();
             $table->string('nombre',200);
             $table->string('estado',20)->default('ACTIVO');
         });
