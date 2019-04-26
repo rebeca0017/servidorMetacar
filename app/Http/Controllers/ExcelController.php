@@ -494,7 +494,7 @@ class ExcelController extends Controller
                 }
             });
             Storage::delete($pathFile);
-            return response()->json(['respuesta' => $response]);
+            // return response()->json(['respuesta' => $response]);
 
             return response()->json([
                 'errores' => $errors,

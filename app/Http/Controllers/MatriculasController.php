@@ -391,6 +391,7 @@ class MatriculasController extends Controller
         DB::beginTransaction();
         $detalleMatricula = DetalleMatricula::findOrFail($request->id);
         $detalleMatricula->update(['estado' => 'ANULADO']);
+        $detalleMatricula->matricula()->update(['estado' => 'APROBADO']);
         DB::commit();
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
@@ -483,16 +484,16 @@ class MatriculasController extends Controller
         $malla = Malla::findOrFail($matricula->malla_id);
         $carrera = $malla->carrera()->first();
         //esto es para matricula
-        if ($matricula && $request->estado == 'MATRICULADO') {
+        if ($matricula && $request->estado == 'MATRICULADO' && $request->estado != 'ANULADO') {
             $matricula->update([
                 'fecha' => $now,
                 'estado' => $request->estado,
                 'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
                 'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas
             ]);
-            $matricula->detalle_matriculas()->update(['estado' => $request->estado]);
+            $matricula->detalle_matriculas()->where('estado', 'APROBADO')->update(['estado' => $request->estado]);
         } //esto es para aprobar el cupo
-        else {
+        else if ($request->estado != 'ANULADO') {
             $matricula->update([
                 'codigo' => $periodoLectivo->codigo . '-' . $carrera->siglas . '-' . $estudiante->identificacion,
                 'folio' => $periodoLectivo->codigo . '-' . $carrera->siglas,
