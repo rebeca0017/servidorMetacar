@@ -50,6 +50,9 @@ class ExcelController extends Controller
             'estudiantes.apellido2',
             'estudiantes.nombre1',
             'estudiantes.nombre2',
+            'estudiantes.correo_institucional',
+            'informacion_estudiantes.telefono_celular',
+            'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
             'detalle_matriculas.jornada as jornada_asignatura',
@@ -67,6 +70,7 @@ class ExcelController extends Controller
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
             ->join('tipo_matriculas', 'tipo_matriculas.id', '=', 'detalle_matriculas.tipo_matricula_id')
+            ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', '=', 'matriculas.id')
             ->where('matriculas.malla_id', $malla->id)
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->orderBy('matriculas.estado', 'DESC')
@@ -96,6 +100,9 @@ class ExcelController extends Controller
             'estudiantes.apellido2',
             'estudiantes.nombre1',
             'estudiantes.nombre2',
+            'estudiantes.correo_institucional',
+            'informacion_estudiantes.telefono_celular',
+            'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo',
             'asignaturas.nombre as asignatura',
             'asignaturas.periodo_academico_id as periodo_academico',
@@ -106,6 +113,7 @@ class ExcelController extends Controller
             ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', '=', 'matriculas.id')
             ->where('matriculas.periodo_academico_id', $request->periodo_academico_id)
             ->where('matriculas.malla_id', $malla->id)
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)

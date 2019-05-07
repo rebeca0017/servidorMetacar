@@ -28,23 +28,49 @@ class MatriculasController extends Controller
         //
     }
 
-    public function getCountMatriculas()
+    public function getCountMatriculas(Request $request)
     {
         $matriculadosCount = DB::select
-        ("select count(*) total, 
-                    sum(case when m.estado = 'MATRICULADO' then 1 else 0 end) matriculados,
-                    sum(case when m.estado = 'EN_PROCESO' then 1 else 0 end) en_proceso,
-                    sum(case when m.estado = 'APROBADO' then 1 else 0 end) aprobados,
-                    c.id as carrera_id,
-                    c.nombre as carrera,
-                    c.descripcion as malla, 
-                    m.malla_id  
-                from MATRICULAS m 
-                    inner join mallas ma on ma.id = m.malla_id
-                    inner join carreras c on c.id = ma.carrera_id
-                where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTUAL' limit 1)
-                    group by c.id,c.nombre,c.descripcion, m.malla_id
-                    order by malla");
+        ("select 
+	sum(case when m.estado = 'MATRICULADO' then 1 else 0 end) total_matriculados,
+       sum(case when m.estado = 'EN_PROCESO' then 1 else 0 end) total_en_proceso,
+       sum(case when m.estado = 'APROBADO' then 1 else 0 end) total_aprobados,
+    sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 1 then 1 else 0 end) matriculados_1,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 1 then 1 else 0 end) en_proceso_1,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id = 1 then 1 else 0 end) aprobados_1,
+	
+	sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 2 then 1 else 0 end) matriculados_2,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 2 then 1 else 0 end) en_proceso_2,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id = 2 then 1 else 0 end) aprobados_2,
+	
+	sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 3 then 1 else 0 end) matriculados_3,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 3 then 1 else 0 end) en_proceso_3,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id = 3 then 1 else 0 end) aprobados_3,
+	
+	sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 4 then 1 else 0 end) matriculados_4,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 4 then 1 else 0 end) en_proceso_4,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id = 4 then 1 else 0 end) aprobados_4,
+	
+	sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 5 then 1 else 0 end) matriculados_5,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 5 then 1 else 0 end) en_proceso_5,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id  = 5 then 1 else 0 end) aprobados_5,
+	
+	sum(case when m.estado = 'MATRICULADO' and m.periodo_academico_id = 6 then 1 else 0 end) matriculados_6,
+    sum(case when m.estado = 'EN_PROCESO' and m.periodo_academico_id = 6 then 1 else 0 end) en_proceso_6,
+    sum(case when m.estado = 'APROBADO' and m.periodo_academico_id = 6 then 1 else 0 end) aprobados_6,
+    c.id as carrera_id,
+    c.nombre as carrera,
+    c.descripcion as malla, 
+    m.malla_id  
+from MATRICULAS m 
+	inner join mallas ma on ma.id = m.malla_id
+    inner join carreras c on c.id = ma.carrera_id
+    inner join carrera_user cu on cu.carrera_id = c.id
+    inner join users u on cu.user_id = u.id
+where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTUAL' limit 1) 
+  and cu.user_id=" . $request->id . "
+	group by c.id,c.nombre,c.descripcion, m.malla_id
+    order by malla");
 
         return response()->json(['matriculados_count' => $matriculadosCount], 200);
     }
@@ -64,7 +90,8 @@ class MatriculasController extends Controller
             'asignaturas.horas_autonoma as horas_autonoma',
             'asignaturas.codigo as asignatura_codigo',
             'asignaturas.periodo_academico_id as periodo',
-            'detalle_matriculas.numero_matricula as numero_matricula'
+            'detalle_matriculas.numero_matricula as numero_matricula',
+            'detalle_matriculas.jornada as jornada'
         )
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
@@ -77,7 +104,8 @@ class MatriculasController extends Controller
             ->with('periodo_lectivo')
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->where('matriculas.estudiante_id', $estudiante->id)
-            ->where('detalle_matriculas.estado', 'APROBADO')
+            // ->where('detalle_matriculas.estado', '=', 'APROBADO')
+            // ->where('detalle_matriculas.estado', '<>', 'EN_PROCESO')
             ->orderby('asignaturas.periodo_academico_id')
             ->orderby('asignaturas.nombre')
             ->get();
@@ -98,7 +126,9 @@ class MatriculasController extends Controller
             'asignaturas.horas_autonoma as horas_autonoma',
             'asignaturas.codigo as asignatura_codigo',
             'asignaturas.periodo_academico_id as periodo',
-            'detalle_matriculas.numero_matricula as numero_matricula'
+            'detalle_matriculas.numero_matricula as numero_matricula',
+            'detalle_matriculas.jornada as jornada_asignatura'
+
         )
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
