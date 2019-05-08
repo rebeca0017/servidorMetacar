@@ -12,8 +12,10 @@
 */
 
 
+use Illuminate\Support\Facades\Hash;
+
 Route::get('/', function () {
-    return view('welcome');
+    return Hash::make('12345678');
 });
 Route::get('/pruebas', 'PruebasController@get');
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
