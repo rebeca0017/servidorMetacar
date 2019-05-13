@@ -72,7 +72,25 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
 	group by c.id,c.nombre,c.descripcion, m.malla_id
     order by malla");
 
-        return response()->json(['matriculados_count' => $matriculadosCount], 200);
+        $matriculadosInstitutoCount = DB::select
+        ("select 
+	sum(case when m.estado = 'MATRICULADO' then 1 else 0 end) total_matriculados,
+       sum(case when m.estado = 'EN_PROCESO' then 1 else 0 end) total_en_proceso,
+       sum(case when m.estado = 'APROBADO' then 1 else 0 end) total_aprobados,
+    i.id as instituto_id,
+    i.nombre as instituto
+from MATRICULAS m 
+	inner join mallas ma on ma.id = m.malla_id
+    inner join carreras c on c.id = ma.carrera_id
+    inner join institutos i on i.id = c.instituto_id
+    inner join carrera_user cu on cu.carrera_id = c.id
+    inner join users u on cu.user_id = u.id
+where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTUAL' limit 1) 
+  and cu.user_id=" . $request->id . "
+	group by i.id
+    order by instituto");
+        return response()->json(['matriculados_institutos_count' => $matriculadosInstitutoCount,
+            'matriculados_carreras_count' => $matriculadosCount], 200);
     }
 
     public function getSolicitudMatricula(Request $request)
