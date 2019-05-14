@@ -11,7 +11,8 @@ class Matricula extends Model implements Auditable
     protected $fillable = [
         'codigo',
         'codigo_sniese_paralelo',
-        'folio', 'fecha', 'jornada', 'paralelo_principal', 'estado',
+        'folio', 'fecha','fecha_formulario','fecha_solicitud',
+        'jornada', 'paralelo_principal', 'estado',
     ];
 
     public function tipo_matricula()

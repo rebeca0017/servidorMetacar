@@ -439,7 +439,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
         DB::beginTransaction();
         $detalleMatricula = DetalleMatricula::findOrFail($request->id);
         $detalleMatricula->update(['estado' => 'ANULADO']);
-        $detalleMatricula->matricula()->update(['estado' => 'APROBADO']);
+        // $detalleMatricula->matricula()->update(['estado' => 'APROBADO']);
         DB::commit();
         return response()->json(['detalle_matricula' => $detalleMatricula], 201);
     }
@@ -600,5 +600,37 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
         }
         DB::commit();
         return response()->json(['matricula' => $matriculas], 201);
+    }
+
+    public function updateFechaFormulario(Request $request)
+    {
+        $now = new Carbon();
+        $data = $request->json()->all();
+        $dataUsuario = $data['usuario'];
+        $estudiante = Estudiante::where('user_id', $dataUsuario)->first();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+
+        $matricula = Matricula::where('periodo_lectivo_id', $periodoLectivoActual->id)->where('estudiante_id', $estudiante->id)->first();
+        $matricula->update([
+            'fecha_formulario' => $now->format('Y-m-d'),
+        ]);
+
+        return response()->json(['estudiante' => $matricula], 201);
+    }
+
+    public function updateFechaSolicitud(Request $request)
+    {
+        $now = new Carbon();
+        $data = $request->json()->all();
+        $dataUsuario = $data['usuario'];
+        $estudiante = Estudiante::where('user_id', $dataUsuario)->first();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+
+        $matricula = Matricula::where('periodo_lectivo_id', $periodoLectivoActual->id)->where('estudiante_id', $estudiante->id)->first();
+        $matricula->update([
+            'fecha_solicitud' => $now->format('Y-m-d'),
+        ]);
+
+        return response()->json(['estudiante' => $matricula], 201);
     }
 }

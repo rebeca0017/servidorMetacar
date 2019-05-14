@@ -18,7 +18,7 @@
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-12 col-xs-12 text-right mt-5 text-center">
-                    <img src="{{ asset('images/logo_carrera_'.$certificado[0]->instituto_id.'.png') }}">
+                    <img src="{{ asset('images/logo_instituto_'.$certificado[0]->instituto_id.'.png') }}">
                 </div>
             </div>
             <div class="row">
@@ -48,7 +48,7 @@
                         <strong>
                             {{
                         $certificado[0]['estudiante']->apellido1 .' '.$certificado[0]['estudiante']->apellido2
-                        .' '.$certificado[0]['estudiante']->apellido2.' '.$certificado[0]['estudiante']->apellido2
+                        .' '.$certificado[0]['estudiante']->nombre1.' '.$certificado[0]['estudiante']->nombre2
                         }}
                         </strong> con cédula de ciudadanía N°
                         <strong>{{$certificado[0]['estudiante']->identificacion}}</strong>

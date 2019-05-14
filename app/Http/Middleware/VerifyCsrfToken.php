@@ -21,6 +21,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'http://127.0.0.1:8000/*',
         'http://localhost:8000/*',
+        'http://172.16.11.81:8000/*',
         'http://134.209.209.73/matriculacion/server/*'
     ];
 }

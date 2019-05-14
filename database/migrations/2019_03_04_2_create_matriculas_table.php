@@ -28,6 +28,8 @@ class CreateMatriculasTable extends Migration
             $table->foreign('tipo_matricula_id')->references('id')->on('tipo_matriculas');
             $table->string('codigo', 50)->nullable();
             $table->dateTime('fecha')->nullable();
+            $table->dateTime('fecha_solicitud')->nullable();
+            $table->dateTime('fecha_formulario')->nullable();
             $table->string('folio', 50)->nullable();
             $table->string('jornada', 50)->nullable();
             $table->string('paralelo_principal', 50)->nullable();

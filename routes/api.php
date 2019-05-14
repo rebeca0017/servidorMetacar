@@ -55,6 +55,8 @@ Route::put('/matriculas', 'MatriculasController@updateMatricula');
 Route::get('/matriculas/count', 'MatriculasController@getCountMatriculas');
 Route::delete('/matriculas/delete_detalle_cupo', 'MatriculasController@deleteDetalleCupo');
 Route::delete('/matriculas/delete_detalle_matricula', 'MatriculasController@deleteDetalleMatricula');
+Route::put('/matriculas/fecha_formulario', 'MatriculasController@updateFechaFormulario');
+Route::put('/matriculas/fecha_solicitud', 'MatriculasController@updateFechaSolicitud');
 
 Route::get('/catalogos/paises', 'CatalogosController@getPaises');
 Route::get('/catalogos/provincias', 'CatalogosController@getProvincias');
