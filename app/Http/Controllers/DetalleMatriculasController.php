@@ -139,7 +139,7 @@ class DetalleMatriculasController extends Controller
             }
 
             if ($dataDetalleMatricula['estado'] == 'MATRICULADO' || $dataDetalleMatricula['estado'] == 'APROBADO') {
-                $matricula->update(['estado' => 'APROBADO']);
+                // $matricula->update(['estado' => 'APROBADO']);
             }
             DB::commit();
             return response()->json(['detalle_matricula' => $detalleMatricula], 201);

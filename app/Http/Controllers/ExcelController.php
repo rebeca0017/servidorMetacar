@@ -55,6 +55,7 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
+            'asignaturas.periodo_academico_id as periodo_academico',
             'detalle_matriculas.jornada as jornada_asignatura',
             'detalle_matriculas.paralelo as paralelo_asignatura',
             'detalle_matriculas.numero_matricula as numero_matricula',
@@ -78,10 +79,43 @@ class ExcelController extends Controller
             ->orderBy('estudiantes.apellido1')
             ->get();
 
+        $listas = Matricula::select(
+            'carreras.nombre as carrera',
+            'carreras.descripcion as malla',
+            'estudiantes.identificacion as cedula_estudiante',
+            'estudiantes.apellido1',
+            'estudiantes.apellido2',
+            'estudiantes.nombre1',
+            'estudiantes.nombre2',
+            'estudiantes.correo_institucional',
+            'informacion_estudiantes.telefono_celular',
+            'informacion_estudiantes.telefono_fijo',
+            'tipo_matriculas.nombre as tipo_matricula',
+            'matriculas.paralelo_principal as paralelo_principal',
+            'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal',
+            'matriculas.estado'
+        )
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('tipo_matriculas', 'tipo_matriculas.id', '=', 'matriculas.tipo_matricula_id')
+            ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', '=', 'matriculas.id')
+            ->where('matriculas.malla_id', $malla->id)
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->orderBy('matriculas.estado', 'DESC')
+            ->orderBy('matriculas.periodo_academico_id')
+            ->orderBy('estudiantes.apellido1')
+            ->get();
+
         Excel::create('Cupos_' . $carrera->siglas . '_' . $now->format('Y-m-d H:i:s'),
-            function ($excel) use (&$cupos) {
+            function ($excel) use (&$cupos, &$listas) {
                 $excel->sheet('Cupos', function ($sheet) use (&$request, &$cupos) {
                     $sheet->fromArray($cupos);
+                });
+
+                $excel->sheet('Listas', function ($sheet) use (&$request, &$listas) {
+                    $sheet->fromArray($listas);
                 });
             })->download('xlsx');
     }
@@ -95,6 +129,43 @@ class ExcelController extends Controller
         $cupos = Matricula::select(
             'carreras.nombre as carrera',
             'carreras.descripcion as malla',
+            'estudiantes.identificacion as cedula_estudiante',
+            'estudiantes.apellido1',
+            'estudiantes.apellido2',
+            'estudiantes.nombre1',
+            'estudiantes.nombre2',
+            'estudiantes.correo_institucional',
+            'informacion_estudiantes.telefono_celular',
+            'informacion_estudiantes.telefono_fijo',
+            'asignaturas.codigo as codigo_asignatura',
+            'asignaturas.nombre as asignatura',
+            'asignaturas.periodo_academico_id as periodo_academico',
+            'detalle_matriculas.jornada as jornada_asignatura',
+            'detalle_matriculas.paralelo as paralelo_asignatura',
+            'detalle_matriculas.numero_matricula as numero_matricula',
+            'tipo_matriculas.nombre as tipo_matricula',
+            'matriculas.paralelo_principal as paralelo_principal',
+            'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal',
+            'matriculas.estado'
+        )
+            ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
+            ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
+            ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
+            ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('tipo_matriculas', 'tipo_matriculas.id', '=', 'detalle_matriculas.tipo_matricula_id')
+            ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', '=', 'matriculas.id')
+            ->where('matriculas.periodo_academico_id', $request->periodo_academico_id)
+            ->where('matriculas.malla_id', $malla->id)
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->orderBy('matriculas.estado', 'DESC')
+            ->orderby('estudiantes.apellido1')
+            ->get();
+
+        $listas = Matricula::select(
+            'carreras.nombre as carrera',
+            'carreras.descripcion as malla',
             'estudiantes.identificacion',
             'estudiantes.apellido1',
             'estudiantes.apellido2',
@@ -103,16 +174,16 @@ class ExcelController extends Controller
             'estudiantes.correo_institucional',
             'informacion_estudiantes.telefono_celular',
             'informacion_estudiantes.telefono_fijo',
-            'asignaturas.codigo',
-            'asignaturas.nombre as asignatura',
-            'asignaturas.periodo_academico_id as periodo_academico',
+            'tipo_matriculas.nombre as tipo_matricula',
+            'matriculas.paralelo_principal as paralelo_principal',
+            'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal',
             'matriculas.estado'
         )
-            ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
-            ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
+            ->join('tipo_matriculas', 'tipo_matriculas.id', '=', 'matriculas.tipo_matricula_id')
             ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', '=', 'matriculas.id')
             ->where('matriculas.periodo_academico_id', $request->periodo_academico_id)
             ->where('matriculas.malla_id', $malla->id)
@@ -122,9 +193,13 @@ class ExcelController extends Controller
             ->get();
 
         Excel::create($request->periodo_academico_id . '_' . 'Cupos_' . $carrera->siglas . '_' . $now->format('Y-m-d H:i:s'),
-            function ($excel) use (&$cupos) {
+            function ($excel) use (&$cupos, &$listas) {
                 $excel->sheet('Cupos', function ($sheet) use (&$request, &$cupos) {
                     $sheet->fromArray($cupos);
+                });
+
+                $excel->sheet('Listas', function ($sheet) use (&$request, &$listas) {
+                    $sheet->fromArray($listas);
                 });
             })->download('xlsx');
     }
@@ -420,7 +495,7 @@ class ExcelController extends Controller
 
                             }
                         } else {
-                            if (!$estudiante && $row->cedula_estudiante!='') {
+                            if (!$estudiante && $row->cedula_estudiante != '') {
                                 $errors['cedulas_estudiante'][] = 'cedula_estudiante: ' . $row->cedula_estudiante . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
 
                                 $countCuposNuevos++;

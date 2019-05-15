@@ -68,6 +68,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
+            'collation' => 'utf8_general_ci',
             'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
