@@ -55,16 +55,72 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
-            'asignaturas.periodo_academico_id as periodo_academico',
-            'detalle_matriculas.jornada as jornada_asignatura',
-            'detalle_matriculas.paralelo as paralelo_asignatura',
-            'detalle_matriculas.numero_matricula as numero_matricula',
-            'tipo_matriculas.nombre as tipo_matricula',
-            'matriculas.paralelo_principal as paralelo_principal',
-            'matriculas.jornada as jornada_principal',
-            'matriculas.periodo_academico_id as periodo_academico_principal',
-            'matriculas.estado'
+            'asignaturas.periodo_academico_id as periodo_academico'
+            // 'detalle_matriculas.jornada as jornada_asignatura',
+            // 'detalle_matriculas.paralelo as paralelo_asignatura',
+            // 'detalle_matriculas.numero_matricula as numero_matricula',
+            // 'tipo_matriculas.nombre as tipo_matricula',
+            // 'matriculas.jornada as jornada_principal',
+            // 'matriculas.paralelo_principal as paralelo_principal',
+            // 'matriculas.periodo_academico_id as periodo_academico_principal',
+            // 'matriculas.estado'
         )
+            ->selecTRaw("(CASE 
+                            WHEN detalle_matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN detalle_matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN detalle_matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN detalle_matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_asignatura,
+                            
+                            (CASE 
+                            WHEN detalle_matriculas.paralelo = '1' THEN 'A' 
+                            WHEN detalle_matriculas.paralelo = '2' THEN 'B'
+                            WHEN detalle_matriculas.paralelo = '3' THEN 'C'
+                            WHEN detalle_matriculas.paralelo = '4' THEN 'D'
+                            WHEN detalle_matriculas.paralelo = '5' THEN 'E'
+                            WHEN detalle_matriculas.paralelo = '6' THEN 'F'
+                            WHEN detalle_matriculas.paralelo = '7' THEN 'G'
+                            WHEN detalle_matriculas.paralelo = '8' THEN 'H'
+                            WHEN detalle_matriculas.paralelo = '9' THEN 'I'
+                            WHEN detalle_matriculas.paralelo = '10' THEN 'J'
+                            WHEN detalle_matriculas.paralelo = '11' THEN 'K'
+                            WHEN detalle_matriculas.paralelo = '12' THEN 'L'
+                            WHEN detalle_matriculas.paralelo = '13' THEN 'M'
+                            WHEN detalle_matriculas.paralelo = '14' THEN 'N' END) AS paralelo_asignatura,
+                            
+                            (CASE 
+                            WHEN detalle_matriculas.numero_matricula = '1' THEN 'PRIMERA' 
+                            WHEN detalle_matriculas.numero_matricula = '2' THEN 'SEGUNDA'
+                            WHEN detalle_matriculas.numero_matricula = '3' THEN 'TERCERA' END) AS numero_matricula,
+                            
+                            tipo_matriculas.nombre as tipo_matricula,             
+                            
+                            (CASE 
+                            WHEN matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_principal,
+                            
+                            (CASE 
+                            WHEN matriculas.paralelo_principal = '1' THEN 'A' 
+                            WHEN matriculas.paralelo_principal = '2' THEN 'B'
+                            WHEN matriculas.paralelo_principal = '3' THEN 'C'
+                            WHEN matriculas.paralelo_principal = '4' THEN 'D'
+                            WHEN matriculas.paralelo_principal = '5' THEN 'E'
+                            WHEN matriculas.paralelo_principal = '6' THEN 'F'
+                            WHEN matriculas.paralelo_principal = '7' THEN 'G'
+                            WHEN matriculas.paralelo_principal = '8' THEN 'H'
+                            WHEN matriculas.paralelo_principal = '9' THEN 'I'
+                            WHEN matriculas.paralelo_principal = '10' THEN 'J'
+                            WHEN matriculas.paralelo_principal = '11' THEN 'K'
+                            WHEN matriculas.paralelo_principal = '12' THEN 'L'
+                            WHEN matriculas.paralelo_principal = '13' THEN 'M'
+                            WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
+                            
+                            matriculas.periodo_academico_id as periodo_academico_principal,
+                            
+                            matriculas.estado
+                            
+                            ")
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
@@ -91,11 +147,35 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_celular',
             'informacion_estudiantes.telefono_fijo',
             'tipo_matriculas.nombre as tipo_matricula',
-            'matriculas.paralelo_principal as paralelo_principal',
-            'matriculas.jornada as jornada_principal',
-            'matriculas.periodo_academico_id as periodo_academico_principal',
-            'matriculas.estado'
+            // 'matriculas.paralelo_principal as paralelo_principal',
+            // 'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal'
+
         )
+            ->selecTRaw("(CASE 
+                            WHEN matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_principal,
+                            
+                            (CASE 
+                            WHEN matriculas.paralelo_principal = '1' THEN 'A' 
+                            WHEN matriculas.paralelo_principal = '2' THEN 'B'
+                            WHEN matriculas.paralelo_principal = '3' THEN 'C'
+                            WHEN matriculas.paralelo_principal = '4' THEN 'D'
+                            WHEN matriculas.paralelo_principal = '5' THEN 'E'
+                            WHEN matriculas.paralelo_principal = '6' THEN 'F'
+                            WHEN matriculas.paralelo_principal = '7' THEN 'G'
+                            WHEN matriculas.paralelo_principal = '8' THEN 'H'
+                            WHEN matriculas.paralelo_principal = '9' THEN 'I'
+                            WHEN matriculas.paralelo_principal = '10' THEN 'J'
+                            WHEN matriculas.paralelo_principal = '11' THEN 'K'
+                            WHEN matriculas.paralelo_principal = '12' THEN 'L'
+                            WHEN matriculas.paralelo_principal = '13' THEN 'M'
+                            WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
+                            matriculas.estado
+                            
+                            ")
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')
@@ -139,16 +219,72 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
-            'asignaturas.periodo_academico_id as periodo_academico',
-            'detalle_matriculas.jornada as jornada_asignatura',
-            'detalle_matriculas.paralelo as paralelo_asignatura',
-            'detalle_matriculas.numero_matricula as numero_matricula',
-            'tipo_matriculas.nombre as tipo_matricula',
-            'matriculas.paralelo_principal as paralelo_principal',
-            'matriculas.jornada as jornada_principal',
-            'matriculas.periodo_academico_id as periodo_academico_principal',
-            'matriculas.estado'
+            'asignaturas.periodo_academico_id as periodo_academico'
+        // 'detalle_matriculas.jornada as jornada_asignatura',
+        // 'detalle_matriculas.paralelo as paralelo_asignatura',
+        // 'detalle_matriculas.numero_matricula as numero_matricula',
+        // 'tipo_matriculas.nombre as tipo_matricula',
+        // 'matriculas.jornada as jornada_principal',
+        // 'matriculas.paralelo_principal as paralelo_principal',
+        // 'matriculas.periodo_academico_id as periodo_academico_principal',
+        // 'matriculas.estado'
         )
+            ->selecTRaw("(CASE 
+                            WHEN detalle_matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN detalle_matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN detalle_matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN detalle_matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_asignatura,
+                            
+                            (CASE 
+                            WHEN detalle_matriculas.paralelo = '1' THEN 'A' 
+                            WHEN detalle_matriculas.paralelo = '2' THEN 'B'
+                            WHEN detalle_matriculas.paralelo = '3' THEN 'C'
+                            WHEN detalle_matriculas.paralelo = '4' THEN 'D'
+                            WHEN detalle_matriculas.paralelo = '5' THEN 'E'
+                            WHEN detalle_matriculas.paralelo = '6' THEN 'F'
+                            WHEN detalle_matriculas.paralelo = '7' THEN 'G'
+                            WHEN detalle_matriculas.paralelo = '8' THEN 'H'
+                            WHEN detalle_matriculas.paralelo = '9' THEN 'I'
+                            WHEN detalle_matriculas.paralelo = '10' THEN 'J'
+                            WHEN detalle_matriculas.paralelo = '11' THEN 'K'
+                            WHEN detalle_matriculas.paralelo = '12' THEN 'L'
+                            WHEN detalle_matriculas.paralelo = '13' THEN 'M'
+                            WHEN detalle_matriculas.paralelo = '14' THEN 'N' END) AS paralelo_asignatura,
+                            
+                            (CASE 
+                            WHEN detalle_matriculas.numero_matricula = '1' THEN 'PRIMERA' 
+                            WHEN detalle_matriculas.numero_matricula = '2' THEN 'SEGUNDA'
+                            WHEN detalle_matriculas.numero_matricula = '3' THEN 'TERCERA' END) AS numero_matricula,
+                            
+                            tipo_matriculas.nombre as tipo_matricula,             
+                            
+                            (CASE 
+                            WHEN matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_principal,
+                            
+                            (CASE 
+                            WHEN matriculas.paralelo_principal = '1' THEN 'A' 
+                            WHEN matriculas.paralelo_principal = '2' THEN 'B'
+                            WHEN matriculas.paralelo_principal = '3' THEN 'C'
+                            WHEN matriculas.paralelo_principal = '4' THEN 'D'
+                            WHEN matriculas.paralelo_principal = '5' THEN 'E'
+                            WHEN matriculas.paralelo_principal = '6' THEN 'F'
+                            WHEN matriculas.paralelo_principal = '7' THEN 'G'
+                            WHEN matriculas.paralelo_principal = '8' THEN 'H'
+                            WHEN matriculas.paralelo_principal = '9' THEN 'I'
+                            WHEN matriculas.paralelo_principal = '10' THEN 'J'
+                            WHEN matriculas.paralelo_principal = '11' THEN 'K'
+                            WHEN matriculas.paralelo_principal = '12' THEN 'L'
+                            WHEN matriculas.paralelo_principal = '13' THEN 'M'
+                            WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
+                            
+                            matriculas.periodo_academico_id as periodo_academico_principal,
+                            
+                            matriculas.estado
+                            
+                            ")
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('asignaturas', 'asignaturas.id', '=', 'detalle_matriculas.asignatura_id')
@@ -166,7 +302,7 @@ class ExcelController extends Controller
         $listas = Matricula::select(
             'carreras.nombre as carrera',
             'carreras.descripcion as malla',
-            'estudiantes.identificacion',
+            'estudiantes.identificacion as cedula_estudiante',
             'estudiantes.apellido1',
             'estudiantes.apellido2',
             'estudiantes.nombre1',
@@ -175,11 +311,35 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_celular',
             'informacion_estudiantes.telefono_fijo',
             'tipo_matriculas.nombre as tipo_matricula',
-            'matriculas.paralelo_principal as paralelo_principal',
-            'matriculas.jornada as jornada_principal',
-            'matriculas.periodo_academico_id as periodo_academico_principal',
-            'matriculas.estado'
+            // 'matriculas.paralelo_principal as paralelo_principal',
+            // 'matriculas.jornada as jornada_principal',
+            'matriculas.periodo_academico_id as periodo_academico_principal'
+
         )
+            ->selecTRaw("(CASE 
+                            WHEN matriculas.jornada = '1' THEN 'MATUTINA' 
+                            WHEN matriculas.jornada = '2' THEN 'VESPERTINA'
+                            WHEN matriculas.jornada = '3' THEN 'NOCTURNA'
+                            WHEN matriculas.jornada = '4' THEN 'INTENSIVA' END) AS jornada_principal,
+                            
+                            (CASE 
+                            WHEN matriculas.paralelo_principal = '1' THEN 'A' 
+                            WHEN matriculas.paralelo_principal = '2' THEN 'B'
+                            WHEN matriculas.paralelo_principal = '3' THEN 'C'
+                            WHEN matriculas.paralelo_principal = '4' THEN 'D'
+                            WHEN matriculas.paralelo_principal = '5' THEN 'E'
+                            WHEN matriculas.paralelo_principal = '6' THEN 'F'
+                            WHEN matriculas.paralelo_principal = '7' THEN 'G'
+                            WHEN matriculas.paralelo_principal = '8' THEN 'H'
+                            WHEN matriculas.paralelo_principal = '9' THEN 'I'
+                            WHEN matriculas.paralelo_principal = '10' THEN 'J'
+                            WHEN matriculas.paralelo_principal = '11' THEN 'K'
+                            WHEN matriculas.paralelo_principal = '12' THEN 'L'
+                            WHEN matriculas.paralelo_principal = '13' THEN 'M'
+                            WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
+                            matriculas.estado
+                            
+                            ")
             ->join('estudiantes', 'estudiantes.id', '=', 'matriculas.estudiante_id')
             ->join('mallas', 'mallas.id', '=', 'matriculas.malla_id')
             ->join('carreras', 'carreras.id', '=', 'mallas.carrera_id')

@@ -122,6 +122,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->with('periodo_lectivo')
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->where('matriculas.estudiante_id', $estudiante->id)
+             ->where('detalle_matriculas.estado', '<>', 'ANULADO')
             // ->where('detalle_matriculas.estado', '=', 'APROBADO')
             // ->where('detalle_matriculas.estado', '<>', 'EN_PROCESO')
             ->orderby('asignaturas.periodo_academico_id')
@@ -194,7 +195,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->where('matriculas.id', $request->matricula_id)
             ->get();
 
-        return view('certificado-matricula', ['certificado' => $certificadoMatricula]);
+//        return view('certificado-matricula', ['certificado' => $certificadoMatricula]);
         return $certificadoMatricula;
     }
 

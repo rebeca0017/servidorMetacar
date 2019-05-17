@@ -71,7 +71,7 @@ Route::post('/imports/estudiantes', 'ExcelController@importEstudiantes');
 Route::post('/imports/matriculas', 'ExcelController@importMatriculas');
 
 Route::get('/certificado-matricula/{matricula_id}', 'MatriculasController@getCertificadoMatriculaPublic');
-Route::get('/prueba', 'ExcelController@prueba');
+
 Route::get('/exports/errores_cupos', 'ExcelController@exportErroresCupos');
 
 Route::get('/email', 'PruebasController@email');
@@ -86,3 +86,5 @@ Route::put('/estudiantes/update_perfil', 'EstudiantesController@updatePerfil');
 Route::put('/users/reset_password', 'UsersController@resetPassword');
 
 
+
+Route::get('/prueba', 'PruebasController@get')->middleware('auth:api');
