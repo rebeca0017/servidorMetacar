@@ -88,3 +88,5 @@ Route::put('/users/reset_password', 'UsersController@resetPassword');
 
 
 Route::get('/prueba', 'PruebasController@get')->middleware('auth:api');
+
+Route::post('/matriculas/open_periodo_lectivo', 'MatriculasController@openPeriodoLectivo');

@@ -10,6 +10,7 @@ use App\Malla;
 use App\Matricula;
 use App\PeriodoAcademico;
 use App\PeriodoLectivo;
+use App\TipoMatricula;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -122,7 +123,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->with('periodo_lectivo')
             ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
             ->where('matriculas.estudiante_id', $estudiante->id)
-             ->where('detalle_matriculas.estado', '<>', 'ANULADO')
+            ->where('detalle_matriculas.estado', '<>', 'ANULADO')
             // ->where('detalle_matriculas.estado', '=', 'APROBADO')
             // ->where('detalle_matriculas.estado', '<>', 'EN_PROCESO')
             ->orderby('asignaturas.periodo_academico_id')
@@ -296,10 +297,11 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                         ->where('periodo_academico_id', $request->periodo_academico_id);
                 })
                 ->where(function ($cupos) use (&$request) {
-                    $cupos->orWhere('matriculas.estado', 'APROBADO')
+                    $cupos->orWhere('matriculas.estado', 'MATRICULADO')
+                        ->orWhere('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                ->orderby('matriculas.estado', 'DESC')
+                ->orderby('matriculas.estado', 'ASC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         } else {
@@ -313,10 +315,11 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id);
                 })
                 ->where(function ($cupos) {
-                    $cupos->where('matriculas.estado', 'APROBADO')
+                    $cupos->orWhere('matriculas.estado', 'MATRICULADO')
+                        ->orWhere('matriculas.estado', 'APROBADO')
                         ->orWhere('matriculas.estado', 'EN_PROCESO');
                 })
-                ->orderby('matriculas.estado', 'DESC')
+                ->orderby('matriculas.estado', 'ASC')
                 ->orderby('apellido1')
                 ->paginate($request->records_per_page);
         }
@@ -377,6 +380,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->where(function ($cupo) use (&$malla, &$periodoLectivoActual) {
                 $cupo->where('matriculas.estado', '=', 'EN_PROCESO')
                     ->orwhere('matriculas.estado', '=', 'APROBADO')
+                    ->orwhere('matriculas.estado', '=', 'MATRICULADO')
                     ->where('matriculas.malla_id', '=', $malla->id)
                     ->where('matriculas.periodo_lectivo_id', '=', $periodoLectivoActual->id);
             })
@@ -633,5 +637,85 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
         ]);
 
         return response()->json(['estudiante' => $matricula], 201);
+    }
+
+    public function openPeriodoLectivo(Request $request)
+    {
+        $periodoLectivoEnProceso = PeriodoLectivo::where('estado', 'EN_PROCESO')->first();
+
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+
+        $matriculas = Matricula::where('periodo_lectivo_id', $periodoLectivoEnProceso->id)
+            ->where('malla_id', $malla->id)
+            ->where('periodo_academico_id', $request->periodo_academico_id)
+            ->orderBy('periodo_academico_id')
+            ->with('detalle_matriculas')
+            ->get();
+
+        foreach ($matriculas as $matricula) {
+            foreach ($matricula->detalle_matriculas as $detalleMatricula) {
+                return $detalleMatricula;
+                return $this->generateCupo($detalleMatricula);
+            }
+        }
+    }
+
+    public function generateCupo($detalleMatricula)
+    {
+        $now = Carbon::now();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        $matriculaEnProceso = Matricula::findOrFail($detalleMatricula->matricula_id);
+        $estudiante = Estudiante::findOrFail($matriculaEnProceso->estudiante_id);
+
+        $matriculaActual = Matricula::where('periodo_lectivo_id', $periodoLectivoActual)
+            ->where('estudiante_id', $estudiante->id)->get();
+
+        if ($matriculaActual) {
+            $matricula = $matriculaActual;
+        } else {
+            $matricula = new Matricula([
+                'fecha' => $now,
+                'jornada' => $matriculaEnProceso->jornada,
+                'paralelo_principal' => $matriculaEnProceso->paralelo_principal,
+                'estado' => 'EN_PROCESO'
+            ]);
+            $periodoAcademico = PeriodoAcademico::findOrFail($matriculaEnProceso->periodo_academico_id);
+            $malla = Malla::findOrFail($matriculaEnProceso->malla_id);
+            $tipoMatricula = TipoMatricula::where('nombre', 'ORDINARIA')->first();
+
+            $matricula->estudiante()->associate($estudiante);
+            $matricula->periodo_lectivo()->associate($periodoLectivoActual);
+            $matricula->periodo_academico()->associate($periodoAcademico);
+            $matricula->malla()->associate($malla);
+            $matricula->tipo_matricula()->associate($tipoMatricula);
+            $matricula->save();
+        }
+
+        $detalleMatricula = new DetalleMatricula([
+            'paralelo' => $detalleMatricula->paralelo,
+            'numero_matricula' => 'PRIMERA',
+            'jornada' => $detalleMatricula->jornada,
+            'estado' => 'EN_PROCESO'
+        ]);
+
+        $asignatura = $this->validatePreyCoRequisitos($detalleMatricula->asignatura_id, $malla->id,
+            $periodoAcademico->id, $estudiante->id);
+
+        $detalleMatricula->matricula()->associate($matricula);
+        $detalleMatricula->asignatura()->associate($asignatura);
+        $detalleMatricula->tipo_matricula()->associate($tipoMatricula);
+        $detalleMatricula->save();
+    }
+
+    public function validatePreyCoRequisitos($asignaturaActual, $malla, $periodoAcademico, $estudiante)
+    {
+        $asignaturasMalla = Asignatura::where('malla_id', $malla)
+            ->where('periodo_academico_id', '<=', $periodoAcademico)->get();
+        $matriculas = Matricula::where('estudiante_id', $estudiante)->where('estado', 'MATRICULADO')->get();
+        $matriculas->detalle_matriculas();
+        $asignaturasMatricula = Asignatura::where('estudiante_id', $malla)
+            ->where('periodo_academico_id', '<=', $periodoAcademico)->get();
+        $asignatura = Asignatura::findOrFail($asignaturaActual);
+
     }
 }

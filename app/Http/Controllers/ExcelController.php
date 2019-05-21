@@ -55,15 +55,16 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
+            'detalle_matriculas.numero_matricula',
             'asignaturas.periodo_academico_id as periodo_academico'
-            // 'detalle_matriculas.jornada as jornada_asignatura',
-            // 'detalle_matriculas.paralelo as paralelo_asignatura',
-            // 'detalle_matriculas.numero_matricula as numero_matricula',
-            // 'tipo_matriculas.nombre as tipo_matricula',
-            // 'matriculas.jornada as jornada_principal',
-            // 'matriculas.paralelo_principal as paralelo_principal',
-            // 'matriculas.periodo_academico_id as periodo_academico_principal',
-            // 'matriculas.estado'
+        // 'detalle_matriculas.jornada as jornada_asignatura',
+        // 'detalle_matriculas.paralelo as paralelo_asignatura',
+        // 'detalle_matriculas.numero_matricula as numero_matricula',
+        // 'tipo_matriculas.nombre as tipo_matricula',
+        // 'matriculas.jornada as jornada_principal',
+        // 'matriculas.paralelo_principal as paralelo_principal',
+        // 'matriculas.periodo_academico_id as periodo_academico_principal',
+        // 'matriculas.estado'
         )
             ->selecTRaw("(CASE 
                             WHEN detalle_matriculas.jornada = '1' THEN 'MATUTINA' 
@@ -117,7 +118,6 @@ class ExcelController extends Controller
                             WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
                             
                             matriculas.periodo_academico_id as periodo_academico_principal,
-                            
                             matriculas.estado
                             
                             ")
@@ -143,6 +143,7 @@ class ExcelController extends Controller
             'estudiantes.apellido2',
             'estudiantes.nombre1',
             'estudiantes.nombre2',
+            'estudiantes.sexo',
             'estudiantes.correo_institucional',
             'informacion_estudiantes.telefono_celular',
             'informacion_estudiantes.telefono_fijo',
@@ -152,7 +153,7 @@ class ExcelController extends Controller
             'matriculas.periodo_academico_id as periodo_academico_principal'
 
         )
-            ->selecTRaw("(CASE 
+            ->selectRaw("(CASE 
                             WHEN matriculas.jornada = '1' THEN 'MATUTINA' 
                             WHEN matriculas.jornada = '2' THEN 'VESPERTINA'
                             WHEN matriculas.jornada = '3' THEN 'NOCTURNA'
@@ -219,6 +220,7 @@ class ExcelController extends Controller
             'informacion_estudiantes.telefono_fijo',
             'asignaturas.codigo as codigo_asignatura',
             'asignaturas.nombre as asignatura',
+            'detalle_matriculas.numero_matricula',
             'asignaturas.periodo_academico_id as periodo_academico'
         // 'detalle_matriculas.jornada as jornada_asignatura',
         // 'detalle_matriculas.paralelo as paralelo_asignatura',
@@ -307,6 +309,7 @@ class ExcelController extends Controller
             'estudiantes.apellido2',
             'estudiantes.nombre1',
             'estudiantes.nombre2',
+            'estudiantes.sexo',
             'estudiantes.correo_institucional',
             'informacion_estudiantes.telefono_celular',
             'informacion_estudiantes.telefono_fijo',
@@ -490,7 +493,7 @@ class ExcelController extends Controller
 
     }
 
-    public function importCupos(Request $request)
+    public function importCuposRespaldo(Request $request)
     {
         if ($request->file('archivo')) {
             $errors = array();
@@ -667,6 +670,274 @@ class ExcelController extends Controller
                                     'password' => Hash::make($row->cedula_estudiante),
                                 ]);
 
+                                $rol = Role::findOrFail(2);
+                                $usuario->role()->associate($rol);
+                                $usuario->save();
+                                $usuario->carreras()->attach($request->carrera_id);
+
+                                $estudiante = $usuario->estudiante()->create([
+                                    'tipo_identificacion' => $row->tipo_identificacion,
+                                    'identificacion' => $row->cedula_estudiante,
+                                    'apellido1' => strtoupper($row->apellido1),
+                                    'apellido2' => strtoupper($row->apellido2),
+                                    'nombre1' => strtoupper($row->nombre1),
+                                    'nombre2' => strtoupper($row->nombre2),
+                                    'correo_institucional' => strtolower($row->correo_institucional),
+                                    'fecha_nacimiento' => $row->fecha_nacimiento,
+                                    'tipo_sangre' => $this->changeTiposangre($row->tipo_sangre),
+                                    'tipo_colegio' => $row->tipo_colegio,
+                                    'tipo_bachillerato' => $row->tipo_bachillerato,
+                                    //'anio_graduacion' => $row->anio_graduacion,
+                                    'fecha_inicio_carrera' => $row->fecha_inicio_carrera
+                                ]);
+
+                                $matricula = new MatriculaTransaccion([
+                                    'fecha' => $now,
+                                    'jornada' => $this->changeJornada($row->jornada_principal),
+                                    'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
+                                    'estado' => 'EN_PROCESO'
+                                ]);
+
+                                $periodoAcademico = PeriodoAcademico::where('id', strtoupper($row->periodo_academico_principal))
+                                    ->first();
+                                $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_principal))->first();
+                                $matricula->estudiante()->associate($estudiante);
+                                $matricula->periodo_lectivo()->associate($periodoLectivo);
+                                $matricula->periodo_academico()->associate($periodoAcademico);
+                                $matricula->malla()->associate($malla);
+                                $matricula->tipo_matricula()->associate($tipoMatricula);
+                                $matricula->save();
+
+                                $matricula->informacion_estudiantes()->create([
+                                    'ha_repetido_asignatura' => $row->ha_repetido_asignatura,
+                                    'ha_perdido_gratuidad' => $row->ha_perdido_gratuidad
+                                ]);
+
+                                $detalleMatriculas = new DetalleMatriculaTransaccion([
+                                    'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                    'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                    'jornada' => $this->changeJornada($row->jornada_asignatura),
+                                    'estado' => 'EN_PROCESO'
+                                ]);
+
+                                $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_asignatura))->first();
+                                $detalleMatriculas->matricula()->associate($matricula);
+                                $detalleMatriculas->asignatura()->associate($asignatura);
+                                $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
+                                $detalleMatriculas->save();
+
+                            }
+                            if (!$asignatura) {
+                                $errors['asignaturas'][] = 'codigo_asignatura: ' . $row->codigo_asignatura . ' - fila: ' . ($i + 1) . ' no existe';
+                            }
+                        }
+                        $i++;
+                        DB::commit();
+                    } catch (QueryException $e) {
+                        return $e;
+                    }
+                }
+            });
+            Storage::delete($pathFile);
+            // return response()->json(['respuesta' => $response]);
+
+            return response()->json([
+                'errores' => $errors,
+                'registros' => $i,
+                'total_cupos_nuevos' => $countCuposNuevos,
+                'total_cupos_modificados' => $countCuposModificados
+            ], 200);
+        } else {
+            return response()->json([
+                'errores' => 'Archivo no valido',
+                'registros' => 0,
+                'total_estudiantes' => 0,
+                'total_asignaturas' => 0
+            ], 500);
+        }
+
+    }
+
+    public function importCupos(Request $request)
+    {
+        if ($request->file('archivo')) {
+            $errors = array();
+            $pathFile = $request->file('archivo')->store('public/archivos');
+            $path = storage_path() . '/app/' . $pathFile;
+            $i = 0;
+            $countCuposNuevos = 0;
+            $countCuposModificados = 0;
+
+            $response = Excel::load($path, function ($reader)
+            use ($request, &$errors, $i, &$countCuposNuevos, &$countCuposModificados) {
+                $now = Carbon::now();
+                $identificacion = '';
+                $periodoLectivo = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+                $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+
+                foreach ($reader->get() as $row) {
+                    try {
+                        DB::beginTransaction();
+                        $estudiante = Estudiante::where('identificacion', trim($row->cedula_estudiante))->first();
+                        $estudianteCorreo = Estudiante::where('identificacion', trim($row->cedula_estudiante))
+                            ->where('correo_institucional', trim($row->correo_institucional))->first();
+                        $correo = Estudiante::where('correo_institucional', trim($row->correo_institucional))->first();
+                        $asignatura = Asignatura::where('codigo', trim(strtoupper($row->codigo_asignatura)))
+                            ->where('malla_id', $malla->id)
+                            ->first();
+                        if ($estudiante && $asignatura) {
+                            $existeMatricula = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
+                                ->where('periodo_lectivo_id', $periodoLectivo->id)
+                                ->first();
+                            if (!$existeMatricula) {
+                                $identificacion = $row->cedula_estudiante;
+                                $countCuposNuevos++;
+                                $matriculaAnterior = MatriculaTransaccion::where('estudiante_id', $estudiante->id)
+                                    ->where('estado', 'MATRICULADO')
+                                    ->orderby('fecha', 'DESC')->first();
+
+                                $matricula = new MatriculaTransaccion([
+                                    'fecha' => $now,
+                                    'jornada' => $this->changeJornada($row->jornada_principal),
+                                    'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
+                                    'estado' => 'EN_PROCESO'
+                                ]);
+
+                                $periodoAcademico = PeriodoAcademico::where('id', strtoupper($row->periodo_academico_principal))
+                                    ->first();
+                                $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_principal))->first();
+                                $matricula->estudiante()->associate($estudiante);
+                                $matricula->periodo_lectivo()->associate($periodoLectivo);
+                                $matricula->periodo_academico()->associate($periodoAcademico);
+                                $matricula->malla()->associate($malla);
+                                $matricula->tipo_matricula()->associate($tipoMatricula);
+                                $matricula->save();
+
+                                if ($matriculaAnterior) {
+                                    $informacionEstudiante = InformacionEstudianteTransaccion::
+                                    where('matricula_id', $matriculaAnterior->id)->first();
+                                    $matricula->informacion_estudiantes()->create([
+                                        'ha_repetido_asignatura' => $informacionEstudiante->ha_repetido_asignatura,
+                                        'ha_perdido_gratuidad' => $informacionEstudiante->ha_perdido_gratuidad,
+                                        'ha_realizado_practicas' => $informacionEstudiante->ha_realizado_practicas,
+                                        'horas_practicas' => $informacionEstudiante->horas_practicas,
+                                        'sector_economico_practica' => $informacionEstudiante->sector_economico_practica,
+                                        'tipo_institucion_practicas' => $informacionEstudiante->tipo_institucion_practicas,
+                                        'ha_realizado_vinculacion' => $informacionEstudiante->ha_realizado_vinculacion,
+                                        'alcance_vinculacion' => $informacionEstudiante->alcance_vinculacion,
+                                        'ocupacion' => $informacionEstudiante->ocupacion,
+                                        'nombre_empresa_labora' => $informacionEstudiante->nombre_empresa_labora,
+                                        'area_trabajo_empresa' => $informacionEstudiante->area_trabajo_empresa,
+                                        'destino_ingreso' => $informacionEstudiante->destino_ingreso,
+                                        'recibe_bono_desarrollo' => $informacionEstudiante->recibe_bono_desarrollo,
+                                        'nivel_formacion_padre' => $informacionEstudiante->nivel_formacion_padre,
+                                        'nivel_formacion_madre' => $informacionEstudiante->nivel_formacion_madre,
+                                        'ingreso_familiar' => $informacionEstudiante->ingreso_familiar,
+                                        'numero_miembros_hogar' => $informacionEstudiante->numero_miembros_hogar,
+                                        'tiene_carnet_conadis' => $informacionEstudiante->tiene_carnet_conadis,
+                                        'numero_carnet_conadis' => $informacionEstudiante->numero_carnet_conadis,
+                                        'tipo_discapcidad' => $informacionEstudiante->tipo_discapcidad,
+                                        'porcentaje_discapacidad' => $informacionEstudiante->porcentaje_discapacidad,
+                                        'telefono_fijo' => $informacionEstudiante->telefono_fijo,
+                                        'telefono_celular' => $informacionEstudiante->telefono_celular,
+                                        'direccion' => $informacionEstudiante->direccion,
+                                        'estado_civil' => $informacionEstudiante->estado_civil,
+                                        'pension_diferenciada' => $informacionEstudiante->pension_diferenciada,
+                                        'tipo_beca' => $informacionEstudiante->tipo_beca,
+                                        'razon_beca' => $informacionEstudiante->razon_beca,
+                                        'monto_beca' => $informacionEstudiante->monto_beca,
+                                        'porciento_beca_cobertura_arancel' => $informacionEstudiante->porciento_beca_cobertura_arancel,
+                                        'porciento_beca_cobertura_manutencion' => $informacionEstudiante->porciento_beca_cobertura_manutencion,
+                                        'tipo_financiamiento_beca' => $informacionEstudiante->tipo_financiamiento_beca,
+                                        'monto_ayuda_economica' => $informacionEstudiante->monto_ayuda_economica,
+                                        'monto_credito_educativo' => $informacionEstudiante->monto_credito_educativo
+                                    ]);
+                                } else {
+                                    $matricula->informacion_estudiantes()->create([
+                                        'ha_repetido_asignatura' => $row->ha_repetido_asignatura,
+                                        'ha_perdido_gratuidad' => $row->ha_perdido_gratuidad
+                                    ]);
+                                }
+
+                                $detalleMatriculas = new DetalleMatriculaTransaccion([
+                                    'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                    'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                    'jornada' => $this->changeJornada($row->jornada_asignatura),
+                                    'estado' => 'EN_PROCESO'
+                                ]);
+
+                                $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_asignatura))->first();
+                                $detalleMatriculas->matricula()->associate($matricula);
+                                $detalleMatriculas->asignatura()->associate($asignatura);
+                                $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
+                                $detalleMatriculas->save();
+
+                            } else if (!($existeMatricula->estado == 'MATRICULADO'
+                                || $existeMatricula->estado == 'APROBADO')) {
+
+                                if ($identificacion != $row->cedula_estudiante) {
+                                    $countCuposModificados++;
+                                    $identificacion = $row->cedula_estudiante;
+                                    $existeMatricula->update([
+                                        'fecha' => $now,
+                                        'jornada' => $this->changeJornada($row->jornada_principal),
+                                        'paralelo_principal' => $this->changeParalelo($row->paralelo_principal),
+                                        'estado' => 'EN_PROCESO'
+                                    ]);
+                                    $periodoAcademico = PeriodoAcademico::where('id', $row->periodo_academico_principal)->first();
+                                    $existeMatricula->estudiante()->associate($estudiante);
+                                    $existeMatricula->periodo_lectivo()->associate($periodoLectivo);
+                                    $existeMatricula->periodo_academico()->associate($periodoAcademico);
+                                    $existeMatricula->malla()->associate($malla);
+                                    $existeMatricula->save();
+                                }
+
+                                $existeDetalleMatricula = DetalleMatriculaTransaccion::where('asignatura_id', $asignatura->id)
+                                    ->where('matricula_id', $existeMatricula->id)->first();
+
+                                if ($existeDetalleMatricula) {
+
+                                    $existeDetalleMatricula->update([
+                                        'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                        'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                        'jornada' => $this->changeJornada($row->jornada_asignatura)
+                                    ]);
+                                    $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_asignatura))
+                                        ->first();
+                                    $existeDetalleMatricula->matricula()->associate($existeMatricula);
+                                    $existeDetalleMatricula->asignatura()->associate($asignatura);
+                                    $existeDetalleMatricula->tipo_matricula()->associate($tipoMatricula);
+                                    $existeDetalleMatricula->save();
+                                } else {
+
+                                    $detalleMatriculas = new DetalleMatriculaTransaccion([
+                                        'paralelo' => $this->changeParalelo($row->paralelo_asignatura),
+                                        'numero_matricula' => $this->changeNumeroMatricula($row->numero_matricula),
+                                        'jornada' => $this->changeJornada($row->jornada_asignatura),
+                                        'estado' => 'EN_PROCESO'
+                                    ]);
+                                    $tipoMatricula = TipoMatricula::where('nombre', strtoupper($row->tipo_matricula_asignatura))
+                                        ->first();
+                                    $detalleMatriculas->matricula()->associate($existeMatricula);
+                                    $detalleMatriculas->asignatura()->associate($asignatura);
+                                    $detalleMatriculas->tipo_matricula()->associate($tipoMatricula);
+                                    $detalleMatriculas->save();
+                                }
+
+                            }
+                        } else {
+                            if (!$estudiante && $row->cedula_estudiante != '') {
+                                $errors['cedulas_estudiante'][] = 'cedula_estudiante: '
+                                    . $row->cedula_estudiante . ' - fila: ' . ($i + 1) . ' nuevo estudiante agregado';
+
+                                $countCuposNuevos++;
+                                $usuario = new User([
+                                    'name' => strtoupper($row->apellido1 . ' ' . $row->nombre1),
+                                    'user_name' => strtoupper($row->cedula_estudiante),
+                                    'email' => strtolower($row->correo_institucional),
+                                    'user_name' => $row->cedula_estudiante,
+                                    'password' => Hash::make($row->cedula_estudiante),
+                                ]);
 
                                 $rol = Role::findOrFail(2);
                                 $usuario->role()->associate($rol);

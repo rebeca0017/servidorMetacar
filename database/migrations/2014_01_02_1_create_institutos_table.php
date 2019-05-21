@@ -11,11 +11,13 @@ class CreateInstitutosTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('institutos', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+
             $table->string('codigo',50)->nullable();
             $table->string('codigo_sniese',50)->nullable();
             $table->string('nombre',200);
