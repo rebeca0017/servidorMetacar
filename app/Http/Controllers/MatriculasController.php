@@ -210,6 +210,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                 ->with('estudiante')
                 ->with('periodo_academico')
                 ->with('periodo_lectivo')
+                ->with('tipo_matricula')
                 ->where(function ($cupos) use (&$malla, &$request) {
                     $cupos->where('malla_id', $malla->id)
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
@@ -231,6 +232,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                 ->with('estudiante')
                 ->with('periodo_academico')
                 ->with('periodo_lectivo')
+                ->with('tipo_matricula')
                 ->where(function ($cupos) use (&$malla, &$request) {
                     $cupos->where('malla_id', $malla->id)
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id);
@@ -265,6 +267,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
+            ->with('tipo_matricula')
             ->where(function ($cupo) use (&$request) {
                 $cupo->orWhere('apellido1', 'like', '%' . $request->apellido1 . '%')
                     ->orWhere('apellido2', 'like', '%' . $request->apellido2 . '%')
@@ -291,6 +294,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                 ->with('estudiante')
                 ->with('periodo_academico')
                 ->with('periodo_lectivo')
+                ->with('tipo_matricula')
                 ->where(function ($cupos) use (&$malla, &$request) {
                     $cupos->where('malla_id', $malla->id)
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id)
@@ -310,6 +314,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                 ->with('estudiante')
                 ->with('periodo_academico')
                 ->with('periodo_lectivo')
+                ->with('tipo_matricula')
                 ->where(function ($cupos) use (&$malla, &$request) {
                     $cupos->where('malla_id', $malla->id)
                         ->where('periodo_lectivo_id', $request->periodo_lectivo_id);
@@ -370,6 +375,7 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
             ->with('estudiante')
             ->with('periodo_academico')
             ->with('periodo_lectivo')
+            ->with('tipo_matricula')
             ->where(function ($cupo) use (&$request) {
                 $cupo->orWhere('apellido1', 'like', '%' . $request->apellido1 . '%')
                     ->orWhere('apellido2', 'like', '%' . $request->apellido2 . '%')
@@ -408,8 +414,10 @@ where m.periodo_lectivo_id = (select id from periodo_lectivos where estado='ACTU
                 'jornada' => $dataMatricula['jornada']
             ]);
             $periodoAcademico = PeriodoAcademico::findOrFail($dataMatricula['periodo_academico']['id']);
+            $tipoMatricula = TipoMatricula::findOrFail($dataMatricula['tipo_matricula']['id']);
 
             $matricula->periodo_academico()->associate($periodoAcademico);
+            $matricula->tipo_matricula()->associate($tipoMatricula);
             $matricula->save();
 
             DB::commit();

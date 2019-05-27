@@ -21,12 +21,100 @@ use Carbon\Carbon;
 use Excel;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ExcelController extends Controller
 {
+
+    public function exportMatrizSnieseCarrera(Request $request)
+    {
+        $now = Carbon::now();
+        $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
+        $malla = Malla::where('carrera_id', $request->carrera_id)->first();
+        $carrera = Carrera::findOrFail($request->carrera_id);
+        $sql = "SELECT 
+                estudiantes.tipo_identificacion as tipoDocumentoId,
+                estudiantes.identificacion as numeroIdentificacion,
+                estudiantes.apellido1 as primerApellido,
+                estudiantes.apellido2 as segundoApellido,
+                estudiantes.nombre1 as primerNombre,
+                estudiantes.nombre2 as segundoNombre,
+                estudiantes.sexo as sexoId,
+                estudiantes.genero as generoId,
+                informacion_estudiantes.estado_civil as estadocivilId,
+                estudiantes.etnia as etniaId,
+                informacion_estudiantes.estado_civil as estadocivilId,
+                estudiantes.pueblo_nacionalidad as pueblonacionalidadId,
+                estudiantes.tipo_sangre as tipoSangre,
+                informacion_estudiantes.tiene_discapacidad as discapacidad,
+                informacion_estudiantes.porcentaje_discapacidad as porcentajeDiscapacidad,
+                informacion_estudiantes.numero_carnet_conadis as numCarnetConadis,
+                informacion_estudiantes.tipo_discapacidad as tipoDiscapacidad,
+                estudiantes.fecha_nacimiento as fechaNacimiento,
+                estudiantes.tipo_colegio as tipoColegioId,
+                carreras.modalidad as modalidadCarrera,
+                matriculas.jornada as jornadaCarrera,
+                estudiantes.fecha_inicio_carrera as fechaInicioCarrera,
+                matriculas.fecha as fechaMatricula,
+                matriculas.tipo_matricula_id as tipoMatriculaId,
+                matriculas.periodo_academico_id as nivelAcademicoQueCursa,
+                '18' as duracionPeriodoAcademico,
+                informacion_estudiantes.ha_repetido_asignatura as haRepetidoAlMenosUnaMateria,
+                matriculas.paralelo_principal as paraleloId,
+                informacion_estudiantes.ha_perdido_gratuidad as haPerdidoLaGratuidad,
+                '3' as recibePensionDiferenciada,
+                informacion_estudiantes.ocupacion as estudianteocupacionId,
+                informacion_estudiantes.destino_ingreso as ingresosestudianteId,
+                informacion_estudiantes.recibe_bono_desarrollo as bonodesarrolloId,
+                informacion_estudiantes.ha_realizado_practicas as haRealizadoPracticasPreprofesionales,
+                informacion_estudiantes.horas_practicas as nroHorasPracticasPreprofesionalesPorPeriodo,
+                informacion_estudiantes.tipo_institucion_practicas as entornoInstitucionalPracticasProfesionales,
+                informacion_estudiantes.sector_economico_practica as sectorEconomicoPracticaProfesional,
+                '3' as tipoBecaId,
+                '2' as primeraRazonBecaId,
+                '2' as segundaRazonBecaId,
+                '2' as terceraRazonBecaId,
+                '2' as cuartaRazonBecaId,
+                '2' as quintaRazonBecaId,
+                '2' as sextaRazonBecaId,
+                'NA' as montoBeca,
+                'NA' as porcientoBecaCoberturaArancel	,
+                'NA' as porcientoBecaCoberturaManuntencion,
+                '4' as financiamientoBeca	,
+                'NA' as montoAyudaEconomica,
+                'NA' as montoCreditoEducativo,
+                informacion_estudiantes.ha_realizado_vinculacion as participaEnProyectoVinculacionSocieda,
+                informacion_estudiantes.alcance_vinculacion as tipoAlcanceProyectoVinculacionId,  
+       			estudiantes.correo_institucional as correoElectronico,
+                informacion_estudiantes.telefono_celular as numeroCelular,
+                informacion_estudiantes.nivel_formacion_padre as nivelFormacionPadre,
+                informacion_estudiantes.nivel_formacion_madre as nivelFormacionMadre,
+                informacion_estudiantes.ingreso_familiar as ingresoTotalHogar,
+                informacion_estudiantes.numero_miembros_hogar as cantidadMiembrosHogar
+            FROM 
+                matriculas INNER JOIN estudiantes ON estudiantes.id = matriculas.estudiante_id
+                INNER JOIN mallas ON mallas.id = matriculas.malla_id
+                INNER JOIN carreras ON carreras.id = mallas.carrera_id
+                INNER JOIN tipo_matriculas ON tipo_matriculas.id = matriculas.tipo_matricula_id
+                INNER JOIN informacion_estudiantes ON informacion_estudiantes.matricula_id = matriculas.id
+            WHERE
+                matriculas.malla_id = $malla->id AND matriculas.periodo_lectivo_id = $periodoLectivoActual->id
+            ORDER BY matriculas.estado DESC, matriculas.periodo_academico_id, estudiantes.apellido1";
+        $matriz = DB::select($sql);
+        $collection = Collection::make($matriz);
+//        $collection = Estudiante::get();
+        dd($collection);
+        Excel::create('Matriz_' . $carrera->siglas . '_' . $now->format('Y-m-d H:i:s'),
+            function ($excel) use ($collection) {
+                $excel->sheet('Carreras', function ($sheet) use ($collection) {
+                    $sheet->fromArray($collection);
+                });
+            })->download('xlsx');
+    }
+
     public function exportErroresCupos(Request $request)
     {
         Excel::create('Errores Cupos', function ($excel) use (&$request) {

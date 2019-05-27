@@ -65,6 +65,7 @@ Route::get('/catalogos/carreras', 'CatalogosController@getCarreras');
 Route::get('/catalogos/periodo_academicos', 'CatalogosController@getPeriodoAcademicos');
 Route::get('/exports/cupos_carrera', 'ExcelController@exportCuposCarrera');
 Route::get('/exports/cupos_periodo_academico', 'ExcelController@exportCuposPeriodoAcademico');
+Route::get('/exports/matriz_sniese', 'ExcelController@exportMatrizSnieseCarrera');
 
 Route::post('/imports/cupos', 'ExcelController@importCupos');
 Route::post('/imports/estudiantes', 'ExcelController@importEstudiantes');

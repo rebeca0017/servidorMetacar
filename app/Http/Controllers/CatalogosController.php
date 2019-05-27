@@ -21,7 +21,7 @@ class CatalogosController extends Controller
 
     public function getPaises()
     {
-        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO')->get();
+        $paises = Ubicacion::where('tipo', 'PAIS')->where('estado', 'ACTIVO')->orderby('nombre')->get();
 
         return response()->json(['paises' => $paises], 200);
     }
