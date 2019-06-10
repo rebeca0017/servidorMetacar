@@ -35,82 +35,134 @@ class ExcelController extends Controller
         $periodoLectivoActual = PeriodoLectivo::where('estado', 'ACTUAL')->first();
         $malla = Malla::where('carrera_id', $request->carrera_id)->first();
         $carrera = Carrera::findOrFail($request->carrera_id);
-        $sql = "SELECT 
-                estudiantes.tipo_identificacion as tipoDocumentoId,
-                estudiantes.identificacion as numeroIdentificacion,
-                estudiantes.apellido1 as primerApellido,
-                estudiantes.apellido2 as segundoApellido,
-                estudiantes.nombre1 as primerNombre,
-                estudiantes.nombre2 as segundoNombre,
-                estudiantes.sexo as sexoId,
-                estudiantes.genero as generoId,
-                informacion_estudiantes.estado_civil as estadocivilId,
-                estudiantes.etnia as etniaId,
-                informacion_estudiantes.estado_civil as estadocivilId,
-                estudiantes.pueblo_nacionalidad as pueblonacionalidadId,
-                estudiantes.tipo_sangre as tipoSangre,
-                informacion_estudiantes.tiene_discapacidad as discapacidad,
-                informacion_estudiantes.porcentaje_discapacidad as porcentajeDiscapacidad,
-                informacion_estudiantes.numero_carnet_conadis as numCarnetConadis,
-                informacion_estudiantes.tipo_discapacidad as tipoDiscapacidad,
-                estudiantes.fecha_nacimiento as fechaNacimiento,
-                estudiantes.tipo_colegio as tipoColegioId,
-                carreras.modalidad as modalidadCarrera,
-                matriculas.jornada as jornadaCarrera,
-                estudiantes.fecha_inicio_carrera as fechaInicioCarrera,
-                matriculas.fecha as fechaMatricula,
-                matriculas.tipo_matricula_id as tipoMatriculaId,
-                matriculas.periodo_academico_id as nivelAcademicoQueCursa,
-                '18' as duracionPeriodoAcademico,
-                informacion_estudiantes.ha_repetido_asignatura as haRepetidoAlMenosUnaMateria,
-                matriculas.paralelo_principal as paraleloId,
-                informacion_estudiantes.ha_perdido_gratuidad as haPerdidoLaGratuidad,
-                '3' as recibePensionDiferenciada,
-                informacion_estudiantes.ocupacion as estudianteocupacionId,
-                informacion_estudiantes.destino_ingreso as ingresosestudianteId,
-                informacion_estudiantes.recibe_bono_desarrollo as bonodesarrolloId,
-                informacion_estudiantes.ha_realizado_practicas as haRealizadoPracticasPreprofesionales,
-                informacion_estudiantes.horas_practicas as nroHorasPracticasPreprofesionalesPorPeriodo,
-                informacion_estudiantes.tipo_institucion_practicas as entornoInstitucionalPracticasProfesionales,
-                informacion_estudiantes.sector_economico_practica as sectorEconomicoPracticaProfesional,
-                '3' as tipoBecaId,
-                '2' as primeraRazonBecaId,
-                '2' as segundaRazonBecaId,
-                '2' as terceraRazonBecaId,
-                '2' as cuartaRazonBecaId,
-                '2' as quintaRazonBecaId,
-                '2' as sextaRazonBecaId,
-                'NA' as montoBeca,
-                'NA' as porcientoBecaCoberturaArancel	,
-                'NA' as porcientoBecaCoberturaManuntencion,
-                '4' as financiamientoBeca	,
-                'NA' as montoAyudaEconomica,
-                'NA' as montoCreditoEducativo,
-                informacion_estudiantes.ha_realizado_vinculacion as participaEnProyectoVinculacionSocieda,
-                informacion_estudiantes.alcance_vinculacion as tipoAlcanceProyectoVinculacionId,  
-       			estudiantes.correo_institucional as correoElectronico,
-                informacion_estudiantes.telefono_celular as numeroCelular,
-                informacion_estudiantes.nivel_formacion_padre as nivelFormacionPadre,
-                informacion_estudiantes.nivel_formacion_madre as nivelFormacionMadre,
-                informacion_estudiantes.ingreso_familiar as ingresoTotalHogar,
-                informacion_estudiantes.numero_miembros_hogar as cantidadMiembrosHogar
-            FROM 
-                matriculas INNER JOIN estudiantes ON estudiantes.id = matriculas.estudiante_id
-                INNER JOIN mallas ON mallas.id = matriculas.malla_id
-                INNER JOIN carreras ON carreras.id = mallas.carrera_id
-                INNER JOIN tipo_matriculas ON tipo_matriculas.id = matriculas.tipo_matricula_id
-                INNER JOIN informacion_estudiantes ON informacion_estudiantes.matricula_id = matriculas.id
-            WHERE
-                matriculas.malla_id = $malla->id AND matriculas.periodo_lectivo_id = $periodoLectivoActual->id
-            ORDER BY matriculas.estado DESC, matriculas.periodo_academico_id, estudiantes.apellido1";
-        $matriz = DB::select($sql);
-        $collection = Collection::make($matriz);
-//        $collection = Estudiante::get();
-        dd($collection);
+
+        $matriculados = Matricula::selectRaw(
+                'estudiantes.tipo_identificacion as "tipoDocumentoId",
+                estudiantes.identificacion as "numeroIdentificacion",
+                estudiantes.apellido1 as "primerApellido",
+                estudiantes.apellido2 as "segundoApellido",
+                estudiantes.nombre1 as "primerNombre",
+                estudiantes.nombre2 as "segundoNombre",
+                estudiantes.sexo as "sexoId",
+                estudiantes.genero as "generoId",
+                informacion_estudiantes.estado_civil as "estadocivilId",
+                estudiantes.etnia as "etniaId",
+                informacion_estudiantes.estado_civil as "estadocivilId",
+                estudiantes.pueblo_nacionalidad as "pueblonacionalidadId",
+                estudiantes.tipo_sangre as "tipoSangre",
+                informacion_estudiantes.tiene_discapacidad as "discapacidad",
+                (CASE WHEN informacion_estudiantes.porcentaje_discapacidad is null or informacion_estudiantes.porcentaje_discapacidad = 0 
+                    THEN \'NA\' ELSE trim(to_char(informacion_estudiantes.porcentaje_discapacidad,\'99999\')) END) as "porcentajeDiscapacidad",
+                (CASE WHEN informacion_estudiantes.numero_carnet_conadis is null or informacion_estudiantes.numero_carnet_conadis = \'\' 
+                    THEN \'NA\' ELSE informacion_estudiantes.numero_carnet_conadis END) as "numCarnetConadis",
+                informacion_estudiantes.tipo_discapacidad as "tipoDiscapacidad",
+                estudiantes.fecha_nacimiento as "fechaNacimiento",
+                (CASE WHEN 
+                    (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = 
+                    (select id from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    )))) is null
+                    OR 
+                    (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = 
+                    (select id from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    )))) = \'\'
+                   
+                THEN \'NA\' 
+                ELSE 
+                    (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = 
+                    (select id from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    ))))
+                END) as "paisNacionalidadId",
+                (CASE WHEN
+                    (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    )) is null
+                    OR
+                    (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    )) = \'\'
+                THEN \'NA\' 
+                ELSE
+                (select codigo from ubicaciones where id = 
+                    (select codigo_padre_id from ubicaciones where id = estudiantes.canton_nacimiento_id
+                    ))
+                END) as "provinciaNacimientoId",
+                (CASE WHEN 
+                (select codigo from ubicaciones where id = estudiantes.canton_nacimiento_id) is null or (select codigo from ubicaciones where id = estudiantes.canton_nacimiento_id) = \'\'
+                or (select codigo from ubicaciones where id = estudiantes.canton_nacimiento_id) = \'43\' or (select codigo from ubicaciones where id = estudiantes.canton_nacimiento_id) = \'0\'
+                THEN \'NA\' 
+                ELSE
+                    (select codigo from ubicaciones where id = estudiantes.canton_nacimiento_id)
+                END) as "cantonNacimientoId",
+                (select codigo from ubicaciones where id = (select codigo_padre_id from ubicaciones where id = (select id from ubicaciones where id = (select codigo_padre_id from ubicaciones where id = informacion_estudiantes.canton_residencia_id)))) as "paisResidenciaId",
+                (select codigo from ubicaciones where id = (select codigo_padre_id from ubicaciones where id = informacion_estudiantes.canton_residencia_id)) as "provinciaResidenciaId", 
+                (select codigo from ubicaciones where id = informacion_estudiantes.canton_residencia_id) as "cantonResidenciaId",
+                estudiantes.tipo_colegio as "tipoColegioId",
+                carreras.modalidad as "modalidadCarrera",
+                matriculas.jornada as "jornadaCarrera",
+                estudiantes.fecha_inicio_carrera as "fechaInicioCarrera",
+                matriculas.fecha as "fechaMatricula",
+                matriculas.tipo_matricula_id as "tipoMatriculaId",
+                matriculas.periodo_academico_id as "nivelAcademicoQueCursa",
+                mallas.numero_semanas as "duracionPeriodoAcademico",
+                informacion_estudiantes.ha_repetido_asignatura as "haRepetidoAlMenosUnaMateria",
+                matriculas.paralelo_principal as "paraleloId",
+                informacion_estudiantes.ha_perdido_gratuidad as "haPerdidoLaGratuidad",
+                informacion_estudiantes.pension_diferenciada as "recibePensionDiferenciada",
+                informacion_estudiantes.ocupacion as "estudianteocupacionId",
+                informacion_estudiantes.destino_ingreso as "ingresosestudianteId",
+                informacion_estudiantes.recibe_bono_desarrollo as "bonodesarrolloId",
+                informacion_estudiantes.ha_realizado_practicas as "haRealizadoPracticasPreprofesionales",
+                (CASE WHEN informacion_estudiantes.horas_practicas is null or informacion_estudiantes.horas_practicas = 0 
+                    THEN \'NA\' ELSE trim(to_char(informacion_estudiantes.horas_practicas,\'99999\')) END) as "nroHorasPracticasPreprofesionalesPorPeriodo",
+                informacion_estudiantes.tipo_institucion_practicas as "entornoInstitucionalPracticasProfesionales",
+                informacion_estudiantes.sector_economico_practica as "sectorEconomicoPracticaProfesional",
+                informacion_estudiantes.tipo_beca as "tipoBecaId",
+                informacion_estudiantes.razon_beca1 as "primeraRazonBecaId",
+                informacion_estudiantes.razon_beca2 as "segundaRazonBecaId",
+                informacion_estudiantes.razon_beca3 as "terceraRazonBecaId",
+                informacion_estudiantes.razon_beca4 as "cuartaRazonBecaId",
+                informacion_estudiantes.razon_beca5 as "quintaRazonBecaId",
+                informacion_estudiantes.razon_beca6 as "sextaRazonBecaId",
+                informacion_estudiantes.monto_beca as "montoBeca",
+                informacion_estudiantes.porciento_beca_cobertura_arancel as "porcientoBecaCoberturaArancel",
+                informacion_estudiantes.porciento_beca_cobertura_manutencion as "porcientoBecaCoberturaManuntencion",
+                informacion_estudiantes.tipo_financiamiento_beca as "financiamientoBeca",
+                informacion_estudiantes.monto_ayuda_economica as "montoAyudaEconomica",
+                informacion_estudiantes.monto_credito_educativo as "montoCreditoEducativo",
+                informacion_estudiantes.ha_realizado_vinculacion as "participaEnProyectoVinculacionSocieda",
+                informacion_estudiantes.alcance_vinculacion as "tipoAlcanceProyectoVinculacionId",  
+       			estudiantes.correo_institucional as "correoElectronico",
+                informacion_estudiantes.telefono_celular as "numeroCelular",
+                informacion_estudiantes.nivel_formacion_padre as "nivelFormacionPadre",
+                informacion_estudiantes.nivel_formacion_madre as "nivelFormacionMadre",
+                informacion_estudiantes.ingreso_familiar as "ingresoTotalHogar",
+                informacion_estudiantes.numero_miembros_hogar as "cantidadMiembrosHogar"')
+            ->join('estudiantes', 'estudiantes.id', 'matriculas.estudiante_id')
+            ->join('mallas', 'mallas.id', 'matriculas.malla_id')
+            ->join('carreras', 'carreras.id', 'mallas.carrera_id')
+            ->join('tipo_matriculas', 'tipo_matriculas.id', 'matriculas.tipo_matricula_id')
+            ->join('informacion_estudiantes', 'informacion_estudiantes.matricula_id', 'matriculas.id')
+            ->where('matriculas.malla_id', $malla->id)
+            ->where('matriculas.periodo_lectivo_id', $periodoLectivoActual->id)
+            ->where('matriculas.estado', 'MATRICULADO')
+            ->orderBy('matriculas.estado', 'DESC')
+            ->orderBy('matriculas.periodo_academico_id')
+            ->orderBy('estudiantes.apellido1')
+            ->get();
+
+
+//        return $matriculados;
+
         Excel::create('Matriz_' . $carrera->siglas . '_' . $now->format('Y-m-d H:i:s'),
-            function ($excel) use ($collection) {
-                $excel->sheet('Carreras', function ($sheet) use ($collection) {
-                    $sheet->fromArray($collection);
+            function ($excel) use ($matriculados) {
+                $excel->sheet('Carreras', function ($sheet) use ($matriculados) {
+                    $sheet->fromArray($matriculados);
                 });
             })->download('xlsx');
     }
@@ -145,16 +197,8 @@ class ExcelController extends Controller
             'asignaturas.nombre as asignatura',
             'detalle_matriculas.numero_matricula',
             'asignaturas.periodo_academico_id as periodo_academico'
-        // 'detalle_matriculas.jornada as jornada_asignatura',
-        // 'detalle_matriculas.paralelo as paralelo_asignatura',
-        // 'detalle_matriculas.numero_matricula as numero_matricula',
-        // 'tipo_matriculas.nombre as tipo_matricula',
-        // 'matriculas.jornada as jornada_principal',
-        // 'matriculas.paralelo_principal as paralelo_principal',
-        // 'matriculas.periodo_academico_id as periodo_academico_principal',
-        // 'matriculas.estado'
         )
-            ->selecTRaw("(CASE 
+            ->selectRaw("(CASE 
                             WHEN detalle_matriculas.jornada = '1' THEN 'MATUTINA' 
                             WHEN detalle_matriculas.jornada = '2' THEN 'VESPERTINA'
                             WHEN detalle_matriculas.jornada = '3' THEN 'NOCTURNA'
@@ -206,7 +250,7 @@ class ExcelController extends Controller
                             WHEN matriculas.paralelo_principal = '14' THEN 'N' END) AS paralelo_principal,
                             
                             matriculas.periodo_academico_id as periodo_academico_principal,
-                            matriculas.estado
+                            detalle_matriculas.estado
                             
                             ")
             ->join('detalle_matriculas', 'detalle_matriculas.matricula_id', '=', 'matriculas.id')
@@ -222,7 +266,6 @@ class ExcelController extends Controller
             ->orderBy('matriculas.periodo_academico_id')
             ->orderBy('estudiantes.apellido1')
             ->get();
-
         $listas = Matricula::select(
             'carreras.nombre as carrera',
             'carreras.descripcion as malla',

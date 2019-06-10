@@ -22,6 +22,7 @@ class CreateMallasTable extends Migration
             $table->date('fecha_aprobacion');
             $table->date('fecha_finalizacion')->nullable();
             $table->string('numero_resolucion',50)->nullable();
+            $table->integer('numero_semanas',50)->nullable();
             $table->string('estado',20)->default('ACTIVO');
         });
     }
