@@ -106,7 +106,7 @@ class ExcelController extends Controller
                 carreras.modalidad as "modalidadCarrera",
                 matriculas.jornada as "jornadaCarrera",
                 estudiantes.fecha_inicio_carrera as "fechaInicioCarrera",
-                matriculas.fecha as "fechaMatricula",
+                to_char(matriculas.fecha,\'YYYY-MM-DD\') as "fechaMatricula",
                 matriculas.tipo_matricula_id as "tipoMatriculaId",
                 matriculas.periodo_academico_id as "nivelAcademicoQueCursa",
                 mallas.numero_semanas as "duracionPeriodoAcademico",
