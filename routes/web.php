@@ -1,5 +1,17 @@
 <?php
 
+Route::post('/cliente','ClienteController@crearCliente');
+Route::delete('/cliente','ClienteController@eliminarCliente');
+Route::get('/cliente','ClienteController@obtenerCliente');
+Route::get('/cliente','ClienteController@obtenerClienteActivo');
+Route::post('/cliente','ClienteController@actualizarCliente');
+
+Route::post('/auto','AutoController@guardarAuto');
+Route::delete('/cliente','AutoController@eliminarAuto');
+Route::get('/cliente','AutoController@obtenerAuto');
+Route::get('/cliente','AutoController@obtenerAutoActivo');
+Route::post('/cliente','AutoController@actualizarAutoCliente');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
