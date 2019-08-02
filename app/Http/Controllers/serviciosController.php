@@ -16,7 +16,7 @@ class serviciosController extends Controller
     }
     public function eliminarServicio(Request $request){
         $data = $request->json()->all();
-        $sql = "delete from servicio where id = ?";
+        $sql = "delete from servicio where id_servicio = ?";
         $parameters = [$data['id']];
         $response = DB::select($sql, $parameters);
         return response()->json(true,201);
@@ -30,7 +30,7 @@ class serviciosController extends Controller
                 codigo= ?,
                 costo= ?,
                 estado=?
-                where id = ?";
+                where id_servicio = ?";
         $parameters = [$data['nombre'], $data['codigo'], $data['costo'], $data['estado'],$data['id']];
         DB::select($sql, $parameters);
         return response()->json(true);    

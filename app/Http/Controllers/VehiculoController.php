@@ -9,13 +9,12 @@ class VehiculoController extends Controller
     public function guardarAuto(Request $request){
         $data = $request->json()->all();
         $sql = "insert into auto(cliente,anio,marca,matricula,placas,estado)
-                  values(?,?,?,?,?,?)"
-                  where id_cliente=?
-        $parameters = [$data['id_cliente']$data['anio'], $data['marca'], $data['matricula'], $data['placas'],$data['estado']];
+                  values(?,?,?,?,?,?)";
+        $parameters = [$data['id_cliente'],$data['anio'], $data['marca'], $data['matricula'], $data['placas'],$data['estado']];
         DB::select($sql, $parameters);
         return response()->json(true,201);
     }
-    
+
     public function eliminarAuto(Request $request){
         $data = $request->json()->all();
         $sql = "delete from auto where id = ?";
@@ -53,7 +52,7 @@ class VehiculoController extends Controller
                 where id = ?";
         $parameters = [$data['anio'], $data['placas'], $data['marca'], $data['matricula'], $data['estado'],$data['id']];
         DB::select($sql, $parameters);
-        return response()->json(true);    
-        
+        return response()->json(true);
+
     }
 }

@@ -1,18 +1,34 @@
 <?php
 
-Route::post('/cliente','ClienteController@crearCliente');
-Route::delete('/cliente','ClienteController@eliminarCliente');
-Route::get('/cliente','ClienteController@obtenerCliente');
-Route::get('/cliente','ClienteController@obtenerClienteActivo');
-Route::post('/cliente','ClienteController@actualizarCliente');
+Route::post('/clientes','ClienteController@crearCliente');
+Route::post('/clientes/vehiculos','ClienteController@registrarVehiculo');
+Route::get('/clientes/vehiculos','ClienteController@obtenerVehiculos');
+Route::delete('/clientes','ClienteController@eliminarCliente');
+Route::get('/clientes','ClienteController@obtenerCliente');
+Route::get('/clientes/activo','ClienteController@obtenerClienteActivo');
+Route::put('/clientes','ClienteController@actualizarCliente');
 
 Route::post('/auto','AutoController@guardarAuto');
-Route::delete('/cliente','AutoController@eliminarAuto');
-Route::get('/cliente','AutoController@obtenerAuto');
-Route::get('/cliente','AutoController@obtenerAutoActivo');
-Route::post('/cliente','AutoController@actualizarAutoCliente');
+Route::delete('/auto','AutoController@eliminarAuto');
+Route::get('/auto','AutoController@obtenerAuto');
+Route::get('/auto/activo','AutoController@obtenerAutoActivo');
+Route::post('/auto','AutoController@actualizarAutoCliente');
 
+
+Route::post('/servicios','serviciosController@crearServicio');
+Route::delete('/servicios','serviciosController@eliminarServicio');
+Route::post('/servicios','serviciosController@actualizarServicios');
+
+Route::post('/mantenimiento','MantenimientoController@crearMantenimiento');
+Route::delete('/mantenimiento','MantenimientoController@eliminarMantenimiento');
+Route::post('/mantenimiento','MantenimientoController@actualizarmantenimiento');
+
+Route::post('/usuarios/login','UsuarioController@login');
+Route::post('/usuarios/clientes','UsuarioController@registrarCliente');
+
+Route::get('/probar','UsuarioController@probar');
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
