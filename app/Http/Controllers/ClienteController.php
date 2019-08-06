@@ -45,9 +45,11 @@ class ClienteController extends Controller
         $data = $request->json()->all();
         $sql = "update cliente set 
                 nombre = ?,
-                email= ?
-                where id_clientes = ?";
-        $parameters = [$data['nombre'], $data['email'], $data['id_clientes']];
+                apellido=?,
+                direccion=?,
+                telefono=?
+                where id = ?";
+        $parameters = [$data['nombre'], $data['apellido'], $data['direccion'],$data['telefono'],$data['id']];
         DB::select($sql, $parameters);
         return response()->json(true);
 
@@ -68,6 +70,21 @@ class ClienteController extends Controller
         $parameters = [$request->id_cliente];
         $response = DB::select($sql,$parameters);
         return response()->json($response);
+    }
+
+    public function actualizarVehiculo(Request $request)
+    {
+        $data = $request->json()->all();
+        $sql = "update vehiculo set 
+                anio = ?,
+                placas= ?,
+                marca= ?,
+                matricula= ?
+                where id = ?";
+        $parameters = [$data['anio'], $data['placas'], $data['marca'], $data['matricula'],$request->id];
+        DB::select($sql, $parameters);
+        return response()->json(true);
+
     }
 
 

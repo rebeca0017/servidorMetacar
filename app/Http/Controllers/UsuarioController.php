@@ -33,8 +33,8 @@ class UsuarioController extends Controller
         $parameters = [$data['nombre']];
         $usuario = DB::select($sql, $parameters);
 
-        $sql = "insert into cliente(nombre,email,clave,id_usuario) values(?,?,?,?)";
-        $parameters = [$data['nombre'], $data['correo'],$data['clave'],$usuario[0]->id];
+        $sql = "insert into cliente(id_usuario,estado) values(?,?)";
+        $parameters = [$usuario[0]->id,"activo"];
         DB::select($sql, $parameters);
 
         $sql = "select count(*) from usuario where usuario.nombre = ?";

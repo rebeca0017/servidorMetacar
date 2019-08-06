@@ -31,14 +31,6 @@ class VehiculoController extends Controller
         return response()->json($response);
     }
 
-    /*public function obtenerAutoActivo(Request $request)
-    {
-        $data = $request->json()->all();
-        $sql = "select * from auto where estado = ?";
-        $parameters = [$data['estado']];
-        $response = DB::select($sql, $parameters);
-        return response()->json($response);
-    }*/
 
     public function actualizarAutoClientes(Request $request)
     {

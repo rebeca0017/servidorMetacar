@@ -2,6 +2,7 @@
 
 Route::post('/clientes','ClienteController@crearCliente');
 Route::post('/clientes/vehiculos','ClienteController@registrarVehiculo');
+Route::put('/clientes/vehiculos','ClienteController@actualizarVehiculo');
 Route::get('/clientes/vehiculos','ClienteController@obtenerVehiculos');
 Route::delete('/clientes','ClienteController@eliminarCliente');
 Route::get('/clientes','ClienteController@obtenerCliente');
@@ -11,8 +12,7 @@ Route::put('/clientes','ClienteController@actualizarCliente');
 Route::post('/auto','AutoController@guardarAuto');
 Route::delete('/auto','AutoController@eliminarAuto');
 Route::get('/auto','AutoController@obtenerAuto');
-Route::get('/auto/activo','AutoController@obtenerAutoActivo');
-Route::post('/auto','AutoController@actualizarAutoCliente');
+Route::put('/auto','AutoController@actualizarAutoCliente');
 
 
 Route::post('/servicios','serviciosController@crearServicio');
