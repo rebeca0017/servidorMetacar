@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
-class serviciosController extends Controller
+class ServiciosController extends Controller
 {
      public function crearServicio(Request $request){
         $data = $request->json()->all();
         $sql = "insert into servicio(nombre,codigo,costo,estado,tipo)
-                  values(?,?,?,?)"
-        $parameters = [$data['nombre']$data['codigo'], $data['costo'], $data['estado'],$data['tipo']];
+                  values(?,?,?,?,?)";
+        $parameters = [$data['nombre'],$data['codigo'], $data['costo'],"activo",$data['tipo']];
         DB::select($sql, $parameters);
         return response()->json(true,201);
     }
     public function eliminarServicio(Request $request){
-        $data = $request->json()->all();
-        $sql = "delete from servicio where id_servicio = ?";
-        $parameters = [$data['id']];
+
+        $sql = "delete from servicio where id= ?";
+        $parameters = [$request->id];
         $response = DB::select($sql, $parameters);
         return response()->json(true,201);
     }
@@ -30,11 +31,19 @@ class serviciosController extends Controller
                 codigo= ?,
                 costo= ?,
                 estado=?
-                where id_servicio = ?";
+                where id= ?";
         $parameters = [$data['nombre'], $data['codigo'], $data['costo'], $data['estado'],$data['id']];
         DB::select($sql, $parameters);
-        return response()->json(true);    
-        
+        return response()->json(true);
+
     }
-    
+    public function obtenerServicios(Request $request){
+
+        $data = $request->json()->all();
+        $sql = "select * from servicio";
+        $response=DB::select($sql);
+        return response()->json($response,200);
+    }
+
+
 }

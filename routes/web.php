@@ -15,13 +15,16 @@ Route::get('/auto','AutoController@obtenerAuto');
 Route::put('/auto','AutoController@actualizarAutoCliente');
 
 
-Route::post('/servicios','serviciosController@crearServicio');
-Route::delete('/servicios','serviciosController@eliminarServicio');
-Route::post('/servicios','serviciosController@actualizarServicios');
+Route::post('/servicios','ServiciosController@crearServicio');
+Route::delete('/servicios','ServiciosController@eliminarServicio');
+Route::put('/servicios','ServiciosController@actualizarServicio');
+Route::get('/servicios','ServiciosController@obtenerServicios');
 
-Route::post('/mantenimiento','MantenimientoController@crearMantenimiento');
-Route::delete('/mantenimiento','MantenimientoController@eliminarMantenimiento');
-Route::post('/mantenimiento','MantenimientoController@actualizarmantenimiento');
+Route::post('/mantenimientos','MantenimientoController@crearMantenimiento');
+Route::delete('/mantenimientos','MantenimientoController@eliminarMantenimiento');
+Route::put('/mantenimientos','MantenimientoController@actualizarmantenimiento');
+Route::get('/mantenimientos/clientes','MantenimientoController@obtenerMantenimientosCliente');
+Route::get('/mantenimientos/administradores','MantenimientoController@obtenerMantenimientosAdministrador');
 
 Route::post('/usuarios/login','UsuarioController@login');
 Route::post('/usuarios/clientes','UsuarioController@registrarCliente');

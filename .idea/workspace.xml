@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b53bc611-7523-40fd-90e7-b2f46fd9ff92" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ClienteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ClienteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UsuarioController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UsuarioController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/VehiculoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/VehiculoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/MantenimientoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/MantenimientoController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/serviciosController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ServiciosController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -249,18 +248,18 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="settings.php.debug.templates" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\CMTL\Desktop\Proyectos GIT\servidor-matriculacion\storage\app\secret-keys\oauth" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\cesar\Desktop\serverPI\app\Http\Controllers" />
       <recent name="C:\Users\CMTL\Desktop\PI\serverPI" />
       <recent name="C:\Users\CMTL\Desktop\PI\serverPI\storage\app" />
       <recent name="C:\Users\CMTL\Desktop\Proyectos GIT\servidor-matriculacion\storage" />
       <recent name="C:\Users\CMTL\Desktop\Proyectos GIT\servidor-matriculacion\app" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\CMTL\Desktop\Proyectos GIT\servidor-matriculacion\storage\app\secret-keys\oauth" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -409,7 +408,8 @@
       <workItem from="1564625169796" duration="33000" />
       <workItem from="1564625218135" duration="8341000" />
       <workItem from="1564703383426" duration="814000" />
-      <workItem from="1565054739866" duration="3663000" />
+      <workItem from="1565054739866" duration="3838000" />
+      <workItem from="1565098859009" duration="7659000" />
     </task>
     <servers />
   </component>
